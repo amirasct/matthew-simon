@@ -459,7 +459,7 @@ a:hover {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -712,7 +712,7 @@ a:hover {
 
 .service-detail-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -938,6 +938,18 @@ a:hover {
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
+    .nav-container {
+        padding: 1rem 1.5rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .logo-tagline {
+        font-size: 0.75rem;
+    }
+    
     h1 { font-size: 2rem; }
     h2 { font-size: 1.6rem; }
     
@@ -983,7 +995,16 @@ a:hover {
 
 @media (max-width: 480px) {
     .nav-container {
-        padding: 1rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .logo {
+        font-size: 1.1rem;
+    }
+    
+    .logo-tagline {
+        font-size: 0.7rem;
+        display: none;
     }
     
     .nav-menu {

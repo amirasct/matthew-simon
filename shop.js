@@ -223,7 +223,7 @@ function createProductCard(product) {
                 ${badgesHTML}
             </div>
             <p class="product-price">CHF ${product.price.toLocaleString()}</p>
-            <a href="contact.html" class="btn btn-primary">Inquire</a>
+            <a href="contact.html?product=${encodeURIComponent(product.name)}" class="btn btn-primary">Inquire</a>
         </div>
     `;
     

@@ -40,10 +40,8 @@ const translations = {
     
     // Services
     'services.title': 'Dienstleistungen',
-    'services.auth': 'Authentifizierung & Beratung',
-    'services.auth.desc': 'Fachkundige Bewertung von Stücken auf Authentizität, Zustand und Marktwert.',
-    'services.valuation': 'Nachlass-Bewertungen',
-    'services.valuation.desc': 'Professionelle Bewertungen und Inventarisierung von Sammlungen und Nachlässen.',
+    'services.consignment': 'Kommissions-Verkauf',
+    'services.consignment.desc': 'Haben Sie ein Stück, das Sie verkaufen möchten? Matthew bietet kommissionsbasierten Verkauf an, um Ihre Schätze mit ernsthaften Sammlern zu verbinden.',
     'services.sourcing': 'Kommissionsbasiertes Sourcing',
     'services.sourcing.desc': 'Suchen Sie nach bestimmten Stücken? Matthew sourced aktiv authentifizierte Stücke für Sammler und Designer.',
     
@@ -92,8 +90,7 @@ const translations = {
     'contact.form.email': 'E-Mail-Adresse',
     'contact.form.subject': 'Betreff',
     'contact.form.subject.product': 'Anfrage zu einem Stück',
-    'contact.form.subject.auth': 'Authentifizierung & Beratung',
-    'contact.form.subject.valuation': 'Nachlass-Bewertung',
+    'contact.form.subject.consignment': 'Kommissions-Verkauf',
     'contact.form.subject.sourcing': 'Kommissionsbasiertes Sourcing',
     'contact.form.subject.other': 'Sonstiges',
     'contact.form.message': 'Nachricht',
@@ -144,10 +141,8 @@ const translations = {
     
     // Services
     'services.title': 'Services',
-    'services.auth': 'Authentification & Consultation',
-    'services.auth.desc': 'Évaluation d\'expert des pièces pour l\'authenticité, la condition et la valeur marchande.',
-    'services.valuation': 'Évaluations successorales',
-    'services.valuation.desc': 'Évaluations professionnelles et inventaire complet des collections et successions.',
+    'services.consignment': 'Vente en Consignation',
+    'services.consignment.desc': 'Avez-vous une pièce que vous aimeriez vendre? Matthew offre une vente en consignation basée sur commission pour connecter vos trésors avec des collectionneurs sérieux.',
     'services.sourcing': 'Sourcing basé sur la commission',
     'services.sourcing.desc': 'Vous cherchez des pièces spécifiques? Matthew source activement des pièces authentifiées pour les collectionneurs et les designers.',
     
@@ -196,8 +191,7 @@ const translations = {
     'contact.form.email': 'Adresse e-mail',
     'contact.form.subject': 'Sujet',
     'contact.form.subject.product': 'Demande de renseignements sur une pièce',
-    'contact.form.subject.auth': 'Authentification & Consultation',
-    'contact.form.subject.valuation': 'Évaluation successorale',
+    'contact.form.subject.consignment': 'Vente en Consignation',
     'contact.form.subject.sourcing': 'Sourcing basé sur la commission',
     'contact.form.subject.other': 'Autre',
     'contact.form.message': 'Message',
@@ -248,10 +242,8 @@ const translations = {
     
     // Services
     'services.title': 'Services',
-    'services.auth': 'Authentication & Consultation',
-    'services.auth.desc': 'Expert evaluation of pieces for authenticity, condition, and market value.',
-    'services.valuation': 'Estate Valuations',
-    'services.valuation.desc': 'Professional appraisals and inventorying of collections and estates.',
+    'services.consignment': 'Consignment Selling',
+    'services.consignment.desc': 'Have a piece you\'d like to sell? Matthew offers commission-based consignment to connect your treasures with serious collectors.',
     'services.sourcing': 'Commission-Based Sourcing',
     'services.sourcing.desc': 'Looking for specific pieces? Matthew actively sources authenticated pieces for collectors and designers.',
     
@@ -300,8 +292,7 @@ const translations = {
     'contact.form.email': 'Email Address',
     'contact.form.subject': 'Subject',
     'contact.form.subject.product': 'Inquiry About a Piece',
-    'contact.form.subject.auth': 'Authentication & Consultation',
-    'contact.form.subject.valuation': 'Estate Valuation',
+    'contact.form.subject.consignment': 'Consignment Selling',
     'contact.form.subject.sourcing': 'Commission-Based Sourcing',
     'contact.form.subject.other': 'Other',
     'contact.form.message': 'Message',
