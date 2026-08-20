@@ -68,12 +68,14 @@
         .detail-cta button {
             padding: 16px 24px; border-radius: 8px; border: none;
             font-size: 1rem; font-weight: 600; cursor: pointer; 
-            transition: all 0.2s; letter-spacing: 0.5px; font-family: inherit;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            letter-spacing: 0.5px; font-family: inherit;
+            will-change: background;
         }
         .cta-inquire { background: #1B3A52; color: white; }
-        .cta-inquire:hover { background: #B8860B; transform: translateY(-2px); }
+        .cta-inquire:hover { background: #B8860B; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .cta-whatsapp { background: #4a5f4a; color: white; }
-        .cta-whatsapp:hover { background: #1B3A52; transform: translateY(-2px); }
+        .cta-whatsapp:hover { background: #3a4f3a; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         
         @media (max-width: 640px) {
             .detail-cta { grid-template-columns: 1fr; }
@@ -183,42 +185,45 @@ function loadProduct() {
     
     if (!id) {
         document.getElementById('productContent').innerHTML = 
-            '<div style="text-align:center;padding:60px;"><h2 data-i18n="detail.not_found">Produkt nicht gefunden</h2><a href="shop.html" data-i18n="detail.back">← Zurück zum Shop</a></div>';
+            '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">← Zurück zum Shop</a></div>';
         return;
     }
     
     setTimeout(() => {
-        // Use translated version if available
-        const product = window.getTranslatedProduct ? window.getTranslatedProduct(id) : window.MATTHEW_PRODUCTS?.find(p => p.id === id);
-        
-        if (!product) {
-            document.getElementById('productContent').innerHTML = 
-                '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">← Zurück zum Shop</a></div>';
-            return;
-        }
-        
-        document.getElementById('pageTitle').textContent = `${product.name} - Matthew Simon`;
-        renderProductDetail(product);
-        
-        // Re-apply translations after render
-        const lang = localStorage.getItem('language') || 'de';
-        if (window.setLanguage) setLanguage(lang);
+        renderCurrentProduct(id);
     }, 100);
 }
 
-// Reload content when language changes
-window.addEventListener('storage', (e) => {
-    if (e.key === 'language') {
-        loadProduct();
-    }
-});
+let currentProductId = null;
 
-// Also intercept setLanguage calls to reload content
-const originalSetLanguage = window.setLanguage;
-window.setLanguage = function(lang) {
-    if (originalSetLanguage) originalSetLanguage(lang);
-    loadProduct();
-};
+function renderCurrentProduct(id) {
+    if (id) currentProductId = id;
+    if (!currentProductId) return;
+    
+    // Get translated product based on current language
+    const product = window.getTranslatedProduct 
+        ? window.getTranslatedProduct(currentProductId) 
+        : window.MATTHEW_PRODUCTS?.find(p => p.id === currentProductId);
+    
+    if (!product) {
+        document.getElementById('productContent').innerHTML = 
+            '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">← Zurück zum Shop</a></div>';
+        return;
+    }
+    
+    document.getElementById('pageTitle').textContent = `${product.name} - Matthew Simon`;
+    renderProductDetail(product);
+    
+    // Apply translations to labels/buttons (data-i18n elements)
+    if (window.updatePageLanguage) {
+        window.updatePageLanguage();
+    }
+}
+
+// Listen for language changes and re-render product content
+window.addEventListener('languageChanged', function() {
+    renderCurrentProduct();
+});
 
 function renderProductDetail(product) {
     const hasImages = product.images && product.images.length > 0;

@@ -12,8 +12,7 @@ function initializeShop() {
         return;
     }
     
-    filteredProducts = getTranslated([...window.MATTHEW_PRODUCTS]);
-    renderProducts();
+    applyFilters();
     
     const categoryFilter = document.getElementById('categoryFilter');
     const sortFilter = document.getElementById('sortFilter');
@@ -23,7 +22,6 @@ function initializeShop() {
 }
 
 function getTranslated(products) {
-    // Apply translations if getTranslatedProduct is available
     if (window.getTranslatedProduct) {
         return products.map(p => window.getTranslatedProduct(p.id) || p);
     }
@@ -38,7 +36,6 @@ function applyFilters() {
         ? window.MATTHEW_PRODUCTS.filter(p => p.category === category)
         : [...window.MATTHEW_PRODUCTS];
     
-    // Apply translations
     filteredProducts = getTranslated(base);
     
     switch(sort) {
@@ -55,22 +52,9 @@ function applyFilters() {
     renderProducts();
 }
 
-// Re-render when language changes
-window.addEventListener('storage', (e) => {
-    if (e.key === 'language') applyFilters();
-});
-
-// Also intercept setLanguage
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        const originalSetLanguage = window.setLanguage;
-        if (originalSetLanguage) {
-            window.setLanguage = function(lang) {
-                originalSetLanguage(lang);
-                applyFilters();
-            };
-        }
-    }, 200);
+// Re-render when language changes (via custom event)
+window.addEventListener('languageChanged', function() {
+    applyFilters();
 });
 
 function extractPrice(str) {

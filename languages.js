@@ -522,8 +522,8 @@ const translations = {
 
 // Language management with auto-detection
 function getDetectedLanguage() {
-  // Check localStorage first
-  const saved = localStorage.getItem('matthew_language');
+  // Check localStorage first (both key formats for compatibility)
+  const saved = localStorage.getItem('matthew_language') || localStorage.getItem('language');
   if (saved) return saved;
   
   // Auto-detect from browser language
@@ -532,22 +532,26 @@ function getDetectedLanguage() {
   
   // Map browser language to supported languages
   const langMap = {
-    'de': 'de',  // German
-    'fr': 'fr',  // French
-    'it': 'it',  // Italian
-    'en': 'en'   // English (default)
+    'de': 'de',
+    'fr': 'fr',
+    'it': 'it',
+    'en': 'en'
   };
   
-  return langMap[langCode] || 'en';
+  return langMap[langCode] || 'de';  // Default to German (main audience)
 }
 
 let currentLanguage = getDetectedLanguage();
 
 function setLanguage(lang) {
   currentLanguage = lang;
+  // Store in BOTH keys for backward compatibility
   localStorage.setItem('matthew_language', lang);
+  localStorage.setItem('language', lang);
   updatePageLanguage();
   updateLanguageSelector();
+  // Dispatch custom event for other components to react
+  window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
 }
 
 function t(key) {
@@ -595,6 +599,11 @@ function updatePageLanguage() {
   // Update html lang attribute
   document.documentElement.lang = currentLanguage;
 }
+
+// Make available globally
+window.updatePageLanguage = updatePageLanguage;
+window.setLanguage = setLanguage;
+window.t = t;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
