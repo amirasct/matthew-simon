@@ -625,27 +625,32 @@ let currentPhotos = [];
 
 // Load products from localStorage on page load
 document.addEventListener('DOMContentLoaded', function() {
-    initializeProducts();
-    renderProductsTable();
-    setupFormHandlers();
-    setupSearch();
-    setupBadgeCheckboxes();
-    setupPhotoUploads();
-    setupFeaturedCheckbox();
+    // Small delay to ensure shop.js has loaded
+    setTimeout(() => {
+        initializeProducts();
+        renderProductsTable();
+        setupFormHandlers();
+        setupSearch();
+        setupBadgeCheckboxes();
+        setupPhotoUploads();
+        setupFeaturedCheckbox();
+    }, 100);
 });
 
 function initializeProducts() {
     const stored = localStorage.getItem(STORAGE_KEY);
     
     if (stored) {
-        // Use localStorage if it exists
+        // Products already in localStorage, use those
         window.products = JSON.parse(stored);
     } else {
-        // Load from shop.js on first time
-        if (typeof products !== 'undefined') {
-            window.products = JSON.parse(JSON.stringify(products));
-            saveProductsToStorage();
+        // First time - load from shop.js into localStorage
+        if (window.MATTHEW_PRODUCTS && window.MATTHEW_PRODUCTS.length > 0) {
+            window.products = JSON.parse(JSON.stringify(window.MATTHEW_PRODUCTS));
+            saveProductsToStorage(); // Save to localStorage
+            console.log('✅ Loaded ' + window.products.length + ' products from shop.js into localStorage');
         } else {
+            console.log('⚠️ Could not load products from shop.js');
             window.products = [];
         }
     }

@@ -1,5 +1,5 @@
 // Product database - Using placeholder images that will load reliably
-const products = [
+const MATTHEW_PRODUCTS = [
     {
         id: 1,
         name: "Fornasetti Umbrella Stand",
@@ -128,6 +128,20 @@ const emptyState = document.getElementById('emptyState');
 const categoryFilter = document.getElementById('categoryFilter');
 const sortFilter = document.getElementById('sortFilter');
 const searchInput = document.getElementById('searchInput');
+
+// Load products from localStorage if available, otherwise use hardcoded products
+let products = (function() {
+    const stored = localStorage.getItem('matthew_simon_products');
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch(e) {
+            console.log('Could not parse localStorage products, using defaults');
+            return MATTHEW_PRODUCTS;
+        }
+    }
+    return MATTHEW_PRODUCTS;
+})();
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
