@@ -675,18 +675,32 @@ function renderProducts(productsToRender) {
     productsGrid.innerHTML = productsToRender.map(product => `
         <div class="product-card">
             <img src="${product.image}" alt="${product.name}" class="product-image">
-            <div class="product-content">
+            <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
-                <p class="product-designer">${product.designer}</p>
-                <p class="product-era">${product.era}</p>
-                <p class="product-condition">Condition: ${product.condition}</p>
-                <p class="product-price">CHF ${product.price}</p>
+                <div class="product-details">
+                    <span><strong>${product.designer}</strong></span>
+                    <span>${product.era}</span>
+                </div>
                 <p class="product-story">${product.story}</p>
                 <div class="product-badges">
-                    ${product.badges.map(badge => `<span class="badge">${badge}</span>`).join('')}
+                    ${product.badges.map(badge => `<span class="product-badge">${badge}</span>`).join('')}
                 </div>
-                <a href="contact.html?product=${encodeURIComponent(product.name)}" class="btn-inquire">Inquire</a>
+                <p class="product-price">CHF ${product.price.toLocaleString()}</p>
+                <div class="product-actions">
+                    <a href="contact.html?product=${encodeURIComponent(product.name)}" class="btn-inquire">Inquire</a>
+                    <button class="btn-details" onclick="viewProductDetails(${product.id})">More Details</button>
+                </div>
             </div>
         </div>
     `).join('');
+}
+
+function viewProductDetails(productId) {
+    // For now, scroll to product - in future: open detailed product page
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        // Store product ID and redirect to detail page
+        localStorage.setItem('selectedProduct', productId);
+        window.location.href = 'product-detail.html?id=' + productId;
+    }
 }

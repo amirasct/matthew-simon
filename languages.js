@@ -15,7 +15,7 @@ const translations = {
     'hero.learnmore': 'Mehr erfahren',
     
     // Featured Section
-    'featured.badge': 'Diesen Monat vorgestellt',
+    'featured.badge': 'Vorgestellt',
     'featured.discover': 'Kuratierte Schätze entdecken',
     'featured.story': 'Einer der größten venezianischen Glasbläser. Dieses handgemalte Murano-Meisterwerk repräsentiert den Höhepunkt der venezianischen Glaskunst der 1920er Jahre. Museumsqualität. Die Art von Stück, nach dem ernsthaft sammelnd Sammler suchen.',
     'featured.price': 'CHF 2.400',
@@ -101,6 +101,7 @@ const translations = {
     'contact.form.message': 'Nachricht',
     'contact.form.send': 'Anfrage senden',
     'contact.form.note': 'Matthew antwortet normalerweise innerhalb von 24 Stunden.',
+    'contact.inquiry.message': 'Ich interessiere mich für {product}. Können Sie mir bitte mehr Details geben?',
     'contact.info.email': 'E-Mail',
     'contact.info.location': 'Standort',
     'contact.info.social': 'Sozial',
@@ -121,7 +122,7 @@ const translations = {
     'hero.learnmore': 'En savoir plus',
     
     // Featured Section
-    'featured.badge': 'En vedette ce mois',
+    'featured.badge': 'En Vedette',
     'featured.discover': 'Découvrez les trésors curés',
     'featured.story': 'L\'un des plus grands verriers vénitiens. Ce chef-d\'œuvre Murano peint à la main représente l\'apothéose de l\'art du verre vénitien du 20e siècle. Qualité muséale. Le type de pièce que les collectionneurs sérieux recherchent.',
     'featured.price': 'CHF 2.400',
@@ -207,6 +208,7 @@ const translations = {
     'contact.form.message': 'Message',
     'contact.form.send': 'Envoyer une demande',
     'contact.form.note': 'Matthew répond généralement dans les 24 heures.',
+    'contact.inquiry.message': 'Je suis intéressé par {product}. Pourriez-vous me fournir plus de détails?',
     'contact.info.email': 'E-mail',
     'contact.info.location': 'Localisation',
     'contact.info.social': 'Social',
@@ -227,7 +229,7 @@ const translations = {
     'hero.learnmore': 'Scopri di Più',
     
     // Featured Section
-    'featured.badge': 'In Evidenza Questo Mese',
+    'featured.badge': 'In Evidenza',
     'featured.discover': 'Scopri Tesori Curati',
     'featured.story': 'Uno dei più grandi soffiatori di vetro veneziani. Questo capolavoro Murano dipinto a mano rappresenta l\'apice dell\'arte del vetro veneziano degli anni \'20. Qualità da museo. Il tipo di pezzo che i collezionisti seri cercano.',
     'featured.price': 'CHF 2.400',
@@ -313,6 +315,7 @@ const translations = {
     'contact.form.message': 'Messaggio',
     'contact.form.send': 'Invia Richiesta',
     'contact.form.note': 'Matthew di solito risponde entro 24 ore.',
+    'contact.inquiry.message': 'Sono interessato a {product}. Potresti fornirmi più dettagli?',
     'contact.info.email': 'Email',
     'contact.info.location': 'Localizzazione',
     'contact.info.social': 'Social',
@@ -333,7 +336,7 @@ const translations = {
     'hero.learnmore': 'Learn More',
     
     // Featured Section
-    'featured.badge': 'Featured This Month',
+    'featured.badge': 'Featured',
     'featured.discover': 'Discover Curated Treasures',
     'featured.story': 'One of Venice\'s greatest glassmakers. This hand-painted Murano masterpiece represents the pinnacle of 1920s Venetian glass artistry. Museum-quality condition. The kind of piece serious collectors search for.',
     'featured.price': 'CHF 2,400',
@@ -419,6 +422,7 @@ const translations = {
     'contact.form.message': 'Message',
     'contact.form.send': 'Send Inquiry',
     'contact.form.note': 'Matthew typically responds within 24 hours.',
+    'contact.inquiry.message': 'I\'m interested in the {product}. Could you please provide more details?',
     'contact.info.email': 'Email',
     'contact.info.location': 'Location',
     'contact.info.social': 'Social',

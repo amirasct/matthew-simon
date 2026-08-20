@@ -177,9 +177,10 @@ window.addEventListener('DOMContentLoaded', function() {
         // Auto-select "product-inquiry" subject
         document.getElementById('subject').value = 'product-inquiry';
         
-        // Prefill message with product name
+        // Prefill message with product name in current language
         const messageField = document.getElementById('message');
-        messageField.value = `I'm interested in the ${productName}. Could you please provide more details?`;
+        const template = t('contact.inquiry.message') || 'I\'m interested in the {product}. Could you please provide more details?';
+        messageField.value = template.replace('{product}', productName);
         
         // Focus on message field so user can start typing
         messageField.focus();
