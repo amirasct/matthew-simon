@@ -12,7 +12,7 @@ function initializeShop() {
         return;
     }
     
-    filteredProducts = [...window.MATTHEW_PRODUCTS];
+    filteredProducts = getTranslated([...window.MATTHEW_PRODUCTS]);
     renderProducts();
     
     const categoryFilter = document.getElementById('categoryFilter');
@@ -22,13 +22,24 @@ function initializeShop() {
     if (sortFilter) sortFilter.addEventListener('change', applyFilters);
 }
 
+function getTranslated(products) {
+    // Apply translations if getTranslatedProduct is available
+    if (window.getTranslatedProduct) {
+        return products.map(p => window.getTranslatedProduct(p.id) || p);
+    }
+    return products;
+}
+
 function applyFilters() {
     const category = document.getElementById('categoryFilter')?.value || '';
     const sort = document.getElementById('sortFilter')?.value || 'featured';
     
-    filteredProducts = category 
+    let base = category 
         ? window.MATTHEW_PRODUCTS.filter(p => p.category === category)
         : [...window.MATTHEW_PRODUCTS];
+    
+    // Apply translations
+    filteredProducts = getTranslated(base);
     
     switch(sort) {
         case 'price-high':
@@ -43,6 +54,24 @@ function applyFilters() {
     
     renderProducts();
 }
+
+// Re-render when language changes
+window.addEventListener('storage', (e) => {
+    if (e.key === 'language') applyFilters();
+});
+
+// Also intercept setLanguage
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const originalSetLanguage = window.setLanguage;
+        if (originalSetLanguage) {
+            window.setLanguage = function(lang) {
+                originalSetLanguage(lang);
+                applyFilters();
+            };
+        }
+    }, 200);
+});
 
 function extractPrice(str) {
     if (!str || str === 'Preis auf Anfrage') return 0;

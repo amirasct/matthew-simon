@@ -1401,3 +1401,154 @@ a:hover {
     .product-name { font-size: 1.1rem; }
     .product-actions { padding: 0 16px 16px; grid-template-columns: 1fr; }
 }
+
+/* ==============================
+   MOBILE FIXES v3
+   ============================== */
+
+/* Mobile: smaller language button */
+@media (max-width: 768px) {
+    .language-boxes { display: none !important; }
+    .language-dropdown-mobile { display: block !important; }
+    .language-selector-mobile {
+        padding: 4px 10px !important;
+        font-size: 0.7rem !important;
+        letter-spacing: 0.5px !important;
+        background: transparent !important;
+        border: 1px solid #ccc !important;
+        color: #666 !important;
+        border-radius: 4px !important;
+        cursor: pointer;
+    }
+    .language-selector-mobile:hover {
+        border-color: #1B3A52 !important;
+        color: #1B3A52 !important;
+    }
+    .language-menu-mobile {
+        right: 0; left: auto;
+        min-width: 130px;
+    }
+}
+
+/* Hide photo count badge - clean look */
+.photo-count { display: none !important; }
+
+/* Product detail: NO sticky gallery on mobile */
+@media (max-width: 900px) {
+    .gallery-container {
+        position: static !important;
+        align-self: unset !important;
+    }
+    .main-image-wrapper {
+        aspect-ratio: unset;
+        max-height: 60vh;
+    }
+    .main-image {
+        max-height: 60vh;
+        object-fit: contain;
+    }
+}
+
+/* WhatsApp button - subtler */
+.cta-whatsapp {
+    background: #4a5f4a !important;
+    color: white;
+}
+.cta-whatsapp:hover {
+    background: #1B3A52 !important;
+    transform: translateY(-2px);
+}
+
+/* ==============================
+   HOMEPAGE FEATURED SECTION - v2
+   ============================== */
+
+.homepage-featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 30px auto 0;
+}
+
+.homepage-featured-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-style: italic;
+}
+
+.homepage-featured-empty p {
+    margin: 0;
+}
+
+/* Categories without images - just clean text tiles */
+.categories-grid.no-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 40px auto 0;
+}
+
+.category-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f5f3f0 0%, #eae5dd 100%);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2C2C2C;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    text-align: center;
+    min-height: 140px;
+}
+
+.category-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border-color: #B8860B;
+    background: linear-gradient(135deg, #fff 0%, #f5f3f0 100%);
+}
+
+.category-tile-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    color: #B8860B;
+}
+
+.category-tile-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+}
+
+.category-tile-label {
+    font-size: 0.8rem;
+    color: #666;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.category-tile-count {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 8px;
+}
+
+/* Note about description language */
+.description-note {
+    background: #f9f7f4;
+    border-left: 3px solid #B8860B;
+    padding: 12px 16px;
+    margin: 20px 0;
+    font-size: 0.85rem;
+    color: #666;
+    border-radius: 4px;
+}
+

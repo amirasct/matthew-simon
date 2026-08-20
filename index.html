@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,17 +18,14 @@
             <li><a href="about.html" data-i18n="nav.about">About</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
-                <!-- Desktop: Language Boxes -->
                 <div class="language-boxes">
                     <button class="lang-box" data-lang="de" onclick="setLanguage('de'); return false;">DE</button>
                     <button class="lang-box" data-lang="en" onclick="setLanguage('en'); return false;">EN</button>
                     <button class="lang-box" data-lang="fr" onclick="setLanguage('fr'); return false;">FR</button>
                     <button class="lang-box" data-lang="it" onclick="setLanguage('it'); return false;">IT</button>
                 </div>
-                
-                <!-- Mobile: Language Dropdown -->
                 <div class="language-dropdown-mobile">
-                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">Language</button>
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">DE / EN / FR / IT</button>
                     <div class="language-menu-mobile" id="languageMenu">
                         <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
                         <a href="#" onclick="setLanguage('en'); return false;">English</a>
@@ -54,38 +51,21 @@
     </div>
 </section>
 
-<!-- Featured Product Section -->
+<!-- Featured Products Section (Dynamic) -->
 <section class="featured-section">
     <div class="featured-container">
         <div class="featured-header">
-            <span class="badge" data-i18n="featured.badge">Featured This Month</span>
-            <h2 data-i18n="featured.discover">Discover Curated Treasures</h2>
+            <span class="badge" data-i18n="featured.badge">Featured</span>
+            <h2 data-i18n="featured.discover">Curated Treasures</h2>
+            <p style="color:#666;margin-top:8px;" data-i18n="featured.subtitle">Curated Highlights from the Collection</p>
         </div>
         
-        <div class="featured-product">
-            <div class="featured-image">
-                <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=600&fit=crop" alt="Featured piece">
-            </div>
-            <div class="featured-info">
-                <h3>Rare Vittorio Zecchin Murano Vase</h3>
-                <p class="featured-details">Vittorio Zecchin | 1920s</p>
-                
-                <p class="featured-story" data-i18n="featured.story">
-                    One of Venice's greatest glassmakers. This hand-painted Murano masterpiece represents the pinnacle of 1920s Venetian glass artistry. Museum-quality condition. The kind of piece serious collectors search for.
-                </p>
-                
-                <div class="featured-badges">
-                    <span class="badge-auth">⭐ Authenticated</span>
-                    <span class="badge-rare">🔍 Museum Quality</span>
-                </div>
-                
-                <p class="featured-price" data-i18n="featured.price">CHF 2,400</p>
-                
-                <div class="featured-buttons">
-                    <a href="contact.html" class="btn btn-primary" data-i18n="featured.inquire">Inquire About This</a>
-                    <a href="shop.html" class="btn btn-secondary" data-i18n="featured.similar">View Similar</a>
-                </div>
-            </div>
+        <div id="homepageFeaturedGrid" class="homepage-featured-grid">
+            <!-- Populated by JS -->
+        </div>
+        
+        <div style="text-align:center;margin-top:40px;">
+            <a href="shop.html" class="btn btn-secondary" data-i18n="featured.view_all">View All →</a>
         </div>
     </div>
 </section>
@@ -117,34 +97,38 @@
     </div>
 </section>
 
-<!-- Browse Categories Section -->
+<!-- Browse Categories Section (Clean, No Photos) -->
 <section class="categories-section">
     <div class="categories-container">
         <h2 data-i18n="categories.title">Browse by Category</h2>
         
-        <div class="categories-grid">
-            <a href="shop.html?category=Möbel" class="category-card">
-                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop" alt="Furniture">
-                <h3>Möbel</h3>
-                <p data-i18n="categories.furniture">Furniture</p>
+        <div class="categories-grid no-images" id="categoriesGrid">
+            <a href="shop.html?category=Möbel" class="category-tile">
+                <div class="category-tile-icon">🪑</div>
+                <h3 class="category-tile-name">Möbel</h3>
+                <p class="category-tile-label" data-i18n="categories.furniture.label">Furniture</p>
+                <p class="category-tile-count"><span data-count="Möbel">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
-            <a href="shop.html?category=Glas" class="category-card">
-                <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=400&h=300&fit=crop" alt="Glass">
-                <h3>Glas</h3>
-                <p data-i18n="categories.glass">Glass & Ceramics</p>
+            <a href="shop.html?category=Glas" class="category-tile">
+                <div class="category-tile-icon">🏺</div>
+                <h3 class="category-tile-name">Glas</h3>
+                <p class="category-tile-label" data-i18n="categories.glass.label">Glass</p>
+                <p class="category-tile-count"><span data-count="Glas">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
-            <a href="shop.html?category=Leuchten" class="category-card">
-                <img src="https://images.unsplash.com/photo-1565636192335-14c44d76766e?w=400&h=300&fit=crop" alt="Lighting">
-                <h3>Leuchten</h3>
-                <p data-i18n="categories.lighting">Lighting</p>
+            <a href="shop.html?category=Leuchten" class="category-tile">
+                <div class="category-tile-icon">💡</div>
+                <h3 class="category-tile-name">Leuchten</h3>
+                <p class="category-tile-label" data-i18n="categories.lighting.label">Lighting</p>
+                <p class="category-tile-count"><span data-count="Leuchten">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
-            <a href="shop.html?category=Objekte" class="category-card">
-                <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=400&h=300&fit=crop" alt="Objects">
-                <h3>Objekte</h3>
-                <p data-i18n="categories.objects">Objects & Art</p>
+            <a href="shop.html?category=Objekte" class="category-tile">
+                <div class="category-tile-icon">🎨</div>
+                <h3 class="category-tile-name">Objekte</h3>
+                <p class="category-tile-label" data-i18n="categories.objects.label">Objects</p>
+                <p class="category-tile-count"><span data-count="Objekte">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
         </div>
     </div>
@@ -166,37 +150,103 @@
             <h4>Matthew Simon</h4>
             <p>Authenticated European Design & Antiques<br>Bern, Switzerland</p>
         </div>
-        
         <div class="footer-section">
             <h4 data-i18n="footer.contact">Contact</h4>
             <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
-            🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram @matthew_simon_bern</a></p>
+            📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
+            🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
         </div>
-        
         <div class="footer-section">
             <h4 data-i18n="footer.admin">Admin</h4>
             <p><a href="admin.html">Manage Products</a></p>
         </div>
     </div>
-    
     <div class="footer-bottom">
         <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
     </div>
 </footer>
 
 <script src="languages.js"></script>
+<script src="products.js"></script>
+<script src="translations_part1.js"></script>
+<script src="translations_part2.js"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Close menu when clicking outside
 document.addEventListener('click', function(event) {
-    const dropdown = document.querySelector('.language-dropdown');
-    if (!dropdown.contains(event.target)) {
-        document.getElementById('languageMenu').style.display = 'none';
+    const dropdown = document.querySelector('.language-dropdown-mobile');
+    if (dropdown && !dropdown.contains(event.target)) {
+        const menu = document.getElementById('languageMenu');
+        if (menu) menu.style.display = 'none';
     }
+});
+
+// Load featured products
+function loadFeatured() {
+    const grid = document.getElementById('homepageFeaturedGrid');
+    if (!grid || !window.MATTHEW_PRODUCTS) return;
+    
+    const featured = window.MATTHEW_PRODUCTS.filter(p => p.featured);
+    
+    if (featured.length === 0) {
+        // Show first 3 products with photos as default
+        const withPhotos = window.MATTHEW_PRODUCTS.filter(p => p.images && p.images.length > 0).slice(0, 3);
+        if (withPhotos.length === 0) {
+            grid.innerHTML = `<div class="homepage-featured-empty"><p data-i18n="featured.empty">No featured pieces yet. Use the Admin page to feature items.</p></div>`;
+            return;
+        }
+        renderFeatured(withPhotos);
+    } else {
+        // Show up to 6 featured
+        renderFeatured(featured.slice(0, 6));
+    }
+    
+    // Re-apply translations after render
+    if (window.updateLanguage) {
+        const lang = localStorage.getItem('language') || 'de';
+        setLanguage(lang);
+    }
+}
+
+function renderFeatured(products) {
+    const grid = document.getElementById('homepageFeaturedGrid');
+    grid.innerHTML = products.map(p => {
+        const escName = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const img = p.images && p.images.length > 0
+            ? `<img src="images/${p.images[0]}" alt="${escName}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px 8px 0 0;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\\'aspect-ratio:1;background:linear-gradient(135deg,#f5f3f0,#eae5dd);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#999;border-radius:8px 8px 0 0;\\'>📷</div>';">`
+            : `<div style="aspect-ratio:1;background:linear-gradient(135deg,#f5f3f0,#eae5dd);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#999;border-radius:8px 8px 0 0;">📷</div>`;
+        
+        return `
+            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;color:inherit;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:all 0.3s;display:block;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+                ${img}
+                <div style="padding:16px;">
+                    <div style="font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:600;margin-bottom:6px;">${p.category}</div>
+                    <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;margin:0 0 8px 0;color:#2C2C2C;">${p.name}</h3>
+                    <div style="font-size:0.95rem;font-weight:600;color:#1B3A52;">${p.price}</div>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
+// Update category counts
+function updateCategoryCounts() {
+    if (!window.MATTHEW_PRODUCTS) return;
+    ['Möbel', 'Glas', 'Leuchten', 'Objekte'].forEach(cat => {
+        const count = window.MATTHEW_PRODUCTS.filter(p => p.category === cat).length;
+        const el = document.querySelector(`[data-count="${cat}"]`);
+        if (el) el.textContent = count;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        loadFeatured();
+        updateCategoryCounts();
+    }, 100);
 });
 </script>
 

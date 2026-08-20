@@ -11,12 +11,18 @@
         .back-link:hover { color: #B8860B; }
         
         .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
-        @media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; gap: 30px; } }
+        @media (max-width: 900px) { 
+            .detail-grid { grid-template-columns: 1fr; gap: 30px; }
+            .gallery-container { position: static !important; align-self: unset !important; }
+        }
         
         .gallery-container { position: sticky; top: 20px; align-self: start; }
         .main-image-wrapper { 
             position: relative; aspect-ratio: 1/1; background: #f5f3f0; 
             border-radius: 8px; overflow: hidden; margin-bottom: 12px;
+        }
+        @media (max-width: 900px) {
+            .main-image-wrapper { aspect-ratio: unset; max-height: 60vh; }
         }
         .main-image { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }
         .main-image-placeholder { 
@@ -66,8 +72,8 @@
         }
         .cta-inquire { background: #1B3A52; color: white; }
         .cta-inquire:hover { background: #B8860B; transform: translateY(-2px); }
-        .cta-whatsapp { background: #25D366; color: white; }
-        .cta-whatsapp:hover { background: #128C7E; transform: translateY(-2px); }
+        .cta-whatsapp { background: #4a5f4a; color: white; }
+        .cta-whatsapp:hover { background: #1B3A52; transform: translateY(-2px); }
         
         @media (max-width: 640px) {
             .detail-cta { grid-template-columns: 1fr; }
@@ -91,20 +97,37 @@
     <div class="nav-container">
         <div class="logo">Matthew Simon <span class="logo-tagline">European Design & Antiques</span></div>
         <ul class="nav-menu">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="shop.html" class="active">Shop</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="shop.html" class="active" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+            <li class="nav-language">
+                <div class="language-boxes">
+                    <button class="lang-box" data-lang="de" onclick="setLanguage('de'); return false;">DE</button>
+                    <button class="lang-box" data-lang="en" onclick="setLanguage('en'); return false;">EN</button>
+                    <button class="lang-box" data-lang="fr" onclick="setLanguage('fr'); return false;">FR</button>
+                    <button class="lang-box" data-lang="it" onclick="setLanguage('it'); return false;">IT</button>
+                </div>
+                <div class="language-dropdown-mobile">
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">DE / EN / FR / IT</button>
+                    <div class="language-menu-mobile" id="languageMenu">
+                        <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                        <a href="#" onclick="setLanguage('it'); return false;">Italiano</a>
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
 
 <div class="detail-container">
-    <a href="shop.html" class="back-link">← Zurück zum Shop</a>
+    <a href="shop.html" class="back-link" data-i18n="detail.back">← Zurück zum Shop</a>
     
     <div id="productContent">
         <div style="text-align: center; padding: 60px;">
-            <p>Lädt Produkt...</p>
+            <p data-i18n="detail.loading">Lädt Produkt...</p>
         </div>
     </div>
 </div>
@@ -121,19 +144,27 @@
             <p>Authenticated European Design & Antiques<br>Bern, Switzerland</p>
         </div>
         <div class="footer-section">
-            <h4>Kontakt</h4>
+            <h4 data-i18n="footer.contact">Kontakt</h4>
             <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
             📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
             🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2026 Matthew Simon. All rights reserved.</p>
+        <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
     </div>
 </footer>
 
+<script src="languages.js"></script>
 <script src="products.js"></script>
+<script src="translations_part1.js"></script>
+<script src="translations_part2.js"></script>
 <script>
+function toggleLanguageMenu() {
+    const menu = document.getElementById('languageMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
 function renderBadge(type) {
     const badges = {
         'authenticated': { label: '✓ Signiert', bg: '#1B3A52' },
@@ -152,42 +183,65 @@ function loadProduct() {
     
     if (!id) {
         document.getElementById('productContent').innerHTML = 
-            '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">Zurück zum Shop</a></div>';
+            '<div style="text-align:center;padding:60px;"><h2 data-i18n="detail.not_found">Produkt nicht gefunden</h2><a href="shop.html" data-i18n="detail.back">← Zurück zum Shop</a></div>';
         return;
     }
     
-    // Wait for products to load
     setTimeout(() => {
-        const product = window.MATTHEW_PRODUCTS?.find(p => p.id === id);
+        // Use translated version if available
+        const product = window.getTranslatedProduct ? window.getTranslatedProduct(id) : window.MATTHEW_PRODUCTS?.find(p => p.id === id);
         
         if (!product) {
             document.getElementById('productContent').innerHTML = 
-                '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">Zurück zum Shop</a></div>';
+                '<div style="text-align:center;padding:60px;"><h2>Produkt nicht gefunden</h2><a href="shop.html">← Zurück zum Shop</a></div>';
             return;
         }
         
         document.getElementById('pageTitle').textContent = `${product.name} - Matthew Simon`;
         renderProductDetail(product);
+        
+        // Re-apply translations after render
+        const lang = localStorage.getItem('language') || 'de';
+        if (window.setLanguage) setLanguage(lang);
     }, 100);
 }
+
+// Reload content when language changes
+window.addEventListener('storage', (e) => {
+    if (e.key === 'language') {
+        loadProduct();
+    }
+});
+
+// Also intercept setLanguage calls to reload content
+const originalSetLanguage = window.setLanguage;
+window.setLanguage = function(lang) {
+    if (originalSetLanguage) originalSetLanguage(lang);
+    loadProduct();
+};
 
 function renderProductDetail(product) {
     const hasImages = product.images && product.images.length > 0;
     const badges = product.badges && product.badges.length > 0
         ? `<div class="detail-badges">${product.badges.map(renderBadge).join('')}</div>` : '';
     
-    // Main image
     const mainImageHtml = hasImages
-        ? `<img src="images/${product.images[0]}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt in Kürze</span></div>';">`
-        : `<div class="main-image-placeholder">📷<br><span>Foto folgt in Kürze</span></div>`;
+        ? `<img src="images/${product.images[0]}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        : `<div class="main-image-placeholder">📷<br><span>Foto folgt</span></div>`;
     
-    // Thumbnails
     const thumbnailsHtml = hasImages && product.images.length > 1
         ? `<div class="thumbnails">${product.images.map((img, i) => `
             <div class="thumbnail ${i === 0 ? 'active' : ''}" onclick="switchImage('${img}', this)">
                 <img src="images/${img}" alt="Bild ${i+1}" onerror="this.parentElement.style.display='none';">
             </div>
           `).join('')}</div>`
+        : '';
+    
+    // Only show description note if translation is missing
+    const descriptionNote = product._needsTranslation
+        ? `<div class="description-note" data-i18n="detail.description_note">
+                Detaillierte Produktbeschreibung ist in deutscher Originalsprache. Für Übersetzungen kontaktieren Sie uns bitte direkt.
+           </div>`
         : '';
     
     const html = `
@@ -204,12 +258,14 @@ function renderProductDetail(product) {
                 <div class="detail-price">${product.price}</div>
                 <div class="detail-description">${product.description || product.shortHook}</div>
                 
+                ${descriptionNote}
+                
                 <div class="detail-cta">
                     <button class="cta-inquire" onclick="inquireAbout('${product.name.replace(/'/g, "\\'")}')">
-                        ✉ Anfrage senden
+                        <span data-i18n="detail.inquire">✉ Anfrage senden</span>
                     </button>
                     <button class="cta-whatsapp" onclick="whatsappInquiry('${product.name.replace(/'/g, "\\'")}')">
-                        💬 WhatsApp
+                        <span data-i18n="detail.whatsapp">💬 WhatsApp</span>
                     </button>
                 </div>
                 
@@ -240,14 +296,32 @@ function closeLightbox() {
 }
 
 function inquireAbout(name) {
+    const lang = localStorage.getItem('language') || 'de';
     const subject = encodeURIComponent(`Anfrage: ${name}`);
-    const message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
+    
+    let message = '';
+    if (lang === 'de') {
+        message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
+    } else if (lang === 'fr') {
+        message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${name}". Pourriez-vous m'envoyer plus de détails, des photos haute résolution et les informations d'expédition ?\n\nCordialement`);
+    } else if (lang === 'it') {
+        message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${name}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
+    } else {
+        message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${name}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
+    }
+    
     window.location.href = `contact.html?subject=${subject}&message=${message}`;
 }
 
 function whatsappInquiry(name) {
-    const message = encodeURIComponent(`Guten Tag Herr Simon, ich interessiere mich für "${name}". Können Sie mir mehr Informationen dazu senden?`);
-    window.open(`https://wa.me/41793021985?text=${message}`, '_blank');
+    const lang = localStorage.getItem('language') || 'de';
+    let message;
+    if (lang === 'de') message = `Guten Tag Herr Simon, ich interessiere mich für "${name}". Können Sie mir mehr Informationen dazu senden?`;
+    else if (lang === 'fr') message = `Bonjour Monsieur Simon, je suis intéressé(e) par "${name}". Pouvez-vous m'envoyer plus d'informations ?`;
+    else if (lang === 'it') message = `Buongiorno Signor Simon, sono interessato/a a "${name}". Può inviarmi maggiori informazioni?`;
+    else message = `Hello Mr. Simon, I'm interested in "${name}". Could you send me more information?`;
+    
+    window.open(`https://wa.me/41793021985?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 document.addEventListener('DOMContentLoaded', loadProduct);
