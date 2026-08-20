@@ -95,6 +95,14 @@
             background: #D97757;
         }
         
+        .btn-edit {
+            background: var(--accent-blue);
+        }
+        
+        .btn-edit:hover {
+            background: #2a3a4a;
+        }
+        
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -480,11 +488,6 @@
                     <textarea id="story" name="story" placeholder="Why is this piece special? What makes it valuable?" required></textarea>
                 </div>
                 
-                <div class="form-group full">
-                    <label for="imageUrl">Image URL</label>
-                    <input type="url" id="imageUrl" name="imageUrl" placeholder="https://matthew-simon.ch/...">
-                </div>
-                
                 <div class="featured-section">
                     <label for="isFeatured">
                         <input type="checkbox" id="isFeatured" name="isFeatured">
@@ -607,7 +610,8 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Add Product</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Add Product</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display: none;">Cancel Edit</button>
                     <button type="reset" class="btn btn-secondary">Clear Form</button>
                 </div>
             </div>
@@ -622,6 +626,10 @@ const STORAGE_KEY = 'matthew_simon_products';
 
 // Track photos being added
 let currentPhotos = [];
+
+// Edit mode tracking
+let editMode = false;
+let editingProductId = null;
 
 // Load products from localStorage on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -713,6 +721,7 @@ function renderProductsTable() {
             </td>
             <td>
                 <div class="action-buttons">
+                    <button class="btn-edit" onclick="editProduct(${index})">Edit</button>
                     <button class="btn-delete" onclick="deleteProduct(${index})">Delete</button>
                 </div>
             </td>
@@ -920,37 +929,160 @@ function deleteProduct(index) {
 }
 
 function setupFormHandlers() {
-    document.getElementById('addProductForm').addEventListener('submit', function(e) {
+    const form = document.getElementById('addProductForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
         
         const formData = new FormData(this);
         
-        if (addProduct(formData)) {
-            showMessage('Product added successfully!', 'success');
-            this.reset();
-            
-            // Reset everything
-            currentPhotos = [];
-            document.getElementById('photoUploads').innerHTML = `
-                <div class="photo-input-group">
-                    <input type="file" class="productPhoto" accept="image/*" />
-                    <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
-                </div>
-            `;
-            document.getElementById('photoPreview').innerHTML = '';
-            setupPhotoUploads();
-            
-            document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
-            document.getElementById('auth').checked = true;
-            document.getElementById('isFeatured').checked = false;
-            updateBadgePreview();
-            
-            showSection('products');
-            renderProductsTable();
+        if (editMode) {
+            // Update existing product
+            if (updateProduct(editingProductId, formData)) {
+                showMessage('Product updated successfully!', 'success');
+                cancelEdit();
+                showSection('products');
+                renderProductsTable();
+            } else {
+                showMessage('Error updating product', 'error');
+            }
         } else {
-            showMessage('Error adding product', 'error');
+            // Add new product
+            if (addProduct(formData)) {
+                showMessage('Product added successfully!', 'success');
+                this.reset();
+                
+                // Reset everything
+                currentPhotos = [];
+                document.getElementById('photoUploads').innerHTML = `
+                    <div class="photo-input-group">
+                        <input type="file" class="productPhoto" accept="image/*" />
+                        <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
+                    </div>
+                `;
+                document.getElementById('photoPreview').innerHTML = '';
+                setupPhotoUploads();
+                
+                document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
+                document.getElementById('auth').checked = true;
+                document.getElementById('isFeatured').checked = false;
+                updateBadgePreview();
+                
+                showSection('products');
+                renderProductsTable();
+            } else {
+                showMessage('Error adding product', 'error');
+            }
         }
     });
+    
+    // Cancel edit button
+    cancelEditBtn.addEventListener('click', cancelEdit);
+}
+
+function editProduct(index) {
+    const product = window.products[index];
+    
+    // Set edit mode
+    editMode = true;
+    editingProductId = index;
+    
+    // Fill form with product data
+    document.getElementById('name').value = product.name;
+    document.getElementById('designer').value = product.designer;
+    document.getElementById('era').value = product.era;
+    document.getElementById('price').value = product.price;
+    document.getElementById('category').value = product.category;
+    document.getElementById('condition').value = product.condition;
+    document.getElementById('story').value = product.story;
+    document.getElementById('isFeatured').checked = product.featured || false;
+    
+    // Set badges
+    document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
+    if (product.badges && product.badges.length > 0) {
+        product.badges.forEach(badge => {
+            const checkboxes = document.querySelectorAll('input[name="badges"]');
+            checkboxes.forEach(cb => {
+                if (cb.value === badge) {
+                    cb.checked = true;
+                }
+            });
+        });
+    }
+    updateBadgePreview();
+    
+    // Set photos
+    currentPhotos = product.photos ? [...product.photos] : [];
+    updatePhotoPreview();
+    
+    // Update UI
+    document.getElementById('submitBtn').textContent = 'Update Product';
+    document.getElementById('cancelEditBtn').style.display = 'block';
+    
+    // Scroll to form and show section
+    document.getElementById('addProduct').scrollIntoView({ behavior: 'smooth' });
+    showSection('addProduct');
+}
+
+function updateProduct(index, formData) {
+    try {
+        const product = window.products[index];
+        
+        product.name = formData.get('name');
+        product.designer = formData.get('designer');
+        product.era = formData.get('era');
+        product.price = parseInt(formData.get('price'));
+        product.category = formData.get('category');
+        product.condition = formData.get('condition');
+        product.story = formData.get('story');
+        product.featured = document.getElementById('isFeatured').checked;
+        
+        // Update badges from checkboxes
+        const badges = [];
+        document.querySelectorAll('input[name="badges"]:checked').forEach(cb => {
+            badges.push(cb.value);
+        });
+        product.badges = badges.length > 0 ? badges : ['⭐ Authentifiziert'];
+        
+        // Update photos from currentPhotos array
+        product.photos = currentPhotos;
+        
+        saveProductsToStorage();
+        return true;
+    } catch(error) {
+        console.error('Error updating product:', error);
+        return false;
+    }
+}
+
+function cancelEdit() {
+    editMode = false;
+    editingProductId = null;
+    
+    // Reset form
+    document.getElementById('addProductForm').reset();
+    
+    // Reset UI
+    document.getElementById('submitBtn').textContent = 'Add Product';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    
+    // Reset everything else
+    currentPhotos = [];
+    document.getElementById('photoUploads').innerHTML = `
+        <div class="photo-input-group">
+            <input type="file" class="productPhoto" accept="image/*" />
+            <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
+        </div>
+    `;
+    document.getElementById('photoPreview').innerHTML = '';
+    setupPhotoUploads();
+    
+    document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
+    document.getElementById('auth').checked = true;
+    document.getElementById('isFeatured').checked = false;
+    updateBadgePreview();
 }
 
 function setupBadgeCheckboxes() {
