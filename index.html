@@ -18,12 +18,22 @@
             <li><a href="about.html" data-i18n="nav.about">About</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
-                <div class="language-dropdown">
-                    <button class="language-selector" onclick="toggleLanguageMenu()">EN</button>
-                    <div class="language-menu" id="languageMenu">
-                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                <!-- Desktop: Language Boxes -->
+                <div class="language-boxes">
+                    <button class="lang-box" data-lang="de" onclick="setLanguage('de'); return false;">DE</button>
+                    <button class="lang-box" data-lang="en" onclick="setLanguage('en'); return false;">EN</button>
+                    <button class="lang-box" data-lang="fr" onclick="setLanguage('fr'); return false;">FR</button>
+                    <button class="lang-box" data-lang="it" onclick="setLanguage('it'); return false;">IT</button>
+                </div>
+                
+                <!-- Mobile: Language Dropdown -->
+                <div class="language-dropdown-mobile">
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">Language</button>
+                    <div class="language-menu-mobile" id="languageMenu">
                         <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
                         <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                        <a href="#" onclick="setLanguage('it'); return false;">Italiano</a>
                     </div>
                 </div>
             </li>
@@ -140,22 +150,12 @@
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="services-section">
-    <div class="services-container">
-        <h2 data-i18n="services.title">Services</h2>
-        
-        <div class="services-grid">
-            <div class="service-card">
-                <h3 data-i18n="services.consignment">Consignment Selling</h3>
-                <p data-i18n="services.consignment.desc">Have a piece you'd like to sell? Matthew offers commission-based consignment to connect your treasures with serious collectors.</p>
-            </div>
-            
-            <div class="service-card">
-                <h3 data-i18n="services.sourcing">Commission-Based Sourcing</h3>
-                <p data-i18n="services.sourcing.desc">Looking for specific pieces? Matthew actively sources authenticated pieces for collectors and designers.</p>
-            </div>
-        </div>
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container">
+        <h2 data-i18n="cta.title">Questions About a Piece?</h2>
+        <p data-i18n="cta.subtitle">Have questions about any pieces in the collection or need help finding something specific? Matthew is here to assist.</p>
+        <a href="contact.html" class="btn btn-primary" data-i18n="cta.button">Get in Touch</a>
     </div>
 </section>
 

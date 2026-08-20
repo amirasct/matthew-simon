@@ -18,12 +18,21 @@
             <li><a href="about.html" data-i18n="nav.about">About</a></li>
             <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
-                <div class="language-dropdown">
-                    <button class="language-selector" onclick="toggleLanguageMenu()">EN</button>
-                    <div class="language-menu" id="languageMenu">
-                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                <div class="language-boxes">
+                    <button class="lang-box" data-lang="de" onclick="setLanguage('de'); return false;">DE</button>
+                    <button class="lang-box" data-lang="en" onclick="setLanguage('en'); return false;">EN</button>
+                    <button class="lang-box" data-lang="fr" onclick="setLanguage('fr'); return false;">FR</button>
+                    <button class="lang-box" data-lang="it" onclick="setLanguage('it'); return false;">IT</button>
+                </div>
+                
+                <!-- Mobile: Language Dropdown -->
+                <div class="language-dropdown-mobile">
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">Language</button>
+                    <div class="language-menu-mobile" id="languageMenu">
                         <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
                         <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                        <a href="#" onclick="setLanguage('it'); return false;">Italiano</a>
                     </div>
                 </div>
             </li>

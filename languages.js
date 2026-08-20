@@ -4,7 +4,7 @@ const translations = {
     // Navigation
     'nav.home': 'Startseite',
     'nav.shop': 'Shop',
-    'nav.about': 'Über',
+    'nav.about': 'Über Mich',
     'nav.contact': 'Kontakt',
     
     // Homepage
@@ -44,6 +44,11 @@ const translations = {
     'services.consignment.desc': 'Haben Sie ein Stück, das Sie verkaufen möchten? Matthew bietet kommissionsbasierten Verkauf an, um Ihre Schätze mit ernsthaften Sammlern zu verbinden.',
     'services.sourcing': 'Kommissionsbasiertes Sourcing',
     'services.sourcing.desc': 'Suchen Sie nach bestimmten Stücken? Matthew sourced aktiv authentifizierte Stücke für Sammler und Designer.',
+    
+    // CTA Section
+    'cta.title': 'Fragen zu einem Stück?',
+    'cta.subtitle': 'Haben Sie Fragen zu Stücken in der Sammlung oder benötigen Sie Hilfe bei der Suche nach etwas Spezifischem? Matthew ist hier, um zu helfen.',
+    'cta.button': 'Kontakt aufnehmen',
     
     // Footer
     'footer.contact': 'Kontakt',
@@ -105,7 +110,7 @@ const translations = {
     // Navigation
     'nav.home': 'Accueil',
     'nav.shop': 'Boutique',
-    'nav.about': 'À propos',
+    'nav.about': 'À Propos de Moi',
     'nav.contact': 'Contact',
     
     // Homepage
@@ -145,6 +150,11 @@ const translations = {
     'services.consignment.desc': 'Avez-vous une pièce que vous aimeriez vendre? Matthew offre une vente en consignation basée sur commission pour connecter vos trésors avec des collectionneurs sérieux.',
     'services.sourcing': 'Sourcing basé sur la commission',
     'services.sourcing.desc': 'Vous cherchez des pièces spécifiques? Matthew source activement des pièces authentifiées pour les collectionneurs et les designers.',
+    
+    // CTA Section
+    'cta.title': 'Des Questions sur une Pièce?',
+    'cta.subtitle': 'Avez-vous des questions sur les pièces de la collection ou besoin d\'aide pour trouver quelque chose de spécifique? Matthew est là pour vous aider.',
+    'cta.button': 'Nous Contacter',
     
     // Footer
     'footer.contact': 'Contact',
@@ -202,11 +212,117 @@ const translations = {
     'contact.info.social': 'Social',
     'contact.info.follow': 'Suivre pour les mises à jour',
   },
+  it: {
+    // Navigation
+    'nav.home': 'Home',
+    'nav.shop': 'Negozio',
+    'nav.about': 'Su di me',
+    'nav.contact': 'Contatti',
+    
+    // Homepage
+    'hero.title': 'Matthew Simon',
+    'hero.subtitle': '40 Anni | Design e Antiquariato Europeo Autenticato',
+    'hero.location': 'Berna, Svizzera',
+    'hero.explore': 'Esplora Collezione',
+    'hero.learnmore': 'Scopri di Più',
+    
+    // Featured Section
+    'featured.badge': 'In Evidenza Questo Mese',
+    'featured.discover': 'Scopri Tesori Curati',
+    'featured.story': 'Uno dei più grandi soffiatori di vetro veneziani. Questo capolavoro Murano dipinto a mano rappresenta l\'apice dell\'arte del vetro veneziano degli anni \'20. Qualità da museo. Il tipo di pezzo che i collezionisti seri cercano.',
+    'featured.price': 'CHF 2.400',
+    'featured.inquire': 'Informazioni su questo',
+    'featured.similar': 'Vedi pezzi simili',
+    
+    // Why Section
+    'why.title': 'Perché Matthew',
+    'why.expertise': '40 Anni di Esperienza',
+    'why.expertise.desc': 'Quattro decenni di sourcing di pezzi autenticati per collezionisti in tutto il mondo',
+    'why.stuker': 'Esperto Stuker',
+    'why.stuker.desc': 'Esperto principale in arti applicate presso la prestigiosa casa d\'aste di Berna',
+    'why.authenticated': 'Autenticato',
+    'why.authenticated.desc': 'Ogni pezzo valutato personalmente per autenticità, condizione e provenienza',
+    
+    // Categories
+    'categories.title': 'Sfoglia per Categoria',
+    'categories.furniture': 'Mobili',
+    'categories.glass': 'Vetro',
+    'categories.lighting': 'Illuminazione',
+    'categories.objects': 'Oggetti',
+    
+    // Services
+    'services.title': 'Servizi',
+    'services.consignment': 'Vendita in Consegna',
+    'services.consignment.desc': 'Hai un pezzo che vorresti vendere? Matthew offre vendita in consegna basata su commissione per collegare i tuoi tesori con collezionisti seri.',
+    'services.sourcing': 'Sourcing Basato su Commissione',
+    'services.sourcing.desc': 'Stai cercando pezzi specifici? Matthew ricerca attivamente pezzi autenticati per collezionisti e designer.',
+    
+    // CTA Section
+    'cta.title': 'Domande su un Pezzo?',
+    'cta.subtitle': 'Hai domande sui pezzi della collezione o hai bisogno di aiuto per trovare qualcosa di specifico? Matthew è qui per aiutarti.',
+    'cta.button': 'Contattami',
+    
+    // Footer
+    'footer.contact': 'Contatti',
+    'footer.instagram': 'Instagram',
+    'footer.admin': 'Admin',
+    'footer.copyright': '© 2026 Matthew Simon. Tutti i diritti riservati.',
+    
+    // Shop Page
+    'shop.title': 'Collezione',
+    'shop.subtitle': 'Pezzi curati autenticati e reperiti da Matthew Simon',
+    'shop.filter.category': 'Categoria:',
+    'shop.filter.sort': 'Ordina:',
+    'shop.sort.featured': 'In Evidenza',
+    'shop.sort.price-high': 'Prezzo: Alto a Basso',
+    'shop.sort.price-low': 'Prezzo: Basso ad Alto',
+    'shop.sort.era-new': 'Era: Più Recente',
+    'shop.search': 'Cerca prodotti...',
+    'shop.inquire': 'Informazioni',
+    'shop.empty': 'Nessun prodotto trovato. Prova ad aggiustare i tuoi filtri.',
+    
+    // About Page
+    'about.title': 'Su Matthew',
+    'about.subtitle': '40 Anni di Expertise in Design Autenticato',
+    'about.story.heading': '40 Anni di Design Autenticato Curato',
+    'about.story.p1': 'Dopo aver scambiato il suo mestiere come doratore e restauratore con la consulenza artistica all\'età di 30 anni, Matthew ha trascorso 10 anni come esperto principale in arti applicate presso la rinomata casa d\'aste Stuker di Berna, approfondendo la sua conoscenza di molteplici movimenti di design e periodi.',
+    'about.story.p2': 'Oggi, quattro decenni nella sua carriera, Matthew si concentra su quello che ama: trovare pezzi autenticati e rari e connetterli con collezionisti che comprendono il loro valore. Ogni oggetto nella sua collezione viene valutato personalmente per autenticità, condizione e provenienza.',
+    'about.story.p3': 'Che tu stia arredando una casa accuratamente curata, costruendo una collezione di investimento o cercando perizie per una proprietà - Matthew ricerca, autentica e racconta la storia dietro ogni pezzo.',
+    'about.based': 'Con sede a Berna, Svizzera',
+    
+    'about.experience': 'Esperienza',
+    'about.cred.40years': '40 Anni',
+    'about.cred.40years.desc': 'Sourcing di pezzi autenticati per collezionisti in tutto il mondo',
+    'about.cred.stuker': 'Esperto Stuker',
+    'about.cred.stuker.desc': 'Esperto principale in arti applicate presso la rinomata casa d\'aste di Berna',
+    'about.cred.master': 'Artigiano Maestro',
+    'about.cred.master.desc': 'Formato come doratore e restauratore con una profonda comprensione di materiali e tecniche',
+    'about.cred.auth': 'Autenticato',
+    'about.cred.auth.desc': 'Ogni pezzo valutato personalmente per autenticità, condizione e provenienza',
+    
+    // Contact Page
+    'contact.title': 'Contattami',
+    'contact.subtitle': 'Poni domande sui pezzi o discuti della tua collezione',
+    'contact.form.name': 'Il tuo nome',
+    'contact.form.email': 'Indirizzo email',
+    'contact.form.subject': 'Oggetto',
+    'contact.form.subject.product': 'Informazioni su un pezzo',
+    'contact.form.subject.consignment': 'Vendita in Consegna',
+    'contact.form.subject.sourcing': 'Sourcing Basato su Commissione',
+    'contact.form.subject.other': 'Altro',
+    'contact.form.message': 'Messaggio',
+    'contact.form.send': 'Invia Richiesta',
+    'contact.form.note': 'Matthew di solito risponde entro 24 ore.',
+    'contact.info.email': 'Email',
+    'contact.info.location': 'Localizzazione',
+    'contact.info.social': 'Social',
+    'contact.info.follow': 'Segui per gli aggiornamenti',
+  },
   en: {
     // Navigation
     'nav.home': 'Home',
     'nav.shop': 'Shop',
-    'nav.about': 'About',
+    'nav.about': 'About Me',
     'nav.contact': 'Contact',
     
     // Homepage
@@ -246,6 +362,11 @@ const translations = {
     'services.consignment.desc': 'Have a piece you\'d like to sell? Matthew offers commission-based consignment to connect your treasures with serious collectors.',
     'services.sourcing': 'Commission-Based Sourcing',
     'services.sourcing.desc': 'Looking for specific pieces? Matthew actively sources authenticated pieces for collectors and designers.',
+    
+    // CTA Section
+    'cta.title': 'Questions About a Piece?',
+    'cta.subtitle': 'Have questions about any pieces in the collection or need help finding something specific? Matthew is here to assist.',
+    'cta.button': 'Get in Touch',
     
     // Footer
     'footer.contact': 'Contact',
@@ -305,17 +426,63 @@ const translations = {
   }
 };
 
-// Language management
-let currentLanguage = localStorage.getItem('matthew_language') || 'en';
+// Language management with auto-detection
+function getDetectedLanguage() {
+  // Check localStorage first
+  const saved = localStorage.getItem('matthew_language');
+  if (saved) return saved;
+  
+  // Auto-detect from browser language
+  const browserLang = navigator.language || navigator.userLanguage;
+  const langCode = browserLang.substring(0, 2).toLowerCase();
+  
+  // Map browser language to supported languages
+  const langMap = {
+    'de': 'de',  // German
+    'fr': 'fr',  // French
+    'it': 'it',  // Italian
+    'en': 'en'   // English (default)
+  };
+  
+  return langMap[langCode] || 'en';
+}
+
+let currentLanguage = getDetectedLanguage();
 
 function setLanguage(lang) {
   currentLanguage = lang;
   localStorage.setItem('matthew_language', lang);
   updatePageLanguage();
+  updateLanguageSelector();
 }
 
 function t(key) {
   return translations[currentLanguage][key] || translations.en[key] || key;
+}
+
+function toggleLanguageMenu() {
+  const menu = document.getElementById('languageMenu');
+  if (menu) {
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+function updateLanguageSelector() {
+  // Update language selector button text and boxes
+  const langButton = document.querySelector('.language-selector');
+  if (langButton) {
+    langButton.textContent = currentLanguage.toUpperCase();
+  }
+  
+  // Update active language box styling
+  document.querySelectorAll('.lang-box').forEach(box => {
+    const lang = box.getAttribute('data-lang');
+    if (lang === currentLanguage) {
+      box.classList.add('active');
+    } else {
+      box.classList.remove('active');
+    }
+  });
 }
 
 function updatePageLanguage() {
@@ -329,15 +496,24 @@ function updatePageLanguage() {
     element.placeholder = t(key);
   });
   
-  // Update language selector button
-  const langButton = document.querySelector('.language-selector');
-  if (langButton) {
-    langButton.textContent = currentLanguage.toUpperCase();
-  }
+  updateLanguageSelector();
   
   // Update html lang attribute
   document.documentElement.lang = currentLanguage;
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', updatePageLanguage);
+document.addEventListener('DOMContentLoaded', function() {
+  updatePageLanguage();
+  
+  // Close language menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const langDropdown = document.querySelector('.language-dropdown');
+    if (langDropdown && !langDropdown.contains(event.target)) {
+      const menu = document.getElementById('languageMenu');
+      if (menu) {
+        menu.style.display = 'none';
+      }
+    }
+  });
+});
