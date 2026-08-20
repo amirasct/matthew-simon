@@ -73,6 +73,13 @@ a:hover {
     color: var(--text-dark);
 }
 
+.logo-tagline {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-left: 0.5rem;
+}
+
 .nav-menu {
     display: flex;
     list-style: none;
