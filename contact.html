@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Matthew Simon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">Matthew Simon</div>
+        <ul class="nav-menu">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
+            <li class="nav-language">
+                <div class="language-dropdown">
+                    <button class="language-selector" onclick="toggleLanguageMenu()">EN</button>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+    <h1 data-i18n="contact.title">Get in Touch</h1>
+    <p data-i18n="contact.subtitle">Inquire about pieces or discuss your collection</p>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="contact-container">
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <h2>Send an Inquiry</h2>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name" data-i18n="contact.form.name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" data-i18n="contact.form.email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" data-i18n="contact.form.subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="">Select a topic</option>
+                            <option value="product-inquiry" data-i18n="contact.form.subject.product">Inquiry About a Piece</option>
+                            <option value="authentication" data-i18n="contact.form.subject.auth">Authentication & Consultation</option>
+                            <option value="valuation" data-i18n="contact.form.subject.valuation">Estate Valuation</option>
+                            <option value="sourcing" data-i18n="contact.form.subject.sourcing">Commission-Based Sourcing</option>
+                            <option value="other" data-i18n="contact.form.subject.other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" data-i18n="contact.form.message">Message</label>
+                        <textarea id="message" name="message" rows="6" data-i18n-placeholder="contact.form.message" placeholder="Tell Matthew about your inquiry..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" data-i18n="contact.form.send">Send Inquiry</button>
+                    <p class="form-note" data-i18n="contact.form.note">Matthew typically responds within 24 hours.</p>
+                </form>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="contact-info-container">
+                <h2>Contact Information</h2>
+                
+                <div class="contact-info">
+                    <h3 data-i18n="contact.info.email">Email</h3>
+                    <p><a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a></p>
+                </div>
+                
+                <div class="contact-info">
+                    <h3 data-i18n="contact.info.location">Location</h3>
+                    <p>Bern, Switzerland</p>
+                </div>
+                
+                <div class="contact-info">
+                    <h3 data-i18n="contact.info.social">Social</h3>
+                    <p><a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram @matthew_simon_bern</a></p>
+                </div>
+                
+                <div class="contact-info">
+                    <h3 data-i18n="contact.info.follow">Follow for Updates</h3>
+                    <p>New acquisitions and collector insights are shared regularly on Instagram.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Matthew Simon</h4>
+            <p>Authenticated European Design & Antiques<br>Bern, Switzerland</p>
+        </div>
+        
+        <div class="footer-section">
+            <h4 data-i18n="footer.contact">Contact</h4>
+            <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
+            🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram @matthew_simon_bern</a></p>
+        </div>
+        
+        <div class="footer-section">
+            <h4 data-i18n="footer.admin">Admin</h4>
+            <p><a href="admin.html">Manage Products</a></p>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="languages.js"></script>
+<script>
+function toggleLanguageMenu() {
+    const menu = document.getElementById('languageMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.language-dropdown');
+    if (!dropdown.contains(event.target)) {
+        document.getElementById('languageMenu').style.display = 'none';
+    }
+});
+
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    // Create mailto link with pre-filled content
+    const mailtoLink = `mailto:info@matthew-simon.ch?subject=Inquiry: ${subject || 'General'}&body=From: ${name} (${email})%0D%0A%0D%0AMessage:%0D%0A${message}`;
+    
+    window.location.href = mailtoLink;
+});
+</script>
+
+</body>
+</html>

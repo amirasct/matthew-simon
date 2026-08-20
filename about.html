@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Matthew | Matthew Simon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">Matthew Simon</div>
+        <ul class="nav-menu">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="about.html" class="active" data-i18n="nav.about">About</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+            <li class="nav-language">
+                <div class="language-dropdown">
+                    <button class="language-selector" onclick="toggleLanguageMenu()">EN</button>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+    <h1 data-i18n="about.title">About Matthew</h1>
+    <p data-i18n="about.subtitle">40 years of authenticated design expertise</p>
+</section>
+
+<!-- Story Section -->
+<section class="story-section">
+    <div class="story-container">
+        <div class="story-content">
+            <h2 data-i18n="about.story.heading">40 Years Curating Authenticated Design</h2>
+            
+            <p data-i18n="about.story.p1">After trading his profession as a gilder and restorer for art mediation at 30, Matthew spent 10 years as Lead Expert in Applied Art at Bern's prestigious Stuker Auction House, deepening his knowledge across multiple design movements and eras.</p>
+            
+            <p data-i18n="about.story.p2">Today, four decades into his career, Matthew focuses on what he loves: finding authenticated, rare pieces and connecting them with collectors who understand their value. Every item in his collection is personally evaluated for authenticity, condition, and provenance.</p>
+            
+            <p data-i18n="about.story.p3">Whether you're furnishing a carefully curated home, building an investment collection, or seeking expert valuations for an estate—Matthew sources, authenticates, and tells the story behind each piece.</p>
+            
+            <p style="margin-top: 2rem; font-style: italic; color: #666;" data-i18n="about.based">Based in Bern, Switzerland</p>
+        </div>
+    </div>
+</section>
+
+<!-- Credentials Section -->
+<section class="credentials-section">
+    <div class="credentials-container">
+        <h2 data-i18n="about.experience">Experience</h2>
+        
+        <div class="credentials-grid">
+            <div class="credential-card">
+                <h3 data-i18n="about.cred.40years">40 Years</h3>
+                <p data-i18n="about.cred.40years.desc">Sourcing authenticated pieces for collectors worldwide</p>
+            </div>
+            
+            <div class="credential-card">
+                <h3 data-i18n="about.cred.stuker">Stuker Expert</h3>
+                <p data-i18n="about.cred.stuker.desc">Lead Expert in Applied Art at Bern's prestigious auction house</p>
+            </div>
+            
+            <div class="credential-card">
+                <h3 data-i18n="about.cred.master">Master Craftsman</h3>
+                <p data-i18n="about.cred.master.desc">Trained as gilder and restorer with deep understanding of materials and techniques</p>
+            </div>
+            
+            <div class="credential-card">
+                <h3 data-i18n="about.cred.auth">Authenticated</h3>
+                <p data-i18n="about.cred.auth.desc">Every piece personally evaluated for authenticity, condition, and provenance</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-detail-section">
+    <div class="services-detail-container">
+        <h2>Services</h2>
+        
+        <div class="service-detail-grid">
+            <div class="service-detail-card">
+                <h3>Authentication & Consultation</h3>
+                <p>Expert evaluation and assessment of your pieces. Matthew provides detailed analysis of authenticity, period, condition, and market context.</p>
+                <p><a href="contact.html?service=authentication" class="link-arrow">Inquire →</a></p>
+            </div>
+            
+            <div class="service-detail-card">
+                <h3>Estate Valuations & Appraisals</h3>
+                <p>Professional valuations and complete inventorying of collections and estates. Documented assessments for insurance, legal, or planning purposes.</p>
+                <p><a href="contact.html?service=valuation" class="link-arrow">Inquire →</a></p>
+            </div>
+            
+            <div class="service-detail-card">
+                <h3>Commission-Based Sourcing</h3>
+                <p>Looking for specific pieces? Matthew actively sources authenticated pieces for collectors and designers. Specialize in custom commission searches.</p>
+                <p><a href="contact.html?service=sourcing" class="link-arrow">Inquire →</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container">
+        <h2>Ready to Discuss Your Collection?</h2>
+        <p>Whether you have questions about a piece, need a valuation, or want to commission a search—Matthew is ready to help.</p>
+        <a href="contact.html" class="btn btn-primary">Get in Touch</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Matthew Simon</h4>
+            <p>Authenticated European Design & Antiques<br>Bern, Switzerland</p>
+        </div>
+        
+        <div class="footer-section">
+            <h4 data-i18n="footer.contact">Contact</h4>
+            <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
+            🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram @matthew_simon_bern</a></p>
+        </div>
+        
+        <div class="footer-section">
+            <h4 data-i18n="footer.admin">Admin</h4>
+            <p><a href="admin.html">Manage Products</a></p>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="languages.js"></script>
+<script>
+function toggleLanguageMenu() {
+    const menu = document.getElementById('languageMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.language-dropdown');
+    if (!dropdown.contains(event.target)) {
+        document.getElementById('languageMenu').style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>
