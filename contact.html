@@ -175,21 +175,39 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     window.location.href = mailtoLink;
 });
 
-// Prefill form with product name if coming from shop
+// Prefill form with product name / subject / message if coming from shop/detail
 window.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
     const productName = params.get('product');
+    const subjectParam = params.get('subject');
+    const messageParam = params.get('message');
     
-    if (productName) {
-        // Auto-select "product-inquiry" subject
+    // New style: direct subject/message from shop.js and product-detail.html
+    if (subjectParam || messageParam) {
         document.getElementById('subject').value = 'product-inquiry';
-        
-        // Prefill message with product name in current language
+        if (messageParam) {
+            document.getElementById('message').value = decodeURIComponent(messageParam);
+        }
+        // Try to prefill name/email from localStorage
+        const savedName = localStorage.getItem('contactName');
+        const savedEmail = localStorage.getItem('contactEmail');
+        if (savedName) document.getElementById('name').value = savedName;
+        if (savedEmail) document.getElementById('email').value = savedEmail;
+        // Focus on name if empty, else message
+        if (!savedName) {
+            document.getElementById('name').focus();
+        } else {
+            document.getElementById('message').focus();
+        }
+        return;
+    }
+    
+    // Legacy: product name only
+    if (productName) {
+        document.getElementById('subject').value = 'product-inquiry';
         const messageField = document.getElementById('message');
-        const template = t('contact.inquiry.message') || 'I\'m interested in the {product}. Could you please provide more details?';
+        const template = 'Guten Tag Herr Simon,\n\nIch interessiere mich für "{product}". Könnten Sie mir bitte weitere Details zusenden?\n\nMit freundlichen Grüßen';
         messageField.value = template.replace('{product}', productName);
-        
-        // Focus on message field so user can start typing
         messageField.focus();
     }
 });

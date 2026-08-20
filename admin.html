@@ -1,1110 +1,524 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Matthew Simon</title>
+    <title>Admin - Matthew Simon European Design & Antiques</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+        .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        .admin-stats { display: flex; gap: 30px; }
+        .stat-box { text-align: center; }
+        .stat-num { font-size: 1.8rem; font-weight: 700; color: #1B3A52; }
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; color: #999; letter-spacing: 1px; }
         
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid var(--border-light);
-            padding-bottom: 1.5rem;
-        }
+        .admin-toolbar { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+        .admin-search { flex-grow: 1; min-width: 200px; padding: 10px 16px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        .btn-add { background: #B8860B; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-add:hover { background: #1B3A52; }
+        .admin-filter { padding: 10px 16px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
         
-        .admin-nav {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+        .products-table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .products-table table { width: 100%; border-collapse: collapse; }
+        .products-table th { background: #1B3A52; color: white; padding: 12px 16px; text-align: left; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .products-table td { padding: 12px 16px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .products-table tr:hover { background: #f9f7f4; }
         
-        .admin-nav a {
-            padding: 0.7rem 1.5rem;
-            background: var(--accent-blue);
-            color: white;
-            border-radius: 3px;
-            font-weight: 500;
-        }
+        .table-thumb { width: 60px; height: 60px; border-radius: 4px; overflow: hidden; background: #f5f3f0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #999; }
+        .table-thumb img { width: 100%; height: 100%; object-fit: cover; }
         
-        .admin-nav a:hover {
-            background: var(--accent-terracotta);
-            color: white;
-        }
+        .row-actions { display: flex; gap: 6px; }
+        .btn-icon { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+        .btn-edit { background: #1B3A52; color: white; }
+        .btn-edit:hover { background: #B8860B; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-delete:hover { background: #a71e2a; }
+        .btn-view { background: #6c757d; color: white; text-decoration: none; display: inline-block; }
         
-        .section {
-            display: none;
-        }
+        .row-badge { display: inline-block; padding: 2px 8px; background: #e9ecef; border-radius: 10px; font-size: 0.7rem; margin-right: 4px; }
         
-        .section.active {
-            display: block;
+        /* Modal */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;
+            padding: 20px; overflow-y: auto;
         }
+        .modal-overlay.active { display: flex; }
+        .modal { 
+            background: white; border-radius: 8px; padding: 30px; max-width: 800px; width: 100%;
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal h2 { margin-top: 0; color: #1B3A52; font-family: 'Playfair Display', Georgia, serif; }
+        .modal-close { float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
         
-        .products-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border: 1px solid var(--border-light);
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px;
+            font-size: 0.95rem; font-family: inherit; box-sizing: border-box;
         }
+        .form-group textarea { min-height: 120px; resize: vertical; }
         
-        .products-table th {
-            background: var(--accent-blue);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         
-        .products-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-light);
+        .badge-checkboxes { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge-checkbox { 
+            display: flex; align-items: center; padding: 6px 12px; background: #f5f3f0;
+            border-radius: 16px; cursor: pointer; font-size: 0.85rem;
         }
+        .badge-checkbox input { margin-right: 6px; }
+        .badge-checkbox.checked { background: #1B3A52; color: white; }
         
-        .products-table tr:hover {
-            background: #f9f8f6;
+        /* Photo management */
+        .photo-manager { background: #f9f7f4; padding: 16px; border-radius: 6px; margin: 12px 0; }
+        .photo-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
+        .photo-item { 
+            position: relative; aspect-ratio: 1/1; background: white; border-radius: 4px;
+            border: 2px solid #ddd; overflow: hidden; cursor: move;
         }
+        .photo-item.dragging { opacity: 0.5; }
+        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-size: 1.5rem; }
+        .photo-order { 
+            position: absolute; top: 4px; left: 4px; background: rgba(0,0,0,0.7); color: white;
+            border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .photo-remove { 
+            position: absolute; top: 4px; right: 4px; background: rgba(220,53,69,0.9); color: white;
+            border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
+            font-size: 0.9rem; line-height: 1; padding: 0;
+        }
+        .photo-filename { 
+            position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white;
+            font-size: 0.65rem; padding: 4px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .add-photo-input { 
+            display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd;
+        }
+        .add-photo-input input { flex-grow: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
+        .add-photo-input button { padding: 8px 16px; background: #1B3A52; color: white; border: none; border-radius: 4px; cursor: pointer; }
         
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn-save { background: #B8860B; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-save:hover { background: #1B3A52; }
+        .btn-cancel { background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; }
         
-        .action-buttons a,
-        .action-buttons button {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
-            border-radius: 2px;
-            border: none;
-            cursor: pointer;
-            color: white;
+        .toast { 
+            position: fixed; bottom: 30px; right: 30px; padding: 16px 24px; border-radius: 6px;
+            color: white; font-weight: 600; z-index: 2000; opacity: 0; transition: opacity 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        
-        .btn-edit {
-            background: var(--accent-gold);
-        }
-        
-        .btn-delete {
-            background: #D97757;
-        }
-        
-        .btn-edit {
-            background: var(--accent-blue);
-        }
-        
-        .btn-edit:hover {
-            background: #2a3a4a;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            background: white;
-            padding: 2rem;
-            border: 1px solid var(--border-light);
-            margin-bottom: 2rem;
-        }
-        
-        .form-grid.full {
-            grid-template-columns: 1fr;
-        }
-        
-        .form-group textarea {
-            grid-column: 1 / -1;
-        }
-        
-        .add-product-form {
-            max-width: 1200px;
-        }
-        
-        .add-product-form .form-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            grid-column: 1 / -1;
-        }
-        
-        .message {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 3px;
-            display: none;
-        }
-        
-        .message.success {
-            background: #D4EDDA;
-            color: #155724;
-            display: block;
-        }
-        
-        .message.error {
-            background: #F8D7DA;
-            color: #721C24;
-            display: block;
-        }
-        
-        .admin-section-title {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-light);
-        }
-        
-        .badges-section {
-            background: #f9f8f6;
-            padding: 1.5rem;
-            border-radius: 3px;
-            grid-column: 1 / -1;
-            margin-top: 1rem;
-        }
-        
-        .badges-section h3 {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-        
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        
-        .badge-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .badge-checkbox input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        
-        .badge-checkbox label {
-            cursor: pointer;
-            margin: 0;
-            font-size: 0.9rem;
-        }
-        
-        .badge-preview {
-            margin-top: 1rem;
-            padding: 0.8rem;
-            background: white;
-            border-radius: 3px;
-            font-size: 0.9rem;
-            color: var(--text-dark);
-        }
-        
-        .photo-upload-section {
-            grid-column: 1 / -1;
-            background: #f9f8f6;
-            padding: 1.5rem;
-            border-radius: 3px;
-        }
-        
-        .photo-upload-section h3 {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-        
-        .photo-uploads {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .photo-input-group {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            background: white;
-            padding: 1rem;
-            border-radius: 3px;
-            border: 1px solid var(--border-light);
-        }
-        
-        .photo-input-group input[type="file"] {
-            flex: 1;
-        }
-        
-        .remove-photo-btn {
-            padding: 0.5rem 1rem;
-            background: #D97757;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        
-        .add-photo-btn {
-            padding: 0.5rem 1.2rem;
-            background: var(--accent-gold);
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        
-        .photo-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .photo-preview-item {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 3px;
-            overflow: hidden;
-            border: 2px solid var(--border-light);
-            cursor: grab;
-            transition: all 0.2s ease;
-        }
-        
-        .photo-preview-item.dragging {
-            opacity: 0.5;
-            cursor: grabbing;
-        }
-        
-        .photo-preview-item.drag-over {
-            border-color: var(--accent-gold);
-            background: #faf8f5;
-        }
-        
-        .photo-preview-item.is-primary {
-            border-color: var(--accent-gold);
-            border-width: 3px;
-            box-shadow: 0 0 0 3px rgba(196, 167, 71, 0.2);
-        }
-        
-        .photo-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--accent-gold);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 10;
-        }
-        
-        .photo-order-number {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        
-        .photo-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 0.5rem;
-            font-size: 0.75rem;
-            text-align: center;
-        }
-        
-        .featured-section {
-            grid-column: 1 / -1;
-            background: #e8f4f8;
-            padding: 1rem;
-            border-radius: 3px;
-            border-left: 4px solid var(--accent-blue);
-        }
-        
-        .featured-section label {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .featured-section input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        .featured-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 3px;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-        
-        .featured-toggle.is-featured {
-            background: #D4EDDA;
-            color: #155724;
-        }
-        
-        .featured-toggle.not-featured {
-            background: #F8D7DA;
-            color: #721C24;
-        }
+        .toast.show { opacity: 1; }
+        .toast.success { background: #28a745; }
+        .toast.error { background: #dc3545; }
+        .toast.info { background: #17a2b8; }
     </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav class="navbar">
     <div class="nav-container">
         <div class="logo">Matthew Simon | Admin <span class="logo-tagline">European Design & Antiques</span></div>
         <ul class="nav-menu">
-            <li><a href="index.html">← Back to Site</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="admin.html" class="active">Admin</a></li>
         </ul>
     </div>
 </nav>
 
-<!-- Admin Container -->
 <div class="admin-container">
     <div class="admin-header">
-        <h1>Admin Panel</h1>
-        <p>Manage products and content</p>
-    </div>
-    
-    <!-- Admin Navigation -->
-    <div class="admin-nav">
-        <a href="#" onclick="showSection('products')" class="nav-link active">Products</a>
-        <a href="#" onclick="showSection('add-product')" class="nav-link">Add Product</a>
-    </div>
-    
-    <!-- Messages -->
-    <div id="message" class="message"></div>
-    
-    <!-- Products Section -->
-    <div id="products" class="section active">
-        <h2 class="admin-section-title">Current Products</h2>
-        
-        <div style="margin-bottom: 1rem;">
-            <input type="text" id="searchProducts" placeholder="Search products..." 
-                   style="padding: 0.7rem; width: 100%; max-width: 300px; border: 1px solid var(--border-light); border-radius: 3px;">
+        <div>
+            <h1 style="margin:0;font-family:'Playfair Display',serif;color:#1B3A52;">Produktverwaltung</h1>
+            <p style="margin:4px 0 0;color:#666;font-size:0.9rem;">Verwalten Sie hier alle Produkte für die Website</p>
         </div>
-        
-        <div style="overflow-x: auto;">
-            <table class="products-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Designer</th>
-                        <th>Era</th>
-                        <th>Price (CHF)</th>
-                        <th>Category</th>
-                        <th>Featured</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="productsTableBody">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+        <div class="admin-stats">
+            <div class="stat-box">
+                <div class="stat-num" id="statTotal">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" id="statWithPrice">0</div>
+                <div class="stat-label">Mit Preis</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" id="statWithPhotos">0</div>
+                <div class="stat-label">Mit Fotos</div>
+            </div>
         </div>
     </div>
     
-    <!-- Add Product Section -->
-    <div id="add-product" class="section">
-        <h2 class="admin-section-title">Add New Product</h2>
+    <div class="admin-toolbar">
+        <input type="text" class="admin-search" id="searchBox" placeholder="🔍 Produkt suchen (Name, Kategorie...)">
+        <select class="admin-filter" id="categoryFilter">
+            <option value="">Alle Kategorien</option>
+            <option value="Möbel">Möbel</option>
+            <option value="Glas">Glas</option>
+            <option value="Leuchten">Leuchten</option>
+            <option value="Objekte">Objekte</option>
+        </select>
+        <button class="btn-add" onclick="openAddModal()">+ Neues Produkt</button>
+        <button class="btn-add" style="background:#dc3545;" onclick="resetAllChanges()" title="Alle Änderungen zurücksetzen">↺ Reset</button>
+    </div>
+    
+    <div class="products-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Name</th>
+                    <th>Kategorie</th>
+                    <th>Preis</th>
+                    <th>Fotos</th>
+                    <th>Badges</th>
+                    <th style="text-align:right;">Aktionen</th>
+                </tr>
+            </thead>
+            <tbody id="productsTableBody">
+                <tr><td colspan="7" style="text-align:center;padding:40px;">Lädt Produkte...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Edit/Add Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2 id="modalTitle">Produkt bearbeiten</h2>
         
-        <form class="add-product-form" id="addProductForm">
-            <div class="form-grid">
+        <form id="productForm" onsubmit="saveProduct(event)">
+            <input type="hidden" id="editId">
+            
+            <div class="form-group">
+                <label>Produktname *</label>
+                <input type="text" id="editName" required>
+            </div>
+            
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="productName">Product Name *</label>
-                    <input type="text" id="productName" name="productName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="designer">Designer/Maker</label>
-                    <input type="text" id="designer" name="designer">
-                </div>
-                
-                <div class="form-group">
-                    <label for="era">Era *</label>
-                    <input type="text" id="era" name="era" placeholder="e.g., 1950s" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="condition">Condition</label>
-                    <select id="condition" name="condition">
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Fair">Fair</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="price">Price (CHF) *</label>
-                    <input type="number" id="price" name="price" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="category">Category *</label>
-                    <select id="category" name="category" required>
-                        <option value="">Select category</option>
+                    <label>Kategorie *</label>
+                    <select id="editCategory" required>
                         <option value="Möbel">Möbel (Furniture)</option>
                         <option value="Glas">Glas (Glass)</option>
                         <option value="Leuchten">Leuchten (Lighting)</option>
                         <option value="Objekte">Objekte (Objects)</option>
                     </select>
                 </div>
-                
-                <div class="form-group full">
-                    <label for="story">Product Story/Description *</label>
-                    <textarea id="story" name="story" placeholder="Why is this piece special? What makes it valuable?" required></textarea>
+                <div class="form-group">
+                    <label>Preis</label>
+                    <input type="text" id="editPrice" placeholder="z.B. CHF 900 oder Preis auf Anfrage">
                 </div>
-                
-                <div class="featured-section">
-                    <label for="isFeatured">
-                        <input type="checkbox" id="isFeatured" name="isFeatured">
-                        ⭐ <strong>Showcase on Homepage</strong> - Display this piece in the featured section
-                    </label>
+            </div>
+            
+            <div class="form-group">
+                <label>Kurze Beschreibung (für Shop-Karte, max 130 Zeichen)</label>
+                <input type="text" id="editShortHook" maxlength="130">
+            </div>
+            
+            <div class="form-group">
+                <label>Vollständige Beschreibung (für Detail-Seite)</label>
+                <textarea id="editDescription"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Badges (Qualitätsmerkmale)</label>
+                <div class="badge-checkboxes">
+                    <label class="badge-checkbox"><input type="checkbox" value="authenticated"> ✓ Signiert / Authentifiziert</label>
+                    <label class="badge-checkbox"><input type="checkbox" value="rare"> ★ Selten</label>
+                    <label class="badge-checkbox"><input type="checkbox" value="documented"> 📖 Dokumentiert</label>
+                    <label class="badge-checkbox"><input type="checkbox" value="museum"> 🏛 Museumsqualität</label>
+                    <label class="badge-checkbox"><input type="checkbox" value="provenance"> 📜 Provenienz</label>
                 </div>
-                
-                <div class="photo-upload-section">
-                    <h3>📸 Product Photos (Multiple)</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Upload photos for this product. The first photo will be the primary/main photo:</p>
-                    
-                    <div class="photo-uploads" id="photoUploads">
-                        <div class="photo-input-group">
-                            <input type="file" class="productPhoto" accept="image/*" />
-                            <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
-                        </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Fotos verwalten (Ziehen zum Umordnen, erstes Foto = Hauptbild)</label>
+                <div class="photo-manager">
+                    <div id="photoList" class="photo-list"></div>
+                    <div class="add-photo-input">
+                        <input type="text" id="newPhotoName" placeholder="Dateiname z.B. ms_gl_02_dino_martens_01.jpg">
+                        <button type="button" onclick="addPhoto()">+ Foto hinzufügen</button>
                     </div>
-                    
-                    <button type="button" class="add-photo-btn" onclick="addPhotoInput()">+ Add Another Photo</button>
-                    
-                    <div class="photo-preview" id="photoPreview"></div>
+                    <p style="font-size:0.75rem;color:#666;margin:8px 0 0;">
+                        💡 Die Dateien müssen im GitHub-Ordner <code>/images/</code> vorhanden sein.
+                    </p>
                 </div>
-                
-                <div class="badges-section">
-                    <h3>🎨 Quality & Authentication Badges</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Check all that apply to this piece:</p>
-                    
-                    <div class="badges-grid">
-                        <!-- AUTHENTICITY -->
-                        <div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem;">Authenticity</div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="auth" name="badges" value="Authentifiziert">
-                            <label for="auth">⭐ Authentifiziert (Authenticated)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="certified" name="badges" value="Zertifiziert">
-                            <label for="certified">✓ Zertifiziert (Certified)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="provenance" name="badges" value="Provenance dokumentiert">
-                            <label for="provenance">📜 Provenance dokumentiert</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="signed" name="badges" value="Signiert/Markiert">
-                            <label for="signed">🔐 Signiert/Markiert</label>
-                        </div>
-                        
-                        <!-- CONDITION -->
-                        <div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-blue); margin-top: 1rem; margin-bottom: 0.5rem;">Condition</div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="original" name="badges" value="Original-Zustand">
-                            <label for="original">✨ Original-Zustand</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="restored" name="badges" value="Restauriert">
-                            <label for="restored">🔧 Restauriert (Restored)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="asfound" name="badges" value="So vorgefunden">
-                            <label for="asfound">⚡ So vorgefunden</label>
-                        </div>
-                        
-                        <!-- QUALITY -->
-                        <div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-blue); margin-top: 1rem; margin-bottom: 0.5rem;">Quality & Significance</div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="museum" name="badges" value="Museum Quality">
-                            <label for="museum">🏆 Museum Quality</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="investment" name="badges" value="Investment-Klasse">
-                            <label for="investment">💎 Investment-Klasse</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="craftmanship" name="badges" value="Kunsthandwerk">
-                            <label for="craftmanship">🎨 Kunsthandwerk</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="collector" name="badges" value="Sammler-Stück">
-                            <label for="collector">🌟 Sammler-Stück</label>
-                        </div>
-                        
-                        <!-- RARITY & HISTORY -->
-                        <div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-blue); margin-top: 1rem; margin-bottom: 0.5rem;">Rarity & Significance</div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="rare" name="badges" value="Selten">
-                            <label for="rare">🔍 Selten (Rare)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="historical" name="badges" value="Historisch">
-                            <label for="historical">🌍 Historisch (Historical)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="specialist" name="badges" value="Spezialist">
-                            <label for="specialist">💎 Spezialist (Specialist)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="limited" name="badges" value="Limitierte Auflage">
-                            <label for="limited">🎁 Limitierte Auflage</label>
-                        </div>
-                        
-                        <!-- PROVENANCE -->
-                        <div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-blue); margin-top: 1rem; margin-bottom: 0.5rem;">Provenance & Recognition</div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="excollection" name="badges" value="Aus Sammlung">
-                            <label for="excollection">👑 Aus Sammlung (Ex-Collection)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="published" name="badges" value="Veröffentlicht">
-                            <label for="published">📚 Veröffentlicht (Published)</label>
-                        </div>
-                        <div class="badge-checkbox">
-                            <input type="checkbox" id="exhibited" name="badges" value="Ausgestellt">
-                            <label for="exhibited">🏛️ Ausgestellt (Exhibited)</label>
-                        </div>
-                    </div>
-                    
-                    <div class="badge-preview">
-                        <strong>Preview:</strong> <span id="badgePreview">⭐ Authentifiziert</span>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Add Product</button>
-                    <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display: none;">Cancel Edit</button>
-                    <button type="reset" class="btn btn-secondary">Clear Form</button>
-                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Abbrechen</button>
+                <button type="submit" class="btn-save">💾 Speichern</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="shop.js"></script>
+<div class="toast" id="toast"></div>
+
+<script src="products.js"></script>
 <script>
-// Local storage key
-const STORAGE_KEY = 'matthew_simon_products';
+let currentEditPhotos = [];
+let searchTerm = '';
+let filterCategory = '';
 
-// Track photos being added
-let currentPhotos = [];
-
-// Edit mode tracking
-let editMode = false;
-let editingProductId = null;
-
-// Load products from localStorage on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Small delay to ensure shop.js has loaded
-    setTimeout(() => {
-        initializeProducts();
-        renderProductsTable();
-        setupFormHandlers();
-        setupSearch();
-        setupBadgeCheckboxes();
-        setupPhotoUploads();
-        setupFeaturedCheckbox();
-    }, 100);
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initAdmin, 100);
 });
 
-function initializeProducts() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    
-    if (stored) {
-        // Products already in localStorage, use those
-        window.products = JSON.parse(stored);
-    } else {
-        // First time - load from shop.js into localStorage
-        if (window.MATTHEW_PRODUCTS && window.MATTHEW_PRODUCTS.length > 0) {
-            window.products = JSON.parse(JSON.stringify(window.MATTHEW_PRODUCTS));
-            saveProductsToStorage(); // Save to localStorage
-            console.log('✅ Loaded ' + window.products.length + ' products from shop.js into localStorage');
-        } else {
-            console.log('⚠️ Could not load products from shop.js');
-            window.products = [];
-        }
-    }
-}
-
-function showSection(sectionId) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Show selected section
-    document.getElementById(sectionId).classList.add('active');
-    
-    // Update nav links
-    document.querySelectorAll('.admin-nav a').forEach(link => {
-        link.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    return false;
-}
-
-function showMessage(message, type) {
-    const messageEl = document.getElementById('message');
-    messageEl.textContent = message;
-    messageEl.className = `message ${type}`;
-    
-    setTimeout(() => {
-        messageEl.classList.remove('success', 'error');
-    }, 3000);
-}
-
-function saveProductsToStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(window.products));
-}
-
-function renderProductsTable() {
-    const tbody = document.getElementById('productsTableBody');
-    tbody.innerHTML = '';
-    
-    if (!window.products || window.products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No products yet. Add your first product!</td></tr>';
+function initAdmin() {
+    if (!window.MATTHEW_PRODUCTS) {
+        showToast('Produkte konnten nicht geladen werden', 'error');
         return;
     }
     
-    window.products.forEach((product, index) => {
-        const isFeatured = product.featured ? '⭐ Featured' : '-';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${product.name}</strong></td>
-            <td>${product.designer || '-'}</td>
-            <td>${product.era}</td>
-            <td>CHF ${product.price.toLocaleString()}</td>
-            <td>${product.category}</td>
+    updateStats();
+    renderTable();
+    
+    document.getElementById('searchBox').addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        renderTable();
+    });
+    document.getElementById('categoryFilter').addEventListener('change', (e) => {
+        filterCategory = e.target.value;
+        renderTable();
+    });
+    
+    // Badge checkbox visual feedback
+    document.querySelectorAll('.badge-checkbox').forEach(label => {
+        const cb = label.querySelector('input');
+        cb.addEventListener('change', () => label.classList.toggle('checked', cb.checked));
+    });
+}
+
+function updateStats() {
+    const products = window.MATTHEW_PRODUCTS || [];
+    document.getElementById('statTotal').textContent = products.length;
+    document.getElementById('statWithPrice').textContent = products.filter(p => p.price !== 'Preis auf Anfrage').length;
+    document.getElementById('statWithPhotos').textContent = products.filter(p => p.images && p.images.length > 0).length;
+}
+
+function renderTable() {
+    const tbody = document.getElementById('productsTableBody');
+    let products = window.MATTHEW_PRODUCTS || [];
+    
+    if (searchTerm) {
+        products = products.filter(p => 
+            p.name.toLowerCase().includes(searchTerm) ||
+            p.category.toLowerCase().includes(searchTerm) ||
+            (p.description || '').toLowerCase().includes(searchTerm)
+        );
+    }
+    if (filterCategory) {
+        products = products.filter(p => p.category === filterCategory);
+    }
+    
+    if (products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;">Keine Produkte gefunden</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = products.map(p => `
+        <tr>
             <td>
-                <span class="featured-toggle ${product.featured ? 'is-featured' : 'not-featured'}">
-                    ${isFeatured}
-                </span>
-            </td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn-edit" onclick="editProduct(${index})">Edit</button>
-                    <button class="btn-delete" onclick="deleteProduct(${index})">Delete</button>
+                <div class="table-thumb">
+                    ${p.images && p.images.length > 0 
+                        ? `<img src="images/${p.images[0]}" alt="" onerror="this.parentElement.innerHTML='📷';">`
+                        : '📷'}
                 </div>
             </td>
-        `;
-        tbody.appendChild(row);
+            <td><strong>${p.name}</strong></td>
+            <td>${p.category}</td>
+            <td><strong style="color:#1B3A52;">${p.price}</strong></td>
+            <td>${p.images ? p.images.length : 0}</td>
+            <td>${(p.badges || []).map(b => `<span class="row-badge">${b}</span>`).join('')}</td>
+            <td>
+                <div class="row-actions" style="justify-content:flex-end;">
+                    <a href="product-detail.html?id=${p.id}" class="btn-icon btn-view" target="_blank">👁 Ansehen</a>
+                    <button class="btn-icon btn-edit" onclick="openEditModal(${p.id})">✎ Bearbeiten</button>
+                    <button class="btn-icon btn-delete" onclick="deleteProduct(${p.id})">🗑 Löschen</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openAddModal() {
+    document.getElementById('modalTitle').textContent = 'Neues Produkt hinzufügen';
+    document.getElementById('editId').value = '';
+    document.getElementById('editName').value = '';
+    document.getElementById('editCategory').value = 'Glas';
+    document.getElementById('editPrice').value = 'Preis auf Anfrage';
+    document.getElementById('editShortHook').value = '';
+    document.getElementById('editDescription').value = '';
+    document.querySelectorAll('.badge-checkbox input').forEach(cb => {
+        cb.checked = false;
+        cb.parentElement.classList.remove('checked');
     });
+    currentEditPhotos = [];
+    renderPhotoList();
+    document.getElementById('editModal').classList.add('active');
 }
 
-// Photo Upload Functions
-function addPhotoInput() {
-    const photoUploads = document.getElementById('photoUploads');
-    const newInput = document.createElement('div');
-    newInput.className = 'photo-input-group';
-    newInput.innerHTML = `
-        <input type="file" class="productPhoto" accept="image/*" />
-        <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)">Remove</button>
-    `;
-    photoUploads.appendChild(newInput);
-    
-    // Add event listener to new input
-    newInput.querySelector('.productPhoto').addEventListener('change', handlePhotoUpload);
-}
-
-function removePhotoInput(btn) {
-    btn.closest('.photo-input-group').remove();
-    updatePhotoPreview();
-}
-
-function handlePhotoUpload(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            // Find which input this is
-            const input = e.target;
-            const index = Array.from(document.querySelectorAll('.productPhoto')).indexOf(input);
-            
-            currentPhotos[index] = {
-                data: event.target.result,
-                name: file.name
-            };
-            
-            updatePhotoPreview();
-        };
-        reader.readAsDataURL(file);
+function openEditModal(id) {
+    const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+    if (!product) {
+        showToast('Produkt nicht gefunden', 'error');
+        return;
     }
+    
+    document.getElementById('modalTitle').textContent = `Bearbeiten: ${product.name}`;
+    document.getElementById('editId').value = product.id;
+    document.getElementById('editName').value = product.name;
+    document.getElementById('editCategory').value = product.category;
+    document.getElementById('editPrice').value = product.price;
+    document.getElementById('editShortHook').value = product.shortHook || '';
+    document.getElementById('editDescription').value = product.description || '';
+    
+    const productBadges = product.badges || [];
+    document.querySelectorAll('.badge-checkbox input').forEach(cb => {
+        cb.checked = productBadges.includes(cb.value);
+        cb.parentElement.classList.toggle('checked', cb.checked);
+    });
+    
+    currentEditPhotos = [...(product.images || [])];
+    renderPhotoList();
+    
+    document.getElementById('editModal').classList.add('active');
 }
 
-function updatePhotoPreview() {
-    const preview = document.getElementById('photoPreview');
-    preview.innerHTML = '';
+function closeModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+function renderPhotoList() {
+    const list = document.getElementById('photoList');
+    if (currentEditPhotos.length === 0) {
+        list.innerHTML = '<p style="color:#999;padding:20px;text-align:center;grid-column:1/-1;">Keine Fotos. Fügen Sie unten Dateinamen hinzu.</p>';
+        return;
+    }
     
-    currentPhotos.forEach((photo, index) => {
-        if (photo) {
-            const item = document.createElement('div');
-            item.className = `photo-preview-item ${index === 0 ? 'is-primary' : ''}`;
-            item.draggable = true;
-            item.dataset.index = index;
-            
-            item.innerHTML = `
-                <img src="${photo.data}" alt="Photo ${index + 1}">
-                ${index === 0 ? '<div class="photo-badge">PRIMARY</div>' : ''}
-                <div class="photo-order-number">${index + 1}</div>
-                <div class="photo-info">${index === 0 ? 'Main Photo - Drag to reorder' : 'Drag to reorder'}</div>
-            `;
-            
-            // Drag events
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragover', handleDragOver);
-            item.addEventListener('drop', handleDrop);
-            item.addEventListener('dragleave', handleDragLeave);
-            item.addEventListener('dragend', handleDragEnd);
-            
-            preview.appendChild(item);
-        }
-    });
+    list.innerHTML = currentEditPhotos.map((photo, i) => `
+        <div class="photo-item" draggable="true" data-index="${i}" 
+             ondragstart="handleDragStart(event, ${i})"
+             ondragover="handleDragOver(event)"
+             ondrop="handleDrop(event, ${i})"
+             ondragend="handleDragEnd(event)">
+            <div class="photo-order">${i + 1}</div>
+            <button type="button" class="photo-remove" onclick="removePhoto(${i})" title="Foto entfernen">×</button>
+            <img src="images/${photo}" onerror="this.style.display='none';this.parentElement.innerHTML+='<div class=\\'photo-placeholder\\'>📷</div>';">
+            <div class="photo-filename" title="${photo}">${photo}</div>
+        </div>
+    `).join('');
 }
 
 let draggedIndex = null;
-
-function handleDragStart(e) {
-    draggedIndex = parseInt(e.target.closest('.photo-preview-item').dataset.index);
-    e.target.closest('.photo-preview-item').classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-}
-
-function handleDragOver(e) {
+function handleDragStart(e, i) { draggedIndex = i; e.target.classList.add('dragging'); }
+function handleDragOver(e) { e.preventDefault(); }
+function handleDrop(e, targetIndex) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    e.target.closest('.photo-preview-item').classList.add('drag-over');
-}
-
-function handleDragLeave(e) {
-    e.target.closest('.photo-preview-item').classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    e.target.closest('.photo-preview-item').classList.remove('drag-over');
-    
-    const targetIndex = parseInt(e.target.closest('.photo-preview-item').dataset.index);
-    
-    if (draggedIndex !== targetIndex) {
-        // Swap photos
-        [currentPhotos[draggedIndex], currentPhotos[targetIndex]] = [currentPhotos[targetIndex], currentPhotos[draggedIndex]];
-        updatePhotoPreview();
-    }
-}
-
-function handleDragEnd(e) {
-    document.querySelectorAll('.photo-preview-item').forEach(item => {
-        item.classList.remove('dragging', 'drag-over');
-    });
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+    const dragged = currentEditPhotos.splice(draggedIndex, 1)[0];
+    currentEditPhotos.splice(targetIndex, 0, dragged);
+    renderPhotoList();
     draggedIndex = null;
 }
+function handleDragEnd(e) { e.target.classList.remove('dragging'); draggedIndex = null; }
 
-function setupPhotoUploads() {
-    document.querySelectorAll('.productPhoto').forEach(input => {
-        input.addEventListener('change', handlePhotoUpload);
-    });
+function addPhoto() {
+    const input = document.getElementById('newPhotoName');
+    const name = input.value.trim();
+    if (!name) { showToast('Bitte Dateiname eingeben', 'error'); return; }
+    if (currentEditPhotos.includes(name)) { showToast('Dieses Foto ist bereits hinzugefügt', 'error'); return; }
+    currentEditPhotos.push(name);
+    input.value = '';
+    renderPhotoList();
+    showToast('Foto hinzugefügt', 'success');
 }
 
-// Featured Checkbox
-function setupFeaturedCheckbox() {
-    // Just setup styling on toggle
+function removePhoto(index) {
+    if (!confirm(`Foto "${currentEditPhotos[index]}" wirklich entfernen?`)) return;
+    currentEditPhotos.splice(index, 1);
+    renderPhotoList();
+    showToast('Foto entfernt', 'info');
 }
 
-// Badge Functions
-function getSelectedBadges() {
-    const checkboxes = document.querySelectorAll('input[name="badges"]:checked');
-    const badges = [];
+function saveProduct(e) {
+    e.preventDefault();
     
-    checkboxes.forEach(checkbox => {
-        badges.push(checkbox.value);
-    });
+    const id = document.getElementById('editId').value;
+    const isNew = !id;
     
-    return badges.length > 0 ? badges : ['Authentifiziert'];
-}
-
-function updateBadgePreview() {
-    const badges = getSelectedBadges();
-    const preview = document.getElementById('badgePreview');
+    const badges = Array.from(document.querySelectorAll('.badge-checkbox input:checked')).map(cb => cb.value);
     
-    // Build preview with emoji prefix
-    const badgeEmojis = {
-        'Authentifiziert': '⭐',
-        'Zertifiziert': '✓',
-        'Provenance dokumentiert': '📜',
-        'Signiert/Markiert': '🔐',
-        'Original-Zustand': '✨',
-        'Restauriert': '🔧',
-        'So vorgefunden': '⚡',
-        'Museum Quality': '🏆',
-        'Investment-Klasse': '💎',
-        'Kunsthandwerk': '🎨',
-        'Sammler-Stück': '🌟',
-        'Selten': '🔍',
-        'Historisch': '🌍',
-        'Spezialist': '💎',
-        'Limitierte Auflage': '🎁',
-        'Aus Sammlung': '👑',
-        'Veröffentlicht': '📚',
-        'Ausgestellt': '🏛️'
+    const productData = {
+        name: document.getElementById('editName').value.trim(),
+        category: document.getElementById('editCategory').value,
+        price: document.getElementById('editPrice').value.trim() || 'Preis auf Anfrage',
+        shortHook: document.getElementById('editShortHook').value.trim(),
+        description: document.getElementById('editDescription').value.trim(),
+        images: [...currentEditPhotos],
+        badges: badges
     };
     
-    const displayBadges = badges.map(b => `${badgeEmojis[b] || ''} ${b}`).join(' | ');
-    preview.textContent = displayBadges;
-}
-
-function addProduct(formData) {
-    const badges = getSelectedBadges();
-    const isFeatured = document.getElementById('isFeatured').checked;
-    
-    const newProduct = {
-        id: window.products.length + 1,
-        name: formData.get('productName'),
-        designer: formData.get('designer'),
-        era: formData.get('era'),
-        condition: formData.get('condition'),
-        price: parseInt(formData.get('price')),
-        category: formData.get('category'),
-        story: formData.get('story'),
-        image: formData.get('imageUrl') || (currentPhotos[0] ? currentPhotos[0].data : 'https://via.placeholder.com/300x400'),
-        images: currentPhotos.filter(p => p), // All uploaded photos
-        badges: badges,
-        featured: isFeatured
-    };
-    
-    if (!window.products) window.products = [];
-    window.products.push(newProduct);
-    
-    saveProductsToStorage();
-    renderProductsTable();
-    
-    return true;
-}
-
-function deleteProduct(index) {
-    if (confirm('Are you sure you want to delete this product?')) {
-        window.products.splice(index, 1);
-        saveProductsToStorage();
-        renderProductsTable();
-        showMessage('Product deleted successfully', 'success');
+    if (isNew) {
+        // Add custom product
+        const custom = JSON.parse(localStorage.getItem('customProducts') || '[]');
+        const newId = Math.max(1000, ...custom.map(p => p.id || 0)) + 1;
+        custom.push({ id: newId, ...productData, featured: false });
+        localStorage.setItem('customProducts', JSON.stringify(custom));
+        showToast(`Produkt "${productData.name}" hinzugefügt`, 'success');
+    } else {
+        // Save edit
+        const edits = JSON.parse(localStorage.getItem('productEdits') || '{}');
+        edits[id] = productData;
+        localStorage.setItem('productEdits', JSON.stringify(edits));
+        showToast(`Änderungen gespeichert`, 'success');
     }
+    
+    // Reload products
+    location.reload();
 }
 
-function setupFormHandlers() {
-    const form = document.getElementById('addProductForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
+function deleteProduct(id) {
+    const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+    if (!product) return;
     
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        if (editMode) {
-            // Update existing product
-            if (updateProduct(editingProductId, formData)) {
-                showMessage('Product updated successfully!', 'success');
-                cancelEdit();
-                showSection('products');
-                renderProductsTable();
-            } else {
-                showMessage('Error updating product', 'error');
-            }
-        } else {
-            // Add new product
-            if (addProduct(formData)) {
-                showMessage('Product added successfully!', 'success');
-                this.reset();
-                
-                // Reset everything
-                currentPhotos = [];
-                document.getElementById('photoUploads').innerHTML = `
-                    <div class="photo-input-group">
-                        <input type="file" class="productPhoto" accept="image/*" />
-                        <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
-                    </div>
-                `;
-                document.getElementById('photoPreview').innerHTML = '';
-                setupPhotoUploads();
-                
-                document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
-                document.getElementById('auth').checked = true;
-                document.getElementById('isFeatured').checked = false;
-                updateBadgePreview();
-                
-                showSection('products');
-                renderProductsTable();
-            } else {
-                showMessage('Error adding product', 'error');
-            }
-        }
-    });
+    if (!confirm(`Produkt "${product.name}" wirklich löschen?\n\nHinweis: Original-Produkte werden ausgeblendet, können mit "Reset" wiederhergestellt werden.`)) return;
     
-    // Cancel edit button
-    cancelEditBtn.addEventListener('click', cancelEdit);
-}
-
-function editProduct(index) {
-    const product = window.products[index];
-    
-    // Set edit mode
-    editMode = true;
-    editingProductId = index;
-    
-    // Fill form with product data
-    document.getElementById('name').value = product.name;
-    document.getElementById('designer').value = product.designer;
-    document.getElementById('era').value = product.era;
-    document.getElementById('price').value = product.price;
-    document.getElementById('category').value = product.category;
-    document.getElementById('condition').value = product.condition;
-    document.getElementById('story').value = product.story;
-    document.getElementById('isFeatured').checked = product.featured || false;
-    
-    // Set badges
-    document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
-    if (product.badges && product.badges.length > 0) {
-        product.badges.forEach(badge => {
-            const checkboxes = document.querySelectorAll('input[name="badges"]');
-            checkboxes.forEach(cb => {
-                if (cb.value === badge) {
-                    cb.checked = true;
-                }
-            });
-        });
+    if (id >= 1000) {
+        // Custom product - remove entirely
+        const custom = JSON.parse(localStorage.getItem('customProducts') || '[]');
+        const filtered = custom.filter(p => p.id !== id);
+        localStorage.setItem('customProducts', JSON.stringify(filtered));
+    } else {
+        // Original - mark as deleted
+        const deleted = JSON.parse(localStorage.getItem('productDeleted') || '[]');
+        if (!deleted.includes(id)) deleted.push(id);
+        localStorage.setItem('productDeleted', JSON.stringify(deleted));
     }
-    updateBadgePreview();
     
-    // Set photos
-    currentPhotos = product.photos ? [...product.photos] : [];
-    updatePhotoPreview();
-    
-    // Update UI
-    document.getElementById('submitBtn').textContent = 'Update Product';
-    document.getElementById('cancelEditBtn').style.display = 'block';
-    
-    // Scroll to form and show section
-    document.getElementById('addProduct').scrollIntoView({ behavior: 'smooth' });
-    showSection('addProduct');
+    showToast(`Produkt gelöscht`, 'success');
+    setTimeout(() => location.reload(), 500);
 }
 
-function updateProduct(index, formData) {
-    try {
-        const product = window.products[index];
-        
-        product.name = formData.get('name');
-        product.designer = formData.get('designer');
-        product.era = formData.get('era');
-        product.price = parseInt(formData.get('price'));
-        product.category = formData.get('category');
-        product.condition = formData.get('condition');
-        product.story = formData.get('story');
-        product.featured = document.getElementById('isFeatured').checked;
-        
-        // Update badges from checkboxes
-        const badges = [];
-        document.querySelectorAll('input[name="badges"]:checked').forEach(cb => {
-            badges.push(cb.value);
-        });
-        product.badges = badges.length > 0 ? badges : ['⭐ Authentifiziert'];
-        
-        // Update photos from currentPhotos array
-        product.photos = currentPhotos;
-        
-        saveProductsToStorage();
-        return true;
-    } catch(error) {
-        console.error('Error updating product:', error);
-        return false;
-    }
+function resetAllChanges() {
+    if (!confirm('Alle Änderungen (Edits, gelöschte Produkte, neue Produkte) zurücksetzen?')) return;
+    localStorage.removeItem('productEdits');
+    localStorage.removeItem('productDeleted');
+    localStorage.removeItem('customProducts');
+    showToast('Alle Änderungen zurückgesetzt', 'info');
+    setTimeout(() => location.reload(), 500);
 }
 
-function cancelEdit() {
-    editMode = false;
-    editingProductId = null;
-    
-    // Reset form
-    document.getElementById('addProductForm').reset();
-    
-    // Reset UI
-    document.getElementById('submitBtn').textContent = 'Add Product';
-    document.getElementById('cancelEditBtn').style.display = 'none';
-    
-    // Reset everything else
-    currentPhotos = [];
-    document.getElementById('photoUploads').innerHTML = `
-        <div class="photo-input-group">
-            <input type="file" class="productPhoto" accept="image/*" />
-            <button type="button" class="remove-photo-btn" onclick="removePhotoInput(this)" style="display:none;">Remove</button>
-        </div>
-    `;
-    document.getElementById('photoPreview').innerHTML = '';
-    setupPhotoUploads();
-    
-    document.querySelectorAll('input[name="badges"]').forEach(cb => cb.checked = false);
-    document.getElementById('auth').checked = true;
-    document.getElementById('isFeatured').checked = false;
-    updateBadgePreview();
-}
-
-function setupBadgeCheckboxes() {
-    document.querySelectorAll('input[name="badges"]').forEach(checkbox => {
-        checkbox.addEventListener('change', updateBadgePreview);
-    });
-    
-    // Set "Authentifiziert" checked by default
-    document.getElementById('auth').checked = true;
-    updateBadgePreview();
-}
-
-function setupSearch() {
-    document.getElementById('searchProducts').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.products-table tbody tr');
-        
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = `toast ${type} show`;
+    setTimeout(() => toast.classList.remove('show'), 3000);
 }
 </script>
 

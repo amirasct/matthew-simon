@@ -1,49 +1,35 @@
-// Shop page - displays products from products.js database
-// Makes entire cards clickable and syncs with admin panel
+// Matthew Simon Shop - Displays products from products.js with clickable cards
 
 let filteredProducts = [];
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait for products to load from products.js
     setTimeout(initializeShop, 100);
 });
 
 function initializeShop() {
     if (!window.MATTHEW_PRODUCTS || window.MATTHEW_PRODUCTS.length === 0) {
-        console.error('❌ Products not loaded');
+        console.error('❌ Products database not loaded');
         return;
     }
     
-    console.log(`✅ Shop initialized with ${window.MATTHEW_PRODUCTS.length} products`);
-    
-    // Load initial products
     filteredProducts = [...window.MATTHEW_PRODUCTS];
     renderProducts();
     
-    // Setup filter listeners
     const categoryFilter = document.getElementById('categoryFilter');
     const sortFilter = document.getElementById('sortFilter');
     
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', applyFilters);
-    }
-    if (sortFilter) {
-        sortFilter.addEventListener('change', applyFilters);
-    }
+    if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
+    if (sortFilter) sortFilter.addEventListener('change', applyFilters);
 }
 
 function applyFilters() {
     const category = document.getElementById('categoryFilter')?.value || '';
     const sort = document.getElementById('sortFilter')?.value || 'featured';
     
-    // Filter by category
-    if (category) {
-        filteredProducts = window.MATTHEW_PRODUCTS.filter(p => p.category === category);
-    } else {
-        filteredProducts = [...window.MATTHEW_PRODUCTS];
-    }
+    filteredProducts = category 
+        ? window.MATTHEW_PRODUCTS.filter(p => p.category === category)
+        : [...window.MATTHEW_PRODUCTS];
     
-    // Sort
     switch(sort) {
         case 'price-high':
             filteredProducts.sort((a, b) => extractPrice(b.price) - extractPrice(a.price));
@@ -51,7 +37,6 @@ function applyFilters() {
         case 'price-low':
             filteredProducts.sort((a, b) => extractPrice(a.price) - extractPrice(b.price));
             break;
-        case 'featured':
         default:
             filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
@@ -59,9 +44,9 @@ function applyFilters() {
     renderProducts();
 }
 
-function extractPrice(priceStr) {
-    if (!priceStr) return 0;
-    const match = priceStr.match(/\d+/);
+function extractPrice(str) {
+    if (!str || str === 'Preis auf Anfrage') return 0;
+    const match = str.replace(/[',]/g, '').match(/\d+/);
     return match ? parseInt(match[0]) : 0;
 }
 
@@ -79,28 +64,65 @@ function renderProducts() {
     
     if (emptyState) emptyState.style.display = 'none';
     
-    grid.innerHTML = filteredProducts.map(product => `
-        <div class="product-card" data-product-id="${product.id}" onclick="goToProduct(${product.id})" style="cursor: pointer;">
+    grid.innerHTML = filteredProducts.map(product => renderProductCard(product)).join('');
+}
+
+function renderProductCard(product) {
+    // Escape name for JS strings
+    const escName = product.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    
+    // Image handling with placeholder fallback
+    const imageHtml = product.images && product.images.length > 0
+        ? `<img src="images/${product.images[0]}" alt="${escName}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        : `<div class="no-image-placeholder">📷<br><span>Foto folgt</span></div>`;
+    
+    // Badges HTML
+    const badgeHtml = product.badges && product.badges.length > 0
+        ? `<div class="product-badges">${product.badges.map(b => renderBadge(b)).join('')}</div>`
+        : '';
+    
+    // Photo count indicator
+    const photoCount = product.images && product.images.length > 1
+        ? `<div class="photo-count">📷 ${product.images.length}</div>`
+        : '';
+    
+    return `
+        <div class="product-card" onclick="goToProduct(${product.id})" role="link" tabindex="0" onkeypress="if(event.key==='Enter')goToProduct(${product.id})">
             <div class="product-image-container">
-                ${product.images && product.images.length > 0 
-                    ? `<img src="images/${product.images[0]}" alt="${product.name}" class="product-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';">`
-                    : `<div class="product-image placeholder" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>`
-                }
+                ${imageHtml}
+                ${photoCount}
+                ${badgeHtml}
             </div>
             
             <div class="product-info">
+                <div class="product-category-label">${product.category}</div>
                 <h3 class="product-name">${product.name}</h3>
-                <p class="product-category" style="font-size: 0.85em; color: #999; margin: 4px 0;">${product.category}</p>
-                <p class="product-description">${product.shortDescription}</p>
-                <p class="product-price" style="font-weight: 600; margin: 8px 0; color: #333;">${product.price}</p>
+                <p class="product-hook">${product.shortHook}</p>
+                <div class="product-price">${product.price}</div>
             </div>
             
-            <div class="product-actions">
-                <button class="btn btn-secondary" onclick="event.stopPropagation(); inquireAbout('${product.name.replace(/'/g, "\\'")}')">Inquire</button>
-                <button class="btn btn-primary" onclick="event.stopPropagation(); goToProduct(${product.id})">More Details</button>
+            <div class="product-actions" onclick="event.stopPropagation();">
+                <button class="btn-inquire" onclick="inquireAbout('${escName}')">
+                    <span>✉</span> Anfrage
+                </button>
+                <button class="btn-details" onclick="goToProduct(${product.id})">
+                    Details →
+                </button>
             </div>
         </div>
-    `).join('');
+    `;
+}
+
+function renderBadge(type) {
+    const badges = {
+        'authenticated': { label: '✓ Signiert', class: 'badge-authenticated' },
+        'rare': { label: '★ Selten', class: 'badge-rare' },
+        'documented': { label: '📖 Dokumentiert', class: 'badge-documented' },
+        'museum': { label: '🏛 Museumsqualität', class: 'badge-museum' },
+        'provenance': { label: '📜 Provenienz', class: 'badge-provenance' }
+    };
+    const b = badges[type];
+    return b ? `<span class="product-badge ${b.class}">${b.label}</span>` : '';
 }
 
 function goToProduct(productId) {
@@ -108,22 +130,18 @@ function goToProduct(productId) {
 }
 
 function inquireAbout(productName) {
-    // Get current language
-    const lang = localStorage.getItem('language') || 'en';
+    const lang = localStorage.getItem('language') || 'de';
+    const subject = encodeURIComponent(`Anfrage: ${productName}`);
     
-    // Prepare subject based on product name
-    const subject = encodeURIComponent(`Inquiry about: ${productName}`);
-    
-    // Message in appropriate language
     let message = '';
     if (lang === 'de') {
-        message = encodeURIComponent(`Guten Tag,\n\nIch bin interessiert in ${productName}. Könnten Sie mir mehr Details geben?\n\nDanke,`);
+        message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${productName}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
     } else if (lang === 'fr') {
-        message = encodeURIComponent(`Bonjour,\n\nJe suis intéressé par ${productName}. Pourriez-vous me fournir plus de détails?\n\nMerci,`);
+        message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${productName}". Pourriez-vous me faire parvenir plus de détails, des photos haute résolution et les informations d'expédition?\n\nCordialement`);
     } else if (lang === 'it') {
-        message = encodeURIComponent(`Buongiorno,\n\nSono interessato a ${productName}. Potrebbe fornirmi più dettagli?\n\nGrazie,`);
+        message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${productName}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
     } else {
-        message = encodeURIComponent(`Hello,\n\nI'm interested in ${productName}. Could you please provide more details?\n\nThank you,`);
+        message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${productName}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
     }
     
     window.location.href = `contact.html?subject=${subject}&message=${message}`;
