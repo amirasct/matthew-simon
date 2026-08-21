@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -469,9 +469,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=6"></script>
-<script src="translations_part1.js?v=6"></script>
-<script src="translations_part2.js?v=6"></script>
+<script src="products.js?v=7"></script>
+<script src="translations_part1.js?v=7"></script>
+<script src="translations_part2.js?v=7"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -899,7 +899,8 @@ async function handleFiles(fileList) {
         try {
             const uploaded = await uploadFile(file, catPrefix);
             if (uploaded) {
-                currentEditPhotos.push(uploaded.filename);
+                // Store the full URL (starts with /.netlify/...) so getImageUrl knows not to prefix with /images/
+                currentEditPhotos.push(uploaded.url);
                 renderPhotoList();
             }
         } catch (err) {
