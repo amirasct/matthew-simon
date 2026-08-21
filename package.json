@@ -1,8 +1,0 @@
-{
-  "name": "matthew-simon-functions",
-  "version": "1.0.0",
-  "description": "Netlify functions for Matthew Simon website",
-  "dependencies": {
-    "@netlify/blobs": "^7.4.0"
-  }
-}
