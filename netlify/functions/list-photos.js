@@ -1,28 +1,25 @@
-// Netlify Function: List all photos in blob storage
-// Used by admin to see what's available
+// Netlify Function v2 syntax - lists all photos in blob storage
+import { getStore } from '@netlify/blobs';
 
-const { getStore } = require('@netlify/blobs');
-
-exports.handler = async (event, context) => {
+export default async (req, context) => {
     try {
         const store = getStore('product-photos');
         const { blobs } = await store.list();
         
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                photos: blobs.map(b => ({
-                    filename: b.key,
-                    url: `/.netlify/functions/get-photo?name=${encodeURIComponent(b.key)}`
-                }))
-            })
-        };
+        return new Response(JSON.stringify({
+            photos: blobs.map(b => ({
+                filename: b.key,
+                url: `/.netlify/functions/get-photo?name=${encodeURIComponent(b.key)}`
+            }))
+        }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
     } catch (error) {
         console.error('List error:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: error.message })
-        };
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 };
