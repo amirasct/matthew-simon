@@ -1,6 +1,7 @@
 // Matthew Simon Shop - Displays products from products.js with clickable cards
 
 let filteredProducts = [];
+let currentView = 'available'; // 'available' or 'archive'
 
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initializeShop, 100);
@@ -21,6 +22,7 @@ async function initializeShop() {
         return;
     }
     
+    updateShopCounts();
     applyFilters();
     
     const categoryFilter = document.getElementById('categoryFilter');
@@ -30,7 +32,29 @@ async function initializeShop() {
     if (sortFilter) sortFilter.addEventListener('change', applyFilters);
     
     // Re-render when cloud data updates
-    window.addEventListener('productsUpdated', applyFilters);
+    window.addEventListener('productsUpdated', () => {
+        updateShopCounts();
+        applyFilters();
+    });
+}
+
+function switchShopView(view) {
+    currentView = view;
+    document.querySelectorAll('.shop-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.view === view);
+    });
+    document.querySelector('.shop-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    applyFilters();
+}
+
+function updateShopCounts() {
+    const available = window.getPublicProducts ? window.getPublicProducts() : [];
+    const archive = window.getArchiveProducts ? window.getArchiveProducts() : [];
+    
+    const availableEl = document.getElementById('availableCount');
+    const archiveEl = document.getElementById('archiveCount');
+    if (availableEl) availableEl.textContent = available.length;
+    if (archiveEl) archiveEl.textContent = archive.length;
 }
 
 function getTranslated(products) {
@@ -44,8 +68,13 @@ function applyFilters() {
     const category = document.getElementById('categoryFilter')?.value || '';
     const sort = document.getElementById('sortFilter')?.value || 'featured';
     
-    // Use getPublicProducts to exclude drafts and sold items
-    let base = window.getPublicProducts ? window.getPublicProducts() : (window.MATTHEW_PRODUCTS || []);
+    // Get base products based on current view (available or archive)
+    let base;
+    if (currentView === 'archive') {
+        base = window.getArchiveProducts ? window.getArchiveProducts() : [];
+    } else {
+        base = window.getPublicProducts ? window.getPublicProducts() : (window.MATTHEW_PRODUCTS || []);
+    }
     
     if (category) {
         base = base.filter(p => p.category === category);
@@ -61,7 +90,16 @@ function applyFilters() {
             filteredProducts.sort((a, b) => extractPrice(a.price) - extractPrice(b.price));
             break;
         default:
-            filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            if (currentView === 'archive') {
+                // Sort archive by sold date (newest first)
+                filteredProducts.sort((a, b) => {
+                    if (!a.soldDate) return 1;
+                    if (!b.soldDate) return -1;
+                    return new Date(b.soldDate) - new Date(a.soldDate);
+                });
+            } else {
+                filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            }
     }
     
     renderProducts();

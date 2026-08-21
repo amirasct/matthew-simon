@@ -124,6 +124,11 @@ const translations = {
     'status.inquire_similar': 'Ähnliches anfragen',
     'shop.no_products': 'Keine Produkte in dieser Kategorie',
 
+    // v5 keys - Shop tabs & mobile nav
+    'shop.tab.available': 'Verfügbar',
+    'shop.tab.archive': 'Verkauft (Archiv)',
+    'nav.about.short': 'Über',
+
   },
   fr: {
     // Navigation
@@ -271,6 +276,11 @@ const translations = {
     'status.inquire_similar': 'Demander similaire',
     'shop.no_products': 'Aucun produit dans cette catégorie',
 
+    // v5 keys - Shop tabs & mobile nav
+    'shop.tab.available': 'Disponibles',
+    'shop.tab.archive': 'Vendus (Archive)',
+    'nav.about.short': 'À propos',
+
   },
   it: {
     // Navigation
@@ -399,6 +409,11 @@ const translations = {
     'featured.empty': 'Noch keine ausgewählten Stücke. Verwenden Sie die Admin-Seite, um Stücke hervorzuheben.',
     'featured.view_details': 'Details ansehen',
     'featured.view_all': 'Alle ansehen →',
+
+    // v5 keys - Shop tabs & mobile nav
+    'shop.tab.available': 'Disponibili',
+    'shop.tab.archive': 'Venduti (Archivio)',
+    'nav.about.short': 'Chi sono',
 
   },
   en: {
@@ -589,6 +604,11 @@ const translations = {
     'status.inquire_similar': 'Richiedi simile',
     'shop.no_products': 'Nessun prodotto in questa categoria',
 
+    // v5 keys - Shop tabs & mobile nav
+    'shop.tab.available': 'Available',
+    'shop.tab.archive': 'Sold (Archive)',
+    'nav.about.short': 'About',
+
   }
 };
 
@@ -642,6 +662,12 @@ function updateLanguageSelector() {
   const langButton = document.querySelector('.language-selector');
   if (langButton) {
     langButton.textContent = currentLanguage.toUpperCase();
+  }
+  
+  // Update MOBILE language button to show only active language
+  const langButtonMobile = document.querySelector('.language-selector-mobile');
+  if (langButtonMobile) {
+    langButtonMobile.textContent = currentLanguage.toUpperCase();
   }
   
   // Update active language box styling

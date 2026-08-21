@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop - Matthew Simon European Design and Antiques</title>
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -15,8 +15,7 @@
         <ul class="nav-menu">
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
             <li><a href="shop.html" class="active" data-i18n="nav.shop">Shop</a></li>
-            <li><a href="archive.html" data-i18n="nav.archive">Archiv</a></li>
-            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <li><a href="about.html" ><span class="nav-text-full" data-i18n="nav.about">About Me</span><span class="nav-text-short" data-i18n="nav.about.short">About</span></a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
                 <div class="language-boxes">
@@ -28,7 +27,7 @@
                 
                 <!-- Mobile: Language Dropdown -->
                 <div class="language-dropdown-mobile">
-                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">DE / EN / FR / IT</button>
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">DE</button>
                     <div class="language-menu-mobile" id="languageMenu">
                         <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
                         <a href="#" onclick="setLanguage('en'); return false;">English</a>
@@ -45,6 +44,20 @@
 <section class="page-header">
     <h1 data-i18n="shop.title">Collection</h1>
     <p data-i18n="shop.subtitle">Curated pieces authenticated and sourced by Matthew Simon</p>
+</section>
+
+<!-- Available / Archive Toggle (professional style) -->
+<section class="shop-tabs-section">
+    <div class="shop-tabs-container">
+        <button class="shop-tab active" data-view="available" onclick="switchShopView('available')">
+            <span data-i18n="shop.tab.available">Verfügbar</span>
+            <span class="shop-tab-count" id="availableCount">0</span>
+        </button>
+        <button class="shop-tab" data-view="archive" onclick="switchShopView('archive')">
+            <span data-i18n="shop.tab.archive">Verkauft (Archiv)</span>
+            <span class="shop-tab-count" id="archiveCount">0</span>
+        </button>
+    </div>
 </section>
 
 <!-- Filters -->
@@ -115,11 +128,11 @@
     </div>
 </footer>
 
-<script src="languages.js?v=10"></script>
-<script src="products.js?v=10"></script>
-<script src="translations_part1.js?v=10"></script>
-<script src="translations_part2.js?v=10"></script>
-<script src="shop.js?v=10"></script>
+<script src="languages.js?v=13"></script>
+<script src="products.js?v=13"></script>
+<script src="translations_part1.js?v=13"></script>
+<script src="translations_part2.js?v=13"></script>
+<script src="shop.js?v=13"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
