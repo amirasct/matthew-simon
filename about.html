@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Matthew Simon European Design and Antiques</title>
-    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 
@@ -48,51 +48,31 @@
 </section>
 
 <!-- Story Section -->
-<section class="story-section story-enhanced">
-    <div class="story-container">
-        <div class="story-layout">
-            <div class="story-visual">
-                <!-- Rotating photo showcase from products -->
-                <div class="story-photo-frame">
-                    <div class="story-photo-inner" id="storyPhoto">
-                        <div class="story-photo-placeholder">
-                            <div class="story-photo-icon">◆</div>
-                            <div class="story-photo-label" data-i18n="about.photo.label">Curated Collection</div>
-                        </div>
-                    </div>
-                    <div class="story-photo-caption" id="storyPhotoCaption"></div>
-                </div>
-                <div class="story-stats">
-                    <div class="story-stat">
-                        <div class="story-stat-number">40+</div>
-                        <div class="story-stat-label" data-i18n="about.stat.years">Years</div>
-                    </div>
-                    <div class="story-stat">
-                        <div class="story-stat-number">100+</div>
-                        <div class="story-stat-label" data-i18n="about.stat.pieces">Pieces</div>
-                    </div>
-                    <div class="story-stat">
-                        <div class="story-stat-number">4</div>
-                        <div class="story-stat-label" data-i18n="about.stat.languages">Languages</div>
-                    </div>
-                </div>
-            </div>
-            <div class="story-content">
-                <div class="story-decoration">
-                    <span class="hero-line-left"></span>
-                    <span class="hero-ornament">◆</span>
-                    <span class="hero-line-right"></span>
-                </div>
-                <h2 data-i18n="about.story.heading">40 Years Curating Authenticated Design</h2>
-                
-                <p data-i18n="about.story.p1">After trading his profession as a gilder and restorer for art mediation at 30, Matthew spent 10 years as Lead Expert in Applied Art at Bern's prestigious Stuker Auction House, deepening his knowledge across multiple design movements and eras.</p>
-                
-                <p data-i18n="about.story.p2">Today, four decades into his career, Matthew focuses on what he loves: finding authenticated, rare pieces and connecting them with collectors who understand their value. Every item in his collection is personally evaluated for authenticity, condition, and provenance.</p>
-                
-                <p data-i18n="about.story.p3">Whether you're furnishing a carefully curated home, building an investment collection, or seeking expert valuations for an estate—Matthew sources, authenticates, and tells the story behind each piece.</p>
-                
-                <p style="margin-top: 2rem; font-style: italic; color: #666;" data-i18n="about.based">Based in Bern, Switzerland</p>
-            </div>
+<section class="story-section story-refined">
+    <div class="story-container-narrow">
+        <div class="story-decoration-top">
+            <span class="hero-line-left"></span>
+            <span class="hero-ornament">◆</span>
+            <span class="hero-line-right"></span>
+        </div>
+        
+        <h2 class="story-heading" data-i18n="about.story.heading">40 Years Curating Authenticated Design</h2>
+        
+        <div class="story-first-p">
+            <p data-i18n="about.story.p1">After trading his profession as a gilder and restorer for art mediation at 30, Matthew spent 10 years as Lead Expert in Applied Art at Bern's prestigious Stuker Auction House, deepening his knowledge across multiple design movements and eras.</p>
+        </div>
+        
+        <div class="story-pullquote">
+            <p data-i18n="about.pullquote">Every item in the collection is personally evaluated for authenticity, condition, and provenance.</p>
+        </div>
+        
+        <p data-i18n="about.story.p2">Today, four decades into his career, Matthew focuses on what he loves: finding authenticated, rare pieces and connecting them with collectors who understand their value. Every item in his collection is personally evaluated for authenticity, condition, and provenance.</p>
+        
+        <p data-i18n="about.story.p3">Whether you're furnishing a carefully curated home, building an investment collection, or seeking expert valuations for an estate—Matthew sources, authenticates, and tells the story behind each piece.</p>
+        
+        <div class="story-signature">
+            <span class="story-signature-line"></span>
+            <p style="font-style: italic; color: #666; margin: 0;" data-i18n="about.based">Based in Bern, Switzerland</p>
         </div>
     </div>
 </section>
@@ -160,54 +140,16 @@
     </div>
 </footer>
 
-<script src="languages.js?v=14"></script>
-<script src="products.js?v=14"></script>
+<script src="languages.js?v=16"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Load rotating story photo from featured products
-async function loadStoryPhoto() {
-    if (window.loadCloudData) {
-        try { await window.loadCloudData(); } catch (e) {}
-    }
-    
-    const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
-    const withPhotos = publicProducts.filter(p => p.images && p.images.length > 0);
-    
-    if (withPhotos.length === 0) return;
-    
-    const featured = withPhotos.filter(p => p.featured);
-    const badged = withPhotos.filter(p => !p.featured && p.badges && p.badges.length > 0);
-    const pool = [...featured, ...badged, ...withPhotos];
-    
-    // Pick a random featured/badged product
-    const pick = pool[Math.floor(Math.random() * Math.min(pool.length, 6))];
-    if (!pick) return;
-    
-    const photoEl = document.getElementById('storyPhoto');
-    const captionEl = document.getElementById('storyPhotoCaption');
-    
-    if (photoEl) {
-        const url = getImageUrl(pick.images[0]);
-        photoEl.innerHTML = `<img src="${url}" alt="${pick.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.innerHTML='<div class=\\'story-photo-placeholder\\'><div class=\\'story-photo-icon\\'>◆</div></div>';">`;
-    }
-    if (captionEl) {
-        captionEl.textContent = `${pick.name} · ${pick.category}`;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(loadStoryPhoto, 100);
-});
-
-window.addEventListener('productsUpdated', loadStoryPhoto);
-
 // Close menu when clicking outside
 document.addEventListener('click', function(event) {
-    const dropdown = document.querySelector('.language-dropdown');
+    const dropdown = document.querySelector('.language-dropdown-mobile');
     if (dropdown && !dropdown.contains(event.target)) {
         const menu = document.getElementById('languageMenu');
         if (menu) menu.style.display = 'none';

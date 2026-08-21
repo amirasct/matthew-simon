@@ -142,6 +142,9 @@ const translations = {
     'about.stat.pieces': 'Stücke',
     'about.stat.languages': 'Sprachen',
 
+    // v8 keys - About pullquote
+    'about.pullquote': '„Jedes Stück wird persönlich auf Authentizität, Zustand und Provenienz geprüft."',
+
   },
   fr: {
     // Navigation
@@ -307,6 +310,9 @@ const translations = {
     'about.stat.pieces': 'Pièces',
     'about.stat.languages': 'Langues',
 
+    // v8 keys - About pullquote
+    'about.pullquote': '« Chaque pièce est personnellement évaluée pour son authenticité, son état et sa provenance. »',
+
   },
   it: {
     // Navigation
@@ -453,6 +459,9 @@ const translations = {
     'about.stat.years': 'Anni',
     'about.stat.pieces': 'Pezzi',
     'about.stat.languages': 'Lingue',
+
+    // v8 keys - About pullquote
+    'about.pullquote': '«Ogni pezzo è personalmente valutato per autenticità, condizione e provenienza.»',
 
   },
   en: {
@@ -660,6 +669,9 @@ const translations = {
     'about.stat.years': 'Years',
     'about.stat.pieces': 'Pieces',
     'about.stat.languages': 'Languages',
+
+    // v8 keys - About pullquote
+    'about.pullquote': '"Every piece is personally evaluated for authenticity, condition, and provenance."',
 
   }
 };

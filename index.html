@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Simon - European Design and Antiques | 40 Years Authenticated</title>
-    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 
@@ -38,16 +38,8 @@
     </div>
 </nav>
 
-<!-- Hero Section with integrated photo accents -->
-<section class="hero hero-enhanced">
-    <div class="hero-photo-cluster hero-photo-left">
-        <div class="hero-photo hp-1"></div>
-        <div class="hero-photo hp-2"></div>
-    </div>
-    <div class="hero-photo-cluster hero-photo-right">
-        <div class="hero-photo hp-3"></div>
-        <div class="hero-photo hp-4"></div>
-    </div>
+<!-- Hero Section -->
+<section class="hero hero-refined">
     <div class="hero-content">
         <div class="hero-decoration">
             <span class="hero-line-left"></span>
@@ -64,16 +56,20 @@
     </div>
 </section>
 
-<!-- Featured Products Section (Dynamic) -->
-<section class="featured-section">
-    <div class="featured-container">
-        <div class="featured-header">
-            <span class="badge" data-i18n="featured.badge">Featured</span>
+<!-- Featured Products Mosaic (uses the ⭐ Featured checkbox from admin) -->
+<section class="featured-mosaic-section">
+    <div class="featured-mosaic-container">
+        <div class="featured-mosaic-header">
+            <div class="hero-decoration">
+                <span class="hero-line-left"></span>
+                <span class="hero-ornament">◆</span>
+                <span class="hero-line-right"></span>
+            </div>
             <h2 data-i18n="featured.discover">Curated Treasures</h2>
-            <p style="color:#666;margin-top:8px;" data-i18n="featured.subtitle">Curated Highlights from the Collection</p>
+            <p style="color:#666;margin-top:8px;font-size:0.95rem;" data-i18n="featured.subtitle">Highlights from the Collection</p>
         </div>
         
-        <div id="homepageFeaturedGrid" class="homepage-featured-grid">
+        <div id="featuredMosaic" class="featured-mosaic">
             <!-- Populated by JS -->
         </div>
         
@@ -193,10 +189,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=14"></script>
-<script src="products.js?v=14"></script>
-<script src="translations_part1.js?v=14"></script>
-<script src="translations_part2.js?v=14"></script>
+<script src="languages.js?v=16"></script>
+<script src="products.js?v=16"></script>
+<script src="translations_part1.js?v=16"></script>
+<script src="translations_part2.js?v=16"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -211,12 +207,11 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Load featured products
-function loadFeatured() {
-    const grid = document.getElementById('homepageFeaturedGrid');
-    if (!grid) return;
+// Load featured products as a beautiful mosaic
+function loadFeaturedMosaic() {
+    const mosaic = document.getElementById('featuredMosaic');
+    if (!mosaic) return;
     
-    // Use public products only (excludes drafts/sold)
     const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
     if (publicProducts.length === 0) return;
     
@@ -225,43 +220,48 @@ function loadFeatured() {
         window.getTranslatedProduct ? window.getTranslatedProduct(p.id) : p
     );
     
-    const featured = translated.filter(p => p.featured);
+    // Filter to products with photos
+    const withPhotos = translated.filter(p => p.images && p.images.length > 0);
     
-    if (featured.length === 0) {
-        const withPhotos = translated.filter(p => p.images && p.images.length > 0).slice(0, 3);
-        if (withPhotos.length === 0) {
-            grid.innerHTML = `<div class="homepage-featured-empty"><p data-i18n="featured.empty">No featured pieces yet. Use the Admin page to feature items.</p></div>`;
-            return;
-        }
-        renderFeatured(withPhotos);
-    } else {
-        renderFeatured(featured.slice(0, 6));
+    if (withPhotos.length === 0) {
+        mosaic.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#999;"><p data-i18n="featured.empty">No featured pieces yet. Use the Admin page to feature items.</p></div>`;
+        if (window.updatePageLanguage) window.updatePageLanguage();
+        return;
     }
     
-    if (window.updatePageLanguage) {
-        window.updatePageLanguage();
-    }
-}
-
-function renderFeatured(products) {
-    const grid = document.getElementById('homepageFeaturedGrid');
-    grid.innerHTML = products.map(p => {
-        const escName = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        const img = p.images && p.images.length > 0
-            ? `<img src="${getImageUrl(p.images[0])}" alt="${escName}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px 8px 0 0;" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\\'aspect-ratio:1;background:linear-gradient(135deg,#f5f3f0,#eae5dd);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#999;border-radius:8px 8px 0 0;\\'>📷</div>';">`
-            : `<div style="aspect-ratio:1;background:linear-gradient(135deg,#f5f3f0,#eae5dd);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#999;border-radius:8px 8px 0 0;">📷</div>`;
+    // Prefer featured, then badged, then rest
+    const featured = withPhotos.filter(p => p.featured);
+    const badged = withPhotos.filter(p => !p.featured && p.badges && p.badges.length > 0);
+    const rest = withPhotos.filter(p => !p.featured && !(p.badges && p.badges.length > 0));
+    const pool = [...featured, ...badged, ...rest];
+    
+    // Take up to 8 items
+    const selection = pool.slice(0, 8);
+    
+    // Layout pattern for visual interest
+    // Position 0 = large (2x2), others = normal
+    const layoutClasses = ['large', '', '', '', '', '', '', ''];
+    
+    mosaic.innerHTML = selection.map((p, i) => {
+        const layoutClass = layoutClasses[i] || '';
+        const imgUrl = getImageUrl(p.images[0]);
+        const escName = p.name.replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+        const isFeatured = p.featured;
         
         return `
-            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;color:inherit;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:all 0.3s;display:block;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
-                ${img}
-                <div style="padding:16px;">
-                    <div style="font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:600;margin-bottom:6px;">${p.category}</div>
-                    <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;margin:0 0 8px 0;color:#2C2C2C;">${p.name}</h3>
-                    <div style="font-size:0.95rem;font-weight:600;color:#1B3A52;">${p.price}</div>
+            <a href="product-detail.html?id=${p.id}" class="mosaic-tile ${layoutClass}" title="${escName}">
+                ${isFeatured ? '<span class="mosaic-featured-badge">★</span>' : ''}
+                <img src="${imgUrl}" alt="${escName}" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.style.display='none';">
+                <div class="mosaic-tile-overlay">
+                    <div class="mosaic-tile-category">${p.category}</div>
+                    <div class="mosaic-tile-name">${p.name}</div>
+                    <div class="mosaic-tile-price">${p.price}</div>
                 </div>
             </a>
         `;
     }).join('');
+    
+    if (window.updatePageLanguage) window.updatePageLanguage();
 }
 
 function updateCategoryCounts() {
@@ -273,50 +273,12 @@ function updateCategoryCounts() {
     });
 }
 
-function loadHeroPhotos() {
-    // Populate the 4 decorative photo tiles in the hero
-    const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
-    const withPhotos = publicProducts.filter(p => p.images && p.images.length > 0);
-    
-    if (withPhotos.length === 0) {
-        // Hide the photo clusters if no photos
-        document.querySelectorAll('.hero-photo-cluster').forEach(el => el.style.display = 'none');
-        return;
-    }
-    
-    // Prefer featured products
-    const featured = withPhotos.filter(p => p.featured);
-    const badged = withPhotos.filter(p => !p.featured && p.badges && p.badges.length > 0);
-    const rest = withPhotos.filter(p => !p.featured && !(p.badges && p.badges.length > 0));
-    const pool = [...featured, ...badged, ...rest];
-    
-    // Get 4 different products
-    const picks = pool.slice(0, 4);
-    
-    // Apply to the 4 photo tiles
-    picks.forEach((p, i) => {
-        const el = document.querySelector(`.hp-${i + 1}`);
-        if (el) {
-            const url = getImageUrl(p.images[0]);
-            el.style.backgroundImage = `url('${url}')`;
-            el.setAttribute('data-name', p.name);
-        }
-    });
-    
-    // Hide any tiles that don't have a photo
-    for (let i = picks.length + 1; i <= 4; i++) {
-        const el = document.querySelector(`.hp-${i}`);
-        if (el) el.style.display = 'none';
-    }
-}
-
 async function initHomepage() {
     // Wait for cloud data
     if (window.loadCloudData) {
         try { await window.loadCloudData(); } catch (e) {}
     }
-    loadHeroPhotos();
-    loadFeatured();
+    loadFeaturedMosaic();
     updateCategoryCounts();
 }
 
@@ -326,8 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Refresh on cloud data update
 window.addEventListener('productsUpdated', () => {
-    loadHeroPhotos();
-    loadFeatured();
+    loadFeaturedMosaic();
     updateCategoryCounts();
 });
 </script>
