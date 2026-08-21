@@ -129,6 +129,19 @@ const translations = {
     'shop.tab.archive': 'Verkauft (Archiv)',
     'nav.about.short': 'Über',
 
+    // v6 keys - Contact info completions
+    'contact.info.heading': 'Kontaktinformationen',
+    'contact.info.phone': 'Telefon',
+    'contact.info.location.value': 'Bern, Schweiz',
+    'contact.info.whatsapp': '💬 <strong>WhatsApp verfügbar</strong> unter dieser Nummer',
+    'contact.info.follow.desc': 'Neue Erwerbungen und Einblicke für Sammler werden regelmäßig auf Instagram geteilt.',
+
+    // v7 keys - About page enhancements
+    'about.photo.label': 'Kuratierte Sammlung',
+    'about.stat.years': 'Jahre',
+    'about.stat.pieces': 'Stücke',
+    'about.stat.languages': 'Sprachen',
+
   },
   fr: {
     // Navigation
@@ -281,6 +294,19 @@ const translations = {
     'shop.tab.archive': 'Vendus (Archive)',
     'nav.about.short': 'À propos',
 
+    // v6 keys - Contact info completions
+    'contact.info.heading': 'Coordonnées',
+    'contact.info.phone': 'Téléphone',
+    'contact.info.location.value': 'Berne, Suisse',
+    'contact.info.whatsapp': '💬 <strong>WhatsApp disponible</strong> sur ce numéro',
+    'contact.info.follow.desc': 'Les nouvelles acquisitions et les informations pour les collectionneurs sont partagées régulièrement sur Instagram.',
+
+    // v7 keys - About page enhancements
+    'about.photo.label': 'Collection Choisie',
+    'about.stat.years': 'Années',
+    'about.stat.pieces': 'Pièces',
+    'about.stat.languages': 'Langues',
+
   },
   it: {
     // Navigation
@@ -414,6 +440,19 @@ const translations = {
     'shop.tab.available': 'Disponibili',
     'shop.tab.archive': 'Venduti (Archivio)',
     'nav.about.short': 'Chi sono',
+
+    // v6 keys - Contact info completions
+    'contact.info.heading': 'Informazioni di contatto',
+    'contact.info.phone': 'Telefono',
+    'contact.info.location.value': 'Berna, Svizzera',
+    'contact.info.whatsapp': '💬 <strong>WhatsApp disponibile</strong> a questo numero',
+    'contact.info.follow.desc': 'Nuove acquisizioni e approfondimenti per collezionisti sono condivisi regolarmente su Instagram.',
+
+    // v7 keys - About page enhancements
+    'about.photo.label': 'Collezione Selezionata',
+    'about.stat.years': 'Anni',
+    'about.stat.pieces': 'Pezzi',
+    'about.stat.languages': 'Lingue',
 
   },
   en: {
@@ -609,6 +648,19 @@ const translations = {
     'shop.tab.archive': 'Sold (Archive)',
     'nav.about.short': 'About',
 
+    // v6 keys - Contact info completions
+    'contact.info.heading': 'Contact Information',
+    'contact.info.phone': 'Phone',
+    'contact.info.location.value': 'Bern, Switzerland',
+    'contact.info.whatsapp': '💬 <strong>WhatsApp available</strong> at this number',
+    'contact.info.follow.desc': 'New acquisitions and collector insights are shared regularly on Instagram.',
+
+    // v7 keys - About page enhancements
+    'about.photo.label': 'Curated Collection',
+    'about.stat.years': 'Years',
+    'about.stat.pieces': 'Pieces',
+    'about.stat.languages': 'Languages',
+
   }
 };
 
@@ -685,6 +737,12 @@ function updatePageLanguage() {
   document.querySelectorAll('[data-i18n]').forEach(element => {
     const key = element.getAttribute('data-i18n');
     element.textContent = t(key);
+  });
+  
+  // data-i18n-html: allows HTML tags in translations (e.g. <strong>)
+  document.querySelectorAll('[data-i18n-html]').forEach(element => {
+    const key = element.getAttribute('data-i18n-html');
+    element.innerHTML = t(key);
   });
   
   document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Simon - European Design and Antiques | 40 Years Authenticated</title>
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 
@@ -38,24 +38,28 @@
     </div>
 </nav>
 
-<!-- Hero Section -->
-<section class="hero">
+<!-- Hero Section with integrated photo accents -->
+<section class="hero hero-enhanced">
+    <div class="hero-photo-cluster hero-photo-left">
+        <div class="hero-photo hp-1"></div>
+        <div class="hero-photo hp-2"></div>
+    </div>
+    <div class="hero-photo-cluster hero-photo-right">
+        <div class="hero-photo hp-3"></div>
+        <div class="hero-photo hp-4"></div>
+    </div>
     <div class="hero-content">
+        <div class="hero-decoration">
+            <span class="hero-line-left"></span>
+            <span class="hero-ornament">◆</span>
+            <span class="hero-line-right"></span>
+        </div>
         <h1 data-i18n="hero.title">Matthew Simon</h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle">40 Years | Authenticated European Design & Antiques</p>
         <p class="hero-location" data-i18n="hero.location">Bern, Switzerland</p>
         <div class="hero-buttons">
             <a href="shop.html" class="btn btn-primary" data-i18n="hero.explore">Explore Collection</a>
             <a href="about.html" class="btn btn-secondary" data-i18n="hero.learnmore">Learn More</a>
-        </div>
-    </div>
-</section>
-
-<!-- Photo Mosaic Collage -->
-<section class="mosaic-section">
-    <div class="mosaic-container">
-        <div id="photoMosaic" class="photo-mosaic">
-            <!-- Populated by JS -->
         </div>
     </div>
 </section>
@@ -154,12 +158,6 @@
                 <p class="category-tile-count"><span data-count="Sonstiges">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
         </div>
-        
-        <div style="text-align:center;margin-top:32px;">
-            <a href="archive.html" style="display:inline-flex;align-items:center;gap:8px;color:#B8860B;text-decoration:none;font-weight:600;font-size:0.95rem;letter-spacing:0.5px;border:1px solid #B8860B;padding:12px 24px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.background='#B8860B';this.style.color='white';" onmouseout="this.style.background='';this.style.color='#B8860B';">
-                📦 <span data-i18n="archive.link">Archiv (Verkauft)</span>
-            </a>
-        </div>
     </div>
 </section>
 
@@ -195,10 +193,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=13"></script>
-<script src="products.js?v=13"></script>
-<script src="translations_part1.js?v=13"></script>
-<script src="translations_part2.js?v=13"></script>
+<script src="languages.js?v=14"></script>
+<script src="products.js?v=14"></script>
+<script src="translations_part1.js?v=14"></script>
+<script src="translations_part2.js?v=14"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -275,49 +273,41 @@ function updateCategoryCounts() {
     });
 }
 
-function loadMosaic() {
-    const mosaic = document.getElementById('photoMosaic');
-    if (!mosaic) return;
-    
+function loadHeroPhotos() {
+    // Populate the 4 decorative photo tiles in the hero
     const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
-    
-    // Filter to only products with photos
     const withPhotos = publicProducts.filter(p => p.images && p.images.length > 0);
     
     if (withPhotos.length === 0) {
-        mosaic.innerHTML = '';
+        // Hide the photo clusters if no photos
+        document.querySelectorAll('.hero-photo-cluster').forEach(el => el.style.display = 'none');
         return;
     }
     
-    // Prefer featured products, fall back to any with photos
+    // Prefer featured products
     const featured = withPhotos.filter(p => p.featured);
-    let selection;
-    if (featured.length >= 5) {
-        selection = featured.slice(0, 8);
-    } else {
-        // Mix featured + others with badges
-        const badged = withPhotos.filter(p => !p.featured && p.badges && p.badges.length > 0);
-        const rest = withPhotos.filter(p => !p.featured && !(p.badges && p.badges.length > 0));
-        selection = [...featured, ...badged, ...rest].slice(0, 8);
+    const badged = withPhotos.filter(p => !p.featured && p.badges && p.badges.length > 0);
+    const rest = withPhotos.filter(p => !p.featured && !(p.badges && p.badges.length > 0));
+    const pool = [...featured, ...badged, ...rest];
+    
+    // Get 4 different products
+    const picks = pool.slice(0, 4);
+    
+    // Apply to the 4 photo tiles
+    picks.forEach((p, i) => {
+        const el = document.querySelector(`.hp-${i + 1}`);
+        if (el) {
+            const url = getImageUrl(p.images[0]);
+            el.style.backgroundImage = `url('${url}')`;
+            el.setAttribute('data-name', p.name);
+        }
+    });
+    
+    // Hide any tiles that don't have a photo
+    for (let i = picks.length + 1; i <= 4; i++) {
+        const el = document.querySelector(`.hp-${i}`);
+        if (el) el.style.display = 'none';
     }
-    
-    if (selection.length === 0) return;
-    
-    // Layout patterns: first is large, some tall/wide, mix visually
-    const layoutClasses = ['large', '', '', 'tall', '', 'wide', '', ''];
-    
-    mosaic.innerHTML = selection.map((p, i) => {
-        const layoutClass = layoutClasses[i] || '';
-        const imgUrl = getImageUrl(p.images[0]);
-        const escName = p.name.replace(/'/g, "&#39;").replace(/"/g, '&quot;');
-        
-        return `
-            <a href="product-detail.html?id=${p.id}" class="mosaic-item ${layoutClass}" title="${escName}">
-                <img src="${imgUrl}" alt="${escName}" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.style.display='none';this.parentElement.innerHTML='<div style=&quot;font-size:2rem;&quot;>📷</div>';">
-                <div class="mosaic-item-overlay">${p.name}</div>
-            </a>
-        `;
-    }).join('');
 }
 
 async function initHomepage() {
@@ -325,7 +315,7 @@ async function initHomepage() {
     if (window.loadCloudData) {
         try { await window.loadCloudData(); } catch (e) {}
     }
-    loadMosaic();
+    loadHeroPhotos();
     loadFeatured();
     updateCategoryCounts();
 }
@@ -336,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Refresh on cloud data update
 window.addEventListener('productsUpdated', () => {
-    loadMosaic();
+    loadHeroPhotos();
     loadFeatured();
     updateCategoryCounts();
 });
