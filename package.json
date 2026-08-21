@@ -2,6 +2,7 @@
   "name": "matthew-simon-website",
   "version": "1.0.0",
   "description": "Matthew Simon European Design & Antiques website",
+  "type": "module",
   "dependencies": {
     "@netlify/blobs": "^7.4.0"
   }
