@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -469,9 +469,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=8"></script>
-<script src="translations_part1.js?v=8"></script>
-<script src="translations_part2.js?v=8"></script>
+<script src="products.js?v=9"></script>
+<script src="translations_part1.js?v=9"></script>
+<script src="translations_part2.js?v=9"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -793,7 +793,10 @@ function renderPhotoList() {
              ondragend="handleDragEnd(event)">
             <div class="photo-order">${i + 1}</div>
             <button type="button" class="photo-remove" onclick="event.stopPropagation(); event.preventDefault(); confirmRemovePhoto(${i}); return false;" onmousedown="event.stopPropagation();" title="Foto entfernen">×</button>
-            <img src="${src}" draggable="false" onerror="this.style.display='none';this.parentElement.innerHTML+='<div class=\\'photo-placeholder\\'>📷</div>';">
+            <div class="photo-image-wrapper" style="width:100%;height:100%;">
+                <img src="${src}" draggable="false" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-placeholder" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:#f5f3f0;font-size:2rem;">📷</div>
+            </div>
             <div class="photo-filename" title="${displayName}">${displayName.length > 25 ? displayName.substring(0, 22) + '...' : displayName}</div>
         </div>
         `;
