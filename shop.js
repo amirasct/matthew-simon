@@ -86,7 +86,7 @@ function renderProductCard(product) {
     
     // Image handling with placeholder fallback
     const imageHtml = product.images && product.images.length > 0
-        ? `<img src="images/${product.images[0]}" alt="${escName}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        ? `<img src="${getImageUrl(product.images[0])}" alt="${escName}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
         : `<div class="no-image-placeholder">📷<br><span>Foto folgt</span></div>`;
     
     // Badges HTML

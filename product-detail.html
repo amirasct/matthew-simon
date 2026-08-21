@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=5">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -157,10 +157,10 @@
     </div>
 </footer>
 
-<script src="languages.js"></script>
-<script src="products.js"></script>
-<script src="translations_part1.js"></script>
-<script src="translations_part2.js"></script>
+<script src="languages.js?v=5"></script>
+<script src="products.js?v=5"></script>
+<script src="translations_part1.js?v=5"></script>
+<script src="translations_part2.js?v=5"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -231,21 +231,25 @@ function renderProductDetail(product) {
         ? `<div class="detail-badges">${product.badges.map(renderBadge).join('')}</div>` : '';
     
     const mainImageHtml = hasImages
-        ? `<img src="images/${product.images[0]}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        ? `<img src="${getImageUrl(product.images[0])}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
         : `<div class="main-image-placeholder">📷<br><span>Foto folgt</span></div>`;
     
     const thumbnailsHtml = hasImages && product.images.length > 1
         ? `<div class="thumbnails">${product.images.map((img, i) => `
             <div class="thumbnail ${i === 0 ? 'active' : ''}" onclick="switchImage('${img}', this)">
-                <img src="images/${img}" alt="Bild ${i+1}" onerror="this.parentElement.style.display='none';">
+                <img src="${getImageUrl(img)}" alt="Bild ${i+1}" onerror="this.parentElement.style.display='none';">
             </div>
           `).join('')}</div>`
         : '';
     
-    // Only show description note if translation is missing
-    const descriptionNote = product._needsTranslation
-        ? `<div class="description-note" data-i18n="detail.description_note">
-                Detaillierte Produktbeschreibung ist in deutscher Originalsprache. Für Übersetzungen kontaktieren Sie uns bitte direkt.
+    // If translation is missing, offer Google Translate as fallback
+    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
+    const descriptionNote = (product._needsTranslation && lang !== 'de')
+        ? `<div class="description-note" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                <span data-i18n="detail.description_note">Detaillierte Beschreibung nur auf Deutsch verfügbar.</span>
+                <button onclick="translateDescription(this, '${lang}')" style="background:#4285F4;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:600;white-space:nowrap;">
+                    🌐 Google Translate
+                </button>
            </div>`
         : '';
     
@@ -286,7 +290,7 @@ function renderProductDetail(product) {
 
 function switchImage(src, thumbEl) {
     const mainImg = document.getElementById('mainImage');
-    if (mainImg) mainImg.src = `images/${src}`;
+    if (mainImg) mainImg.src = getImageUrl(src);
     document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
     thumbEl.classList.add('active');
 }
@@ -319,7 +323,7 @@ function inquireAbout(name) {
 }
 
 function whatsappInquiry(name) {
-    const lang = localStorage.getItem('language') || 'de';
+    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
     let message;
     if (lang === 'de') message = `Guten Tag Herr Simon, ich interessiere mich für "${name}". Können Sie mir mehr Informationen dazu senden?`;
     else if (lang === 'fr') message = `Bonjour Monsieur Simon, je suis intéressé(e) par "${name}". Pouvez-vous m'envoyer plus d'informations ?`;
@@ -327,6 +331,64 @@ function whatsappInquiry(name) {
     else message = `Hello Mr. Simon, I'm interested in "${name}". Could you send me more information?`;
     
     window.open(`https://wa.me/41793021985?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+// ================
+// GOOGLE TRANSLATE FALLBACK
+// Uses free MyMemory API (no signup required)
+// ================
+async function translateDescription(button, targetLang) {
+    const noteEl = button.closest('.description-note');
+    const descEl = noteEl.previousElementSibling; // the .detail-description
+    const originalText = descEl.textContent;
+    
+    button.disabled = true;
+    button.textContent = '⏳ Übersetze...';
+    
+    try {
+        // Split into chunks (MyMemory has 500-char limit per request)
+        const chunks = [];
+        const paragraphs = originalText.split('\n\n');
+        let currentChunk = '';
+        
+        for (const p of paragraphs) {
+            if ((currentChunk + '\n\n' + p).length > 450) {
+                if (currentChunk) chunks.push(currentChunk);
+                currentChunk = p;
+            } else {
+                currentChunk = currentChunk ? currentChunk + '\n\n' + p : p;
+            }
+        }
+        if (currentChunk) chunks.push(currentChunk);
+        
+        // Translate each chunk
+        const translatedChunks = [];
+        for (const chunk of chunks) {
+            const response = await fetch(
+                `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=de|${targetLang}`
+            );
+            const data = await response.json();
+            if (data.responseData && data.responseData.translatedText) {
+                translatedChunks.push(data.responseData.translatedText);
+            } else {
+                throw new Error('Translation failed');
+            }
+        }
+        
+        const translated = translatedChunks.join('\n\n');
+        
+        // Update description
+        descEl.innerHTML = translated + '<div style="margin-top:12px;font-size:0.75rem;color:#999;font-style:italic;">🌐 Auto-übersetzt · Für präzise Übersetzung bitte Matthew kontaktieren</div>';
+        
+        // Hide the button/note
+        noteEl.style.display = 'none';
+        
+    } catch (err) {
+        console.error('Translation error:', err);
+        button.disabled = false;
+        button.textContent = '❌ Fehler, erneut versuchen';
+        setTimeout(() => { button.textContent = '🌐 Google Translate'; }, 3000);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', loadProduct);

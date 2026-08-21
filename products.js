@@ -1179,3 +1179,12 @@ window.getAllTranslatedProducts = getAllTranslatedProducts;
 window.getFeaturedProducts = getFeaturedProducts;
 
 console.log(`✅ Products loaded: ${window.MATTHEW_PRODUCTS.length} items`);
+// Get correct image URL: handle both /images/ paths and Netlify function URLs
+function getImageUrl(filename) {
+    if (!filename) return '';
+    // Netlify function URL or absolute URL - use as-is
+    if (filename.startsWith('http') || filename.startsWith('/')) return filename;
+    // Regular filename - prefix with images/
+    return `images/${filename}`;
+}
+window.getImageUrl = getImageUrl;

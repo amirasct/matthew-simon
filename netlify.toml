@@ -1,0 +1,25 @@
+# Netlify configuration for Matthew Simon website
+
+[build]
+  # Publish directory (all HTML/CSS/JS files at root)
+  publish = "."
+  # Functions directory
+  functions = "netlify/functions"
+
+[functions]
+  # Increase body size limit for photo uploads (up to 10MB per photo)
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent old cached files (fixes the ? still showing on phone issue)
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    # Images can be cached longer since filenames change when updated
+    Cache-Control = "public, max-age=86400"
+
+# Redirect old paths if needed (currently none)
