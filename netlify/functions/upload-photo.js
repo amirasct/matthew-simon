@@ -12,16 +12,6 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Simple password protection - checks for admin password in header
-    const authHeader = event.headers['x-admin-password'];
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'matthew-simon-admin';
-    if (authHeader !== ADMIN_PASSWORD) {
-        return {
-            statusCode: 401,
-            body: JSON.stringify({ error: 'Unauthorized' })
-        };
-    }
-
     try {
         const { filename, contentType, base64Data } = JSON.parse(event.body);
 
