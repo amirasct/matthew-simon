@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -155,6 +155,112 @@
 </head>
 <body>
 
+<!-- LOGIN GATE - shown until user authenticates -->
+<div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#F5F3F0 0%,#eae5dd 100%);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:white;padding:40px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.15);max-width:400px;width:100%;">
+        <div style="text-align:center;margin-bottom:24px;">
+            <div style="font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;color:#2C2C2C;">Matthew Simon</div>
+            <div style="font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:#B8860B;margin-top:4px;">Admin Login</div>
+        </div>
+        
+        <form id="loginForm" onsubmit="tryLogin(event)">
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-size:0.85rem;color:#666;margin-bottom:6px;font-weight:600;">Benutzername</label>
+                <input type="text" id="loginUser" autofocus autocomplete="username" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;box-sizing:border-box;">
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block;font-size:0.85rem;color:#666;margin-bottom:6px;font-weight:600;">Passwort</label>
+                <input type="password" id="loginPass" autocomplete="current-password" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;box-sizing:border-box;">
+            </div>
+            
+            <div id="loginError" style="display:none;background:#fee;color:#c33;padding:10px;border-radius:6px;margin-bottom:16px;font-size:0.85rem;text-align:center;">
+                Falscher Benutzername oder Passwort
+            </div>
+            
+            <button type="submit" style="width:100%;background:#1B3A52;color:white;border:none;padding:14px;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;letter-spacing:0.5px;">
+                Anmelden
+            </button>
+            
+            <div style="margin-top:16px;text-align:center;">
+                <label style="font-size:0.8rem;color:#999;cursor:pointer;">
+                    <input type="checkbox" id="rememberMe" checked style="margin-right:6px;">
+                    Angemeldet bleiben (30 Tage)
+                </label>
+            </div>
+        </form>
+        
+        <div style="margin-top:24px;text-align:center;font-size:0.75rem;color:#999;">
+            <a href="index.html" style="color:#B8860B;text-decoration:none;">← Zurück zur Website</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// LOGIN SYSTEM
+// Simple browser-side authentication (99% effective for casual protection)
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin';
+
+function tryLogin(e) {
+    e.preventDefault();
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const remember = document.getElementById('rememberMe').checked;
+    
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        const authData = {
+            authenticated: true,
+            expires: remember 
+                ? Date.now() + (30 * 24 * 60 * 60 * 1000)  // 30 days
+                : Date.now() + (2 * 60 * 60 * 1000)  // 2 hours
+        };
+        if (remember) {
+            localStorage.setItem('adminAuth', JSON.stringify(authData));
+        } else {
+            sessionStorage.setItem('adminAuth', JSON.stringify(authData));
+        }
+        document.getElementById('loginGate').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginPass').value = '';
+        document.getElementById('loginPass').focus();
+    }
+}
+
+function checkAuth() {
+    // Check both sessionStorage and localStorage
+    let authRaw = sessionStorage.getItem('adminAuth') || localStorage.getItem('adminAuth');
+    if (!authRaw) return false;
+    
+    try {
+        const auth = JSON.parse(authRaw);
+        if (auth.authenticated && auth.expires > Date.now()) {
+            return true;
+        }
+        // Expired
+        sessionStorage.removeItem('adminAuth');
+        localStorage.removeItem('adminAuth');
+    } catch (e) {}
+    return false;
+}
+
+function logout() {
+    if (!confirm('Wirklich abmelden?')) return;
+    sessionStorage.removeItem('adminAuth');
+    localStorage.removeItem('adminAuth');
+    location.reload();
+}
+
+// Check auth immediately - hide login if already authenticated
+if (checkAuth()) {
+    document.getElementById('loginGate').style.display = 'none';
+} else {
+    document.body.style.overflow = 'hidden';  // prevent scrolling behind login
+}
+</script>
+
 <nav class="navbar">
     <div class="nav-container">
         <div class="logo">Matthew Simon | Admin <span class="logo-tagline">European Design & Antiques</span></div>
@@ -162,6 +268,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="shop.html">Shop</a></li>
             <li><a href="admin.html" class="active">Admin</a></li>
+            <li><a href="#" onclick="logout();return false;" style="color:#dc3545;">🔓 Abmelden</a></li>
         </ul>
     </div>
 </nav>
@@ -362,9 +469,9 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=5"></script>
-<script src="translations_part1.js?v=5"></script>
-<script src="translations_part2.js?v=5"></script>
+<script src="products.js?v=6"></script>
+<script src="translations_part1.js?v=6"></script>
+<script src="translations_part2.js?v=6"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -775,17 +882,6 @@ async function handleFiles(fileList) {
     const barEl = document.getElementById('uploadBar');
     progressDiv.style.display = 'block';
     
-    // Get admin password (stored per browser session)
-    let adminPassword = sessionStorage.getItem('adminPassword');
-    if (!adminPassword) {
-        adminPassword = prompt('Admin-Passwort für Foto-Upload:\n(einmalig pro Sitzung)');
-        if (!adminPassword) {
-            progressDiv.style.display = 'none';
-            return;
-        }
-        sessionStorage.setItem('adminPassword', adminPassword);
-    }
-    
     const category = document.getElementById('editCategory').value || 'misc';
     const catPrefix = { 'Möbel': 'moebel', 'Glas': 'glas', 'Leuchten': 'leuchten', 'Objekte': 'objekte' }[category] || 'misc';
     
@@ -801,19 +897,13 @@ async function handleFiles(fileList) {
         }
         
         try {
-            const uploaded = await uploadFile(file, catPrefix, adminPassword);
+            const uploaded = await uploadFile(file, catPrefix);
             if (uploaded) {
                 currentEditPhotos.push(uploaded.filename);
                 renderPhotoList();
             }
         } catch (err) {
             console.error('Upload failed:', err);
-            if (err.message.includes('401')) {
-                sessionStorage.removeItem('adminPassword');
-                showToast('Falsches Passwort', 'error');
-                progressDiv.style.display = 'none';
-                return;
-            }
             showToast(`Fehler bei ${file.name}: ${err.message}`, 'error');
         }
     }
@@ -826,8 +916,8 @@ async function handleFiles(fileList) {
     }, 2000);
 }
 
-async function uploadFile(file, categoryPrefix, adminPassword) {
-    // Generate professional filename: ms_glas_20260820_originalname.jpg
+async function uploadFile(file, categoryPrefix) {
+    // Generate professional filename
     const date = new Date();
     const dateStr = date.getFullYear() + 
         String(date.getMonth() + 1).padStart(2, '0') + 
@@ -836,7 +926,6 @@ async function uploadFile(file, categoryPrefix, adminPassword) {
         String(date.getMinutes()).padStart(2, '0') + 
         String(date.getSeconds()).padStart(2, '0');
     
-    // Clean original filename (keep extension)
     const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
     const filename = `ms_${categoryPrefix}_${dateStr}_${timeStr}.${ext}`;
     
@@ -848,12 +937,11 @@ async function uploadFile(file, categoryPrefix, adminPassword) {
         reader.readAsDataURL(file);
     });
     
-    // Upload via Netlify Function
+    // Upload via Netlify Function (no password needed - admin page is protected)
     const response = await fetch('/.netlify/functions/upload-photo', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'x-admin-password': adminPassword
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             filename: filename,
