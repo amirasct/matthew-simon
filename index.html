@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Simon - European Design and Antiques | 40 Years Authenticated</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -15,6 +15,7 @@
         <ul class="nav-menu">
             <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
             <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="archive.html" data-i18n="nav.archive">Archiv</a></li>
             <li><a href="about.html" data-i18n="nav.about">About</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
@@ -130,6 +131,26 @@
                 <p class="category-tile-label" data-i18n="categories.objects.label">Objects</p>
                 <p class="category-tile-count"><span data-count="Objekte">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
+            
+            <a href="shop.html?category=Accessoires" class="category-tile">
+                <div class="category-tile-icon">💎</div>
+                <h3 class="category-tile-name">Accessoires</h3>
+                <p class="category-tile-label" data-i18n="categories.accessoires.label">Accessories</p>
+                <p class="category-tile-count"><span data-count="Accessoires">0</span> <span data-i18n="categories.count">pieces</span></p>
+            </a>
+            
+            <a href="shop.html?category=Sonstiges" class="category-tile">
+                <div class="category-tile-icon">🎁</div>
+                <h3 class="category-tile-name">Sonstiges</h3>
+                <p class="category-tile-label" data-i18n="categories.sonstiges.label">Miscellaneous</p>
+                <p class="category-tile-count"><span data-count="Sonstiges">0</span> <span data-i18n="categories.count">pieces</span></p>
+            </a>
+        </div>
+        
+        <div style="text-align:center;margin-top:32px;">
+            <a href="archive.html" style="display:inline-flex;align-items:center;gap:8px;color:#B8860B;text-decoration:none;font-weight:600;font-size:0.95rem;letter-spacing:0.5px;border:1px solid #B8860B;padding:12px 24px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.background='#B8860B';this.style.color='white';" onmouseout="this.style.background='';this.style.color='#B8860B';">
+                📦 <span data-i18n="archive.link">Archiv (Verkauft)</span>
+            </a>
         </div>
     </div>
 </section>
@@ -166,10 +187,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=5"></script>
-<script src="products.js?v=5"></script>
-<script src="translations_part1.js?v=5"></script>
-<script src="translations_part2.js?v=5"></script>
+<script src="languages.js?v=10"></script>
+<script src="products.js?v=10"></script>
+<script src="translations_part1.js?v=10"></script>
+<script src="translations_part2.js?v=10"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -187,27 +208,32 @@ document.addEventListener('click', function(event) {
 // Load featured products
 function loadFeatured() {
     const grid = document.getElementById('homepageFeaturedGrid');
-    if (!grid || !window.MATTHEW_PRODUCTS) return;
+    if (!grid) return;
     
-    const featured = window.MATTHEW_PRODUCTS.filter(p => p.featured);
+    // Use public products only (excludes drafts/sold)
+    const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
+    if (publicProducts.length === 0) return;
+    
+    // Apply translations
+    const translated = publicProducts.map(p => 
+        window.getTranslatedProduct ? window.getTranslatedProduct(p.id) : p
+    );
+    
+    const featured = translated.filter(p => p.featured);
     
     if (featured.length === 0) {
-        // Show first 3 products with photos as default
-        const withPhotos = window.MATTHEW_PRODUCTS.filter(p => p.images && p.images.length > 0).slice(0, 3);
+        const withPhotos = translated.filter(p => p.images && p.images.length > 0).slice(0, 3);
         if (withPhotos.length === 0) {
             grid.innerHTML = `<div class="homepage-featured-empty"><p data-i18n="featured.empty">No featured pieces yet. Use the Admin page to feature items.</p></div>`;
             return;
         }
         renderFeatured(withPhotos);
     } else {
-        // Show up to 6 featured
         renderFeatured(featured.slice(0, 6));
     }
     
-    // Re-apply translations after render
-    if (window.updateLanguage) {
-        const lang = localStorage.getItem('language') || 'de';
-        setLanguage(lang);
+    if (window.updatePageLanguage) {
+        window.updatePageLanguage();
     }
 }
 
@@ -232,21 +258,32 @@ function renderFeatured(products) {
     }).join('');
 }
 
-// Update category counts
 function updateCategoryCounts() {
-    if (!window.MATTHEW_PRODUCTS) return;
-    ['Möbel', 'Glas', 'Leuchten', 'Objekte'].forEach(cat => {
-        const count = window.MATTHEW_PRODUCTS.filter(p => p.category === cat).length;
+    const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
+    ['Möbel', 'Glas', 'Leuchten', 'Objekte', 'Accessoires', 'Sonstiges'].forEach(cat => {
+        const count = publicProducts.filter(p => p.category === cat).length;
         const el = document.querySelector(`[data-count="${cat}"]`);
         if (el) el.textContent = count;
     });
 }
 
+async function initHomepage() {
+    // Wait for cloud data
+    if (window.loadCloudData) {
+        try { await window.loadCloudData(); } catch (e) {}
+    }
+    loadFeatured();
+    updateCategoryCounts();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        loadFeatured();
-        updateCategoryCounts();
-    }, 100);
+    setTimeout(initHomepage, 100);
+});
+
+// Refresh on cloud data update
+window.addEventListener('productsUpdated', () => {
+    loadFeatured();
+    updateCategoryCounts();
 });
 </script>
 

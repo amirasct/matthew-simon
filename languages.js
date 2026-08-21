@@ -106,6 +106,24 @@ const translations = {
     'contact.info.location': 'Standort',
     'contact.info.social': 'Sozial',
     'contact.info.follow': 'Folgen Sie für Updates',
+    // v4 keys - Archive, Draft, New categories
+    'categories.accessoires.label': 'Accessoires',
+    'categories.accessoires.desc': 'Schmuck & Accessoires',
+    'categories.sonstiges.label': 'Sonstiges',
+    'categories.sonstiges.desc': 'Verschiedene Stücke',
+    'categories.archive.label': 'Archiv',
+    'categories.archive.desc': 'Verkaufte Stücke',
+    'archive.title': 'Verkaufte Stücke',
+    'archive.subtitle': 'Eine Auswahl bereits verkaufter Objekte aus unserer Sammlung',
+    'archive.empty': 'Noch keine verkauften Stücke',
+    'archive.link': 'Archiv (Verkauft)',
+    'nav.archive': 'Archiv',
+    'status.sold': 'VERKAUFT',
+    'status.sold_on': 'Verkauft am',
+    'status.draft': 'ENTWURF',
+    'status.inquire_similar': 'Ähnliches anfragen',
+    'shop.no_products': 'Keine Produkte in dieser Kategorie',
+
   },
   fr: {
     // Navigation
@@ -234,6 +252,24 @@ const translations = {
     'featured.empty': 'Aucune pièce en vedette pour le moment.',
     'featured.view_details': 'Voir les détails',
     'featured.view_all': 'Voir tout →',
+
+    // v4 keys - Archive, Draft, New categories
+    'categories.accessoires.label': 'Accessoires',
+    'categories.accessoires.desc': 'Bijoux et accessoires',
+    'categories.sonstiges.label': 'Divers',
+    'categories.sonstiges.desc': 'Pièces variées',
+    'categories.archive.label': 'Archive',
+    'categories.archive.desc': 'Pièces vendues',
+    'archive.title': 'Pièces vendues',
+    'archive.subtitle': 'Une sélection d\'objets déjà vendus de notre collection',
+    'archive.empty': 'Aucune pièce vendue pour le moment',
+    'archive.link': 'Archive (Vendus)',
+    'nav.archive': 'Archive',
+    'status.sold': 'VENDU',
+    'status.sold_on': 'Vendu le',
+    'status.draft': 'BROUILLON',
+    'status.inquire_similar': 'Demander similaire',
+    'shop.no_products': 'Aucun produit dans cette catégorie',
 
   },
   it: {
@@ -516,6 +552,42 @@ const translations = {
     'featured.empty': 'No featured pieces yet. Use the Admin page to feature items.',
     'featured.view_details': 'View Details',
     'featured.view_all': 'View All →',
+
+    // v4 keys - Archive, Draft, New categories
+    'categories.accessoires.label': 'Accessories',
+    'categories.accessoires.desc': 'Jewelry & Accessories',
+    'categories.sonstiges.label': 'Miscellaneous',
+    'categories.sonstiges.desc': 'Various Pieces',
+    'categories.archive.label': 'Archive',
+    'categories.archive.desc': 'Sold Pieces',
+    'archive.title': 'Sold Pieces',
+    'archive.subtitle': 'A selection of previously sold objects from our collection',
+    'archive.empty': 'No sold pieces yet',
+    'archive.link': 'Archive (Sold)',
+    'nav.archive': 'Archive',
+    'status.sold': 'SOLD',
+    'status.sold_on': 'Sold on',
+    'status.draft': 'DRAFT',
+    'status.inquire_similar': 'Inquire about similar',
+    'shop.no_products': 'No products in this category',
+
+    // v4 keys - Archive, Draft, New categories
+    'categories.accessoires.label': 'Accessori',
+    'categories.accessoires.desc': 'Gioielli e accessori',
+    'categories.sonstiges.label': 'Varie',
+    'categories.sonstiges.desc': 'Pezzi vari',
+    'categories.archive.label': 'Archivio',
+    'categories.archive.desc': 'Pezzi venduti',
+    'archive.title': 'Pezzi venduti',
+    'archive.subtitle': 'Una selezione di oggetti già venduti dalla nostra collezione',
+    'archive.empty': 'Nessun pezzo venduto per ora',
+    'archive.link': 'Archivio (Venduti)',
+    'nav.archive': 'Archivio',
+    'status.sold': 'VENDUTO',
+    'status.sold_on': 'Venduto il',
+    'status.draft': 'BOZZA',
+    'status.inquire_similar': 'Richiedi simile',
+    'shop.no_products': 'Nessun prodotto in questa categoria',
 
   }
 };

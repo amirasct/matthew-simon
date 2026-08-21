@@ -1,7 +1,7 @@
-// Matthew Simon - Complete Product Database (100 items)
-// Cleaned and formatted for consistency
+// Matthew Simon - Complete Product Database
+// Cloud-synced via Netlify Blobs
 
-window.MATTHEW_PRODUCTS = [
+window.MATTHEW_PRODUCTS_BASE = [
     {
         id: 1,
         name: "Anthroposophischer Rahmen",
@@ -11,7 +11,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_22_antro_01.JPG", "ms_mo_22_antro_02.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 2,
@@ -22,7 +23,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_20_eckmoebel_steiner_01.JPG", "ms_mo_20_eckmoebel_steiner_02.JPG", "ms_mo_20_eckmoebel_steiner_03.JPG", "ms_mo_20_eckmoebel_steiner_04.JPG", "ms_mo_20_eckmoebel_steiner_05.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 3,
@@ -33,7 +35,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 900",
         images: ["ms_le_25_stil_nuovo_01.JPG", "ms_le_25_stil_nuovo_02.JPG", "ms_le_25_stil_nuovo_03.JPG", "ms_le_25_stil_nuovo_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 4,
@@ -44,7 +47,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 450",
         images: ["ms_ob_29_spanisch_schuessel_01.JPG", "ms_ob_29_spanisch_schuessel_02.JPG", "ms_ob_29_spanisch_schuessel_03.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 5,
@@ -55,7 +59,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_18_korbleuchter_hoffmann_01.JPG", "ms_le_18_korbleuchter_hoffmann_02.JPG", "ms_le_18_korbleuchter_hoffmann_03.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 6,
@@ -66,7 +71,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 420",
         images: ["ms_gl_41_daros_fisch_01.JPG", "ms_gl_41_daros_fisch_02.JPG", "ms_gl_41_daros_fisch_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 7,
@@ -77,7 +83,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_31_barovier_autunno_1.JPG", "ms_gl_31_barovier_autunno_2.JPG", "ms_gl_31_barovier_autunno_3.JPG", "ms_gl_31_barovier_autunno_5.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 8,
@@ -88,7 +95,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_25_davesn_poisson_01.JPG", "ms_gl_25_davesn_poisson_02.JPG", "ms_gl_25_davesn_poisson_03.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 9,
@@ -99,7 +107,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_10_bag_turgi_01.JPG", "ms_le_10_bag_turgi_02.JPG", "ms_le_10_bag_turgi_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 10,
@@ -110,7 +119,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 430",
         images: ["ms_gl_36_borella_vmc_01.JPG", "ms_gl_36_borella_vmc_02.JPG", "ms_gl_36_borella_vmc_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 11,
@@ -121,7 +131,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_19_barovier_opalina_fiamma_01.jpg", "ms_gl_19_barovier_opalina_fiamma_02.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 12,
@@ -132,7 +143,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_11_borsi_portraits_00.jpg", "ms_ob_11_borsi_portraits_01.jpg", "ms_ob_11_borsi_portraits_02.jpg", "ms_ob_11_borsi_portraits_03.jpg", "ms_ob_11_borsi_portraits_04.jpg"],
         badges: ["museum"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 13,
@@ -143,7 +155,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 900",
         images: ["ms_le_24_carlo_nason_01.JPG", "ms_le_24_carlo_nason_02.JPG", "ms_le_24_carlo_nason_03.JPG", "ms_le_24_carlo_nason_05.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 14,
@@ -154,7 +167,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_15_crepusculo_lamp_01.JPG", "ms_le_15_crepusculo_lamp_02.JPG", "ms_le_15_crepusculo_lamp_03.JPG", "ms_le_15_crepusculo_lamp_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 15,
@@ -165,7 +179,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'800",
         images: ["ms_gl_44_diego_glasbild_01.JPG", "ms_gl_44_diego_glasbild_02.JPG", "ms_gl_44_diego_glasbild_03.JPG", "ms_gl_44_diego__07.JPG"],
         badges: ["provenance"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 16,
@@ -176,7 +191,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'900",
         images: ["ms_gl_43_diego_vase_01.JPG", "ms_gl_43_diego_vase_02.JPG", "ms_gl_43_diego_vase_03.JPG", "ms_gl_43_diego_vase_04.JPG", "ms_gl_43_diego_vase_05.JPG"],
         badges: ["provenance"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 17,
@@ -187,7 +203,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_02_dino_martens_oriente_vase_01.jpg", "ms_gl_02_dino_martens_oriente_vase_02.jpg", "ms_gl_02_dino_martens_oriente_vase_03.jpg", "ms_gl_02_dino_martens_oriente_vase_04.jpg", "ms_gl_02_dino_martens_oriente_vase_05.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 18,
@@ -198,7 +215,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_01_dino_martens_parnasso_vase_01.jpg", "ms_gl_01_dino_martens_parnasso_vase_02.jpg", "ms_gl_01_dino_martens_parnasso_vase_03.jpg", "ms_gl_01_dino_martens_parnasso_vase_04.jpg", "ms_gl_01_dino_martens_parnasso_vase_05.jpg"],
         badges: ["authenticated", "documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 19,
@@ -209,7 +227,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 330",
         images: ["ms_ob_25_lachenal_iznik_01.JPG", "ms_ob_25_lachenal_iznik_02.JPG", "ms_ob_25_lachenal_iznik_03.JPG", "ms_ob_25_lachenal_iznik_04.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 20,
@@ -220,7 +239,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 720",
         images: ["ms_le_22_holophane_asteroid_01.JPG", "ms_le_22_holophane_asteroid_02.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 21,
@@ -231,7 +251,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_16_venini_opalini_01.JPG", "ms_le_16_venini_opalini_02.JPG", "ms_le_16_venini_opalini_03.JPG", "ms_le_16_venini_opalini_04.JPG", "ms_le_16_venini_opalini_05.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 22,
@@ -242,7 +263,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'300",
         images: ["ms_gl_32_barovier_pezzato_01.jpg", "ms_gl_32_barovier_pezzato_02.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 23,
@@ -253,7 +275,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'100",
         images: ["ms_gl_42_toso_floreali_01.JPG", "ms_gl_42_toso_floreali_02.JPG", "ms_gl_42_toso_floreali_03.JPG", "ms_gl_42_toso_floreali_04.JPG", "ms_gl_42_toso_floreali_05.JPG", "ms_gl_42_toso_floreali_06.JPG", "ms_gl_42_toso_floreali_08.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 24,
@@ -264,7 +287,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'500",
         images: ["ms_gl_04_fratelli_toso_kiku_vase_01.jpg", "ms_gl_04_fratelli_toso_kiku_vase_02.jpg", "ms_gl_04_fratelli_toso_kiku_vase_03.jpg", "ms_gl_04_fratelli_toso_kiku_vase_04.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 25,
@@ -275,7 +299,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_30_schinkel_gsessel_01.JPG", "ms_mo_30_schinkel_gsessel_02.JPG", "ms_mo_30_schinkel_gsessel_03.JPG", "ms_mo_30_schinkel_gsessel_04.JPG", "ms_mo_30_schinkel_gsessel_05.JPG"],
         badges: ["museum", "rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 26,
@@ -286,7 +311,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_23_bugnati_barovier_01.jpg", "ms_gl_23_bugnati_barovier_02.jpg", "ms_gl_23_bugnati_barovier_03.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 27,
@@ -297,7 +323,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_22_farn_galle_1.JPG", "ms_gl_22_farn_galle_2.JPG", "ms_gl_22_farn_galle_3.JPG", "ms_gl_22_farn_galle_4.JPG", "ms_gl_22_farn_galle_6.JPG", "ms_gl_22_farn_galle_7.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 28,
@@ -308,7 +335,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 170",
         images: ["ms_ob_26_goebel_spritzdekor_01.JPG", "ms_ob_26_goebel_spritzdekor_02.JPG", "ms_ob_26_goebel_spritzdekor_03.JPG", "ms_ob_26_goebel_spritzdekor_04.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 29,
@@ -319,7 +347,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_16_goldscheider_lorenzl_01.JPG", "ms_ob_16_goldscheider_lorenzl_02.JPG", "ms_ob_16_goldscheider_lorenzl_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 30,
@@ -330,7 +359,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_23_groult_ständer_01.JPG", "ms_mo_23_groult_ständer_02.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 31,
@@ -341,7 +371,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 4'200",
         images: ["ms_mo_27_gugelot_sessel_01.JPG", "ms_mo_27_gugelot_sessel_02.JPG", "ms_mo_27_gugelot_sessel_03.JPG", "ms_mo_27_gugelot_sessel_04.JPG", "ms_mo_27_gugelot_sessel_05.JPG", "ms_mo_27_gugelot_sessel_06.JPG", "ms_mo_27_gugelot_sessel_07.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 32,
@@ -352,7 +383,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_13_hummer_leuchter_01.jpg", "ms_le_13_hummer_leuchter_02.jpg", "ms_le_13_hummer_leuchter_03.jpg", "ms_le_13_hummer_leuchter_04.jpg", "ms_le_13_hummer_leuchter_05.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 33,
@@ -363,7 +395,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'100",
         images: ["ms_mo_29_jmueller_ronco2_01.JPG", "ms_mo_29_jmueller_ronco2_02.JPG", "ms_mo_29_jmueller_ronco2_03.JPG", "ms_mo_29_jmueller_ronco2_04.JPG", "ms_mo_29_jmueller_ronco2_05.JPG", "ms_mo_29_jmueller_ronco2_06.JPG", "ms_mo_29_jmueller_ronco2_07.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 34,
@@ -374,7 +407,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'800",
         images: ["ms_mo_28_jmueller_ronco_01.JPG", "ms_mo_28_jmueller_ronco_02.JPG", "ms_mo_28_jmueller_ronco_03.JPG", "ms_mo_28_jmueller_ronco_04.JPG", "ms_mo_28_jmueller_ronco_05.JPG", "ms_mo_28_jmueller_ronco_06.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 35,
@@ -385,7 +419,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'700",
         images: ["ms_le_01_jean_perzel_schreibtischlampe_01.jpg", "ms_le_01_jean_perzel_schreibtischlampe_02.jpg", "ms_le_01_jean_perzel_schreibtischlampe_03.jpg", "ms_le_01_jean_perzel_schreibtischlampe_04.jpg", "ms_le_01_jean_perzel_schreibtischlampe_05.jpg", "ms_le_01_jean_perzel_schreibtischlampe_06.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 36,
@@ -396,7 +431,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_14_palmen_leuchter_01.jpg", "ms_le_14_palmen_leuchter_02.jpg", "ms_le_14_palmen_leuchter_03.jpg", "ms_le_14_palmen_leuchter_04.jpg"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 37,
@@ -407,7 +443,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 600",
         images: ["ms_ob_20_faun_oudry_01.JPG", "ms_ob_20_faun_oudry_02.JPG", "ms_ob_20_faun_oudry_03.JPG", "ms_ob_20_faun_oudry_04.JPG", "ms_ob_20_faun_oudry_05.JPG", "ms_ob_20_faun_oudry_06.JPG", "ms_ob_20_faun_oudry_07.JPG", "ms_ob_20_faun_oudry_08.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 38,
@@ -418,7 +455,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_30_scarpa_dreieckig_1.JPG", "ms_gl_30_scarpa_dreieckig_2.JPG", "ms_gl_30_scarpa_dreieckig_3.JPG", "ms_gl_30_scarpa_dreieckig_4.JPG", "ms_gl_30_scarpa_dreieckig_5.JPG", "ms_gl_30_scarpa_dreieckig_6.JPG"],
         badges: ["authenticated", "documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 39,
@@ -429,7 +467,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 3'100",
         images: ["ms_le_20_genet_michon_01.JPG", "ms_le_20_genet_michon_02.JPG", "ms_le_20_genet_michon_03.JPG", "ms_le_20_genet_michon_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 40,
@@ -440,7 +479,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'600",
         images: ["ms_le_23_stil_arteluce_01.JPG", "ms_le_23_stil_arteluce_02.JPG", "ms_le_23_stil_arteluce_03.JPG", "ms_le_23_stil_arteluce_04.JPG", "ms_le_23_stil_arteluce_09.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 41,
@@ -451,7 +491,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_26_leerdam_serica_01.JPG", "ms_gl_26_leerdam_serica_02.JPG", "ms_gl_26_leerdam_serica_03.JPG", "ms_gl_26_leerdam_serica_04.JPG", "ms_gl_26_leerdam_serica_05.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 42,
@@ -462,7 +503,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 350",
         images: ["ms_le_19_bag_tlampe_01.JPG", "ms_le_19_bag_tlampe_02.JPG", "ms_le_19_bag_tlampe_03.JPG", "ms_le_19_bag_tlampe_04.JPG", "ms_le_19_bag_tlampe_06.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 43,
@@ -473,7 +515,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 550",
         images: ["ms_gl_39_ingrand_korb_01.JPG", "ms_gl_39_ingrand_korb_02.JPG", "ms_gl_39_ingrand_korb_03.JPG", "ms_gl_39_ingrand_korb_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 44,
@@ -484,7 +527,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 4'400",
         images: ["ms_gl_05_anzolo_fuga_bandiere_01.jpg", "ms_gl_05_anzolo_fuga_bandiere_02.jpg", "ms_gl_05_anzolo_fuga_bandiere_03.jpg", "ms_gl_05_anzolo_fuga_bandiere_04.jpg", "ms_gl_05_anzolo_fuga_bandiere_05.jpg", "ms_gl_05_anzolo_fuga_bandiere_06.jpg", "ms_gl_05_anzolo_fuga_bandiere_07.jpg", "ms_gl_05_anzolo_fuga_bandiere_08.jpg", "ms_gl_05_anzolo_fuga_bandiere_09.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 45,
@@ -495,7 +539,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'800",
         images: ["ms_gl_06_fratelli_toso_trichter_vase_01.jpg", "ms_gl_06_fratelli_toso_trichter_vase_02.jpg", "ms_gl_06_fratelli_toso_trichter_vase_03.jpg", "ms_gl_06_fratelli_toso_trichter_vase_04.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 46,
@@ -506,7 +551,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_08_ercole_barovier_neomurrino_vase_01.jpg", "ms_gl_08_ercole_barovier_neomurrino_vase_02.jpg", "ms_gl_08_ercole_barovier_neomurrino_vase_03.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 47,
@@ -517,7 +563,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_09_vetreria_artistica_barovier_aventurin_vase_1.JPG", "ms_gl_09_vetreria_artistica_barovier_aventurin_vase_2.JPG", "ms_gl_09_vetreria_artistica_barovier_aventurin_vase_3.JPG", "ms_gl_09_vetreria_artistica_barovier_aventurin_vase_4.JPG", "ms_gl_09_vetreria_artistica_barovier_aventurin_vase_5.JPG", "ms_gl_09_vetreria_artistica_barovier_aventurin_vase_6.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 48,
@@ -528,7 +575,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 480",
         images: ["ms_gl_10_fratelli_toso_aventurin_vase_1.JPG", "ms_gl_10_fratelli_toso_aventurin_vase_2.JPG", "ms_gl_10_fratelli_toso_aventurin_vase_3.JPG", "ms_gl_10_fratelli_toso_aventurin_vase_4.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 49,
@@ -539,7 +587,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_11_venedig_paar_becher_01.JPG", "ms_gl_11_venedig_paar_becher_02.JPG", "ms_gl_11_venedig_paar_becher_03.JPG", "ms_gl_11_venedig_paar_becher_04.JPG", "ms_gl_11_venedig_paar_becher_05.JPG", "ms_gl_11_venedig_paar_becher_06.JPG", "ms_gl_11_venedig_paar_becher_07.JPG", "ms_gl_11_venedig_paar_becher_08.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 50,
@@ -550,7 +599,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 700",
         images: ["ms_gl_12_gaspari_sasso_1.jpg", "ms_gl_12_gaspari_sasso_2.JPG", "ms_gl_12_gaspari_sasso_3.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 51,
@@ -561,7 +611,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_13_flavio_poli_flacon_1.jpg", "ms_gl_13_flavio_poli_flacon_2.JPG", "ms_gl_13_flavio_poli_flacon_3.JPG", "ms_gl_13_flavio_poli_flacon_4.jpg", "ms_gl_13_flavio_poli_flacon_5.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 52,
@@ -572,7 +623,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'800",
         images: ["ms_gl_14_fulvio_bianconi_spicchi_01.jpg", "ms_gl_14_fulvio_bianconi_spicchi_02.JPG", "ms_gl_14_fulvio_bianconi_spicchi_03.jpg", "ms_gl_14_fulvio_bianconi_spicchi_04.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 53,
@@ -583,7 +635,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_15_dube_fontana_arte_01.jpg", "ms_gl_15_dube_fontana_arte_02.jpg", "ms_gl_15_dube_fontana_arte_03.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 54,
@@ -594,7 +647,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_16_bianconi_venini_donna_01.jpg", "ms_gl_16_bianconi_venini_donna_02.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 55,
@@ -605,7 +659,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 400",
         images: ["ms_gl_17_loetz_lampenfuss_01.JPG", "ms_gl_17_loetz_lampenfuss_02.JPG", "ms_gl_17_loetz_lampenfuss_03.JPG", "ms_gl_17_loetz_lampenfuss_04.JPG", "ms_gl_17_loetz_lampenfuss_05.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 56,
@@ -616,7 +671,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_18_guido_balsamo_stella_vase_01.jpg", "ms_gl_18_guido_balsamo_stella_vase_02.jpg", "ms_gl_18_guido_balsamo_stella_vase_03.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 57,
@@ -627,7 +683,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 500",
         images: ["ms_gl_33_orrefors_birne_01.JPG", "ms_gl_33_orrefors_birne_02.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 58,
@@ -638,7 +695,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 700",
         images: ["ms_gl_34_toso_gelb_01.JPG", "ms_gl_33_orrefors_birne_01.JPG", "ms_gl_33_orrefors_birne_02.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 59,
@@ -649,7 +707,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 450",
         images: ["ms_gl_35_seguso_zanfirico_02.JPG", "ms_gl_35_seguso_zanfirico_01.JPG", "ms_gl_35_seguso_zanfirico_03.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 60,
@@ -660,7 +719,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_02_doria_deckenleuchte_01.jpg", "ms_le_02_doria_deckenleuchte_02.jpg", "ms_le_02_doria_deckenleuchte_03.jpg", "ms_le_02_doria_deckenleuchte_04.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 61,
@@ -671,7 +731,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 650",
         images: ["ms_gl_38_ingrand_bicolore_00.JPG", "ms_gl_38_ingrand_bicolore_01.JPG", "ms_gl_38_ingrand_bicolore_03.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 62,
@@ -682,7 +743,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 500",
         images: ["ms_mo_05_caruelle_tisch_paris_01.jpg", "ms_mo_05_caruelle_tisch_paris_02.jpg", "ms_mo_05_caruelle_tisch_paris_03.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 63,
@@ -693,7 +755,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'200",
         images: ["ms_mo_06_caruelle_tisch_embru_01.jpg", "ms_mo_06_caruelle_tisch_embru_02.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 64,
@@ -704,7 +767,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_09_jallot_vitrine_01.jpg", "ms_mo_09_jallot_vitrine_02.jpg", "ms_mo_09_jallot_vitrine_03.jpg"],
         badges: ["authenticated", "provenance", "museum"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 65,
@@ -715,7 +779,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_10_MvR_MR515_01.jpg", "ms_mo_10_MvR_MR515_02.jpg"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 66,
@@ -726,7 +791,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_13_Danhauser_Stuehle_1.jpg", "ms_mo_13_Danhauser_Stuehle_2.jpg", "ms_mo_13_Danhauser_Stuehle_3.jpg", "ms_mo_13_Danhauser_Stuehle_4.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 67,
@@ -737,7 +803,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_mo_14_konsole_louisxv-1.jpg", "ms_mo_14_konsole_louisxv-2.jpg", "ms_mo_14_konsole_louisxv-3.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 68,
@@ -748,7 +815,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 650",
         images: ["ms_mo_26_thonet_btisch_05.JPG", "ms_mo_26_thonet_btisch_01.JPG", "ms_mo_26_thonet_btisch_02.JPG", "ms_mo_26_thonet_btisch_03.JPG", "ms_mo_26_thonet_btisch_04.JPG", "ms_mo_26_thonet_btisch_06.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 69,
@@ -759,7 +827,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_01.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_02.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_03.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_04.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_05.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_06.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_07.JPG", "ms_ob_05_albert-ernest_carrier-belleuse_warwick_vase_08.JPG"],
         badges: ["authenticated", "rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 70,
@@ -770,7 +839,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_07_sevres_vase_01.jpg", "ms_ob_07_sevres_vase_02.jpg", "ms_ob_07_sevres_vase_03.jpg", "ms_ob_07_sevres_vase_04.jpg", "ms_ob_07_sevres_vase_05.jpg", "ms_ob_07_sevres_vase_06.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 71,
@@ -781,7 +851,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_09_bitossi_vase_schale_01.JPG", "ms_ob_09_bitossi_vase_schale_02.jpg", "ms_ob_09_bitossi_vase_schale_03.jpg", "ms_ob_09_bitossi_vase_schale_04.jpg", "ms_ob_09_bitossi_vase_schale_05.jpg", "ms_ob_09_bitossi_vase_schale_06.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 72,
@@ -792,7 +863,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'300",
         images: ["ms_ob_22_cyclades_soleil_01.JPG", "ms_ob_22_cyclades_soleil_02.JPG", "ms_ob_22_cyclades_soleil_03.JPG", "ms_ob_22_cyclades_soleil_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 73,
@@ -803,7 +875,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 330",
         images: ["ms_ob_23_sicre_teller_01.JPG", "ms_ob_23_sicre_teller_02.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 74,
@@ -814,7 +887,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 360",
         images: ["ms_ob_24_psicre_teller_01.JPG", "ms_ob_24_psicre_teller_02.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 75,
@@ -825,7 +899,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 600",
         images: ["ms_mo_18_panton_randers_01.jpg", "ms_mo_18_panton_randers_02.jpg", "ms_mo_18_panton_randers_03.jpg", "ms_mo_18_panton_randers_04.jpg", "ms_mo_18_panton_randers_05.jpg", "ms_mo_18_panton_randers_06.jpg", "ms_mo_18_panton_randers_07.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 76,
@@ -836,7 +911,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 550",
         images: ["ms_gl_37_stlouis_paperweight_01.JPG", "ms_gl_37_stlouis_paperweight_02.JPG", "ms_gl_37_stlouis_paperweight_03.JPG", "ms_gl_37_stlouis_paperweight_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 77,
@@ -847,7 +923,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'900",
         images: ["ms_mo_31_fornasetti_setter_01.JPG", "ms_mo_31_fornasetti_setter_02.JPG", "ms_mo_31_fornasetti_setter_03.JPG", "ms_mo_31_fornasetti_setter_04.JPG", "ms_mo_31_fornasetti_setter_05.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 78,
@@ -858,7 +935,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 2'200",
         images: ["ms_mo_32_fornasetti_ombrelli_01.JPG", "ms_mo_32_fornasetti_ombrelli_02.JPG", "ms_mo_32_fornasetti_ombrelli_03.JPG", "ms_mo_32_fornasetti_ombrelli_04.JPG", "ms_mo_32_fornasetti_ombrelli_05.JPG", "ms_mo_32_fornasetti_ombrelli_06.JPG", "ms_mo_32_fornasetti_ombrelli_07.JPG", "ms_mo_32_fornasetti_ombrelli_08.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 79,
@@ -869,7 +947,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_6_pilzlampe_martinuzzi_01.JPG", "ms_le_6_pilzlampe_martinuzzi_02.JPG", "ms_le_6_pilzlampe_martinuzzi_03.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 80,
@@ -880,7 +959,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 800",
         images: ["ms_ob_21_portanier_platte_02.JPG", "ms_ob_21_portanier_platte_01.JPG", "ms_ob_21_portanier_platte_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 81,
@@ -891,7 +971,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 860",
         images: ["ms_le_21_strassen_laterne_01.JPG", "ms_le_21_strassen_laterne_02.JPG", "ms_le_21_strassen_laterne_03.JPG", "ms_le_21_strassen_laterne_04.JPG", "ms_le_21_strassen_laterne_05.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 82,
@@ -902,7 +983,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 480",
         images: ["ms_ob_03_raymond_loewy_fischmaul_vase_01.jpg", "ms_ob_03_raymond_loewy_fischmaul_vase_02.jpg", "ms_ob_03_raymond_loewy_fischmaul_vase_03.jpg", "ms_ob_03_raymond_loewy_fischmaul_vase_04.jpg", "ms_ob_03_raymond_loewy_fischmaul_vase_05.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 83,
@@ -913,7 +995,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 600",
         images: ["ms_le_04_reticello_scarpa_1.JPG", "ms_le_04_reticello_scarpa_2.JPG", "ms_le_04_reticello_scarpa_3.JPG", "ms_le_04_reticello_scarpa_4.JPG", "ms_le_04_reticello_scarpa_5.JPG", "ms_le_04_reticello_scarpa_6.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 84,
@@ -924,7 +1007,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 250",
         images: ["ms_ob_28_samson_schessel_01.JPG", "ms_ob_28_samson_schessel_02.JPG", "ms_ob_28_samson_schessel_03.JPG", "ms_ob_28_samson_schessel_04.JPG", "ms_ob_28_samson_schessel_05.JPG", "ms_ob_28_samson_schessel_06.JPG", "ms_ob_28_samson_schuessel_08.JPG"],
         badges: ["rare"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 85,
@@ -935,7 +1019,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_06_scarpa_poliedri_1.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 86,
@@ -946,7 +1031,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_20_scarpa_bugne_irridato_corrosa_01.jpg", "ms_gl_20_scarpa_bugne_irridato_corrosa_02.JPG", "ms_gl_20_scarpa_bugne_irridato_corrosa_03.jpg", "ms_gl_20_scarpa_bugne_irridato_corrosa_04.JPG"],
         badges: ["rare", "documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 87,
@@ -957,7 +1043,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_27_copier__bowl_01.JPG", "ms_gl_27_copier__bowl_02.JPG", "ms_gl_27_copier__bowl_03.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 88,
@@ -968,7 +1055,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'350",
         images: ["ms_mo_17_schirmständer_ingrand_01.jpg", "ms_mo_17_schirmständer_ingrand_02.jpg", "ms_mo_17_schirmständer_ingrand_03.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 89,
@@ -979,7 +1067,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_11_seguso_sommerso_01.JPG", "ms_le_11_seguso_sommerso_02.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 90,
@@ -990,7 +1079,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_9_siemens_behrens_01.JPG", "ms_le_9_siemens_behrens_02.JPG", "ms_le_9_siemens_behrens_03.JPG", "ms_le_9_siemens_behrens_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 91,
@@ -1001,7 +1091,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 700",
         images: ["ms_mo_16_tisch_copenhagen_01.jpg", "ms_mo_16_tisch_copenhagen_02.jpg", "ms_mo_16_tisch_copenhagen_03.jpg", "ms_mo_16_tisch_copenhagen_04.jpg"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 92,
@@ -1012,7 +1103,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_29_seguso_verde_ 1.JPG", "ms_gl_29_seguso_verde_ 2.JPG", "ms_gl_29_seguso_verde_ 3.JPG", "ms_gl_29_seguso_verde_ 4.JPG", "ms_gl_29_seguso_verde_ 5.JPG"],
         badges: ["documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 93,
@@ -1023,7 +1115,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_gl_28_seguso_pulegoso_1.JPG", "ms_gl_28_seguso_pulegoso_2.JPG", "ms_gl_28_seguso_pulegoso_3.JPG", "ms_gl_28_seguso_pulegoso_4.JPG", "ms_gl_28_seguso_pulegoso_5.JPG", "ms_gl_28_seguso_pulegoso_6.JPG"],
         badges: ["authenticated", "documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 94,
@@ -1034,7 +1127,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_12_venini_sechsarmig_1.JPG", "ms_le_12_venini_sechsarmig_2.JPG", "ms_le_12_venini_sechsarmig_3.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 95,
@@ -1045,7 +1139,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'400",
         images: ["ms_le_05_vignelli_lampen_2.JPG", "ms_le_05_vignelli_lampen_1.JPG", "ms_le_05_vignelli_lampen_3.JPG", "ms_le_05_vignelli_lampen_4.JPG", "ms_le_05_vignelli_lampen_5.JPG", "ms_le_05_vignelli_lampen_6.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 96,
@@ -1056,7 +1151,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 600",
         images: ["ms_gl_40_zecchin_trompete_01.JPG", "ms_gl_40_zecchin_trompete_02.JPG", "ms_gl_40_zecchin_trompete_03.JPG"],
         badges: ["authenticated", "documented"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 97,
@@ -1067,7 +1163,8 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_ob_17_von_stuck_01.JPG", "ms_ob_17_von_stuck_02.JPG", "ms_ob_17_von_stuck_03.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 98,
@@ -1078,7 +1175,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 1'600",
         images: ["ms_ob_04_wilhelm_kage_mermaid_vase_01.jpg", "ms_ob_04_wilhelm_kage_mermaid_vase_02.jpg", "ms_ob_04_wilhelm_kage_mermaid_vase_03.jpg", "ms_ob_04_wilhelm_kage_mermaid_vase_04.jpg", "ms_ob_04_wilhelm_kage_mermaid_vase_05.jpg"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 99,
@@ -1089,7 +1187,8 @@ window.MATTHEW_PRODUCTS = [
         price: "CHF 320",
         images: ["ms_ob_27_willy_daro_01.JPG", "ms_ob_27_willy_daro_02.JPG", "ms_ob_27_willy_daro_03.JPG", "ms_ob_27_willy_daro_04.JPG"],
         badges: [],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
     {
         id: 100,
@@ -1100,54 +1199,185 @@ window.MATTHEW_PRODUCTS = [
         price: "Preis auf Anfrage",
         images: ["ms_le_17_venini_inciso_01.JPG", "ms_le_17_venini_inciso_02.JPG", "ms_le_17_venini_inciso_03.JPG", "ms_le_17_venini_inciso_04.JPG", "ms_le_17_venini_inciso_05.JPG", "ms_le_17_venini_inciso_06.JPG", "ms_le_17_venini_inciso_07.JPG", "ms_le_17_venini_inciso_08.JPG", "ms_le_17_venini_inciso_09.JPG"],
         badges: ["authenticated"],
-        featured: false
+        featured: false,
+        status: "published"  // published | draft | sold
     },
 ];
 
-// Load user edits from localStorage
-function loadUserEdits() {
-    try {
-        const edits = localStorage.getItem("productEdits");
-        if (edits) {
-            const editsMap = JSON.parse(edits);
-            window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.map(p => {
-                if (editsMap[p.id]) {
-                    return { ...p, ...editsMap[p.id] };
+window.MATTHEW_PRODUCTS = [...window.MATTHEW_PRODUCTS_BASE];
+
+
+// ============================
+// CLOUD DATA LAYER (Netlify Blobs)
+// ============================
+
+let cloudDataLoaded = false;
+let cloudLoadPromise = null;
+
+async function loadCloudData(forceRefresh = false) {
+    // Return cached promise if already loading
+    if (cloudLoadPromise && !forceRefresh) return cloudLoadPromise;
+    
+    cloudLoadPromise = (async () => {
+        try {
+            const response = await fetch('/.netlify/functions/load-products' + (forceRefresh ? '?t=' + Date.now() : ''));
+            if (!response.ok) throw new Error('Load failed');
+            const cloudData = await response.json();
+            
+            // Apply cloud data to products
+            applyDataToProducts(cloudData);
+            
+            // Also cache locally for offline fallback
+            try {
+                localStorage.setItem('cloudProductCache', JSON.stringify(cloudData));
+            } catch (e) {}
+            
+            cloudDataLoaded = true;
+            return cloudData;
+        } catch (error) {
+            console.warn('Cloud load failed, using local cache:', error);
+            // Fallback to localStorage cache
+            try {
+                const cached = localStorage.getItem('cloudProductCache');
+                if (cached) {
+                    applyDataToProducts(JSON.parse(cached));
+                    cloudDataLoaded = true;
                 }
-                return p;
-            });
+            } catch (e) {}
+            return null;
         }
-        const featured = JSON.parse(localStorage.getItem("featuredProducts") || "[]");
-        window.MATTHEW_PRODUCTS.forEach(p => {
-            p.featured = featured.includes(p.id);
+    })();
+    
+    return cloudLoadPromise;
+}
+
+function applyDataToProducts(cloudData) {
+    if (!cloudData) return;
+    
+    // Reset to base
+    window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS_BASE.map(p => ({...p}));
+    
+    // Apply edits
+    if (cloudData.edits) {
+        window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.map(p => {
+            if (cloudData.edits[p.id]) {
+                return { ...p, ...cloudData.edits[p.id] };
+            }
+            return p;
         });
-        const deleted = JSON.parse(localStorage.getItem("productDeleted") || "[]");
-        window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.filter(p => !deleted.includes(p.id));
-        const custom = JSON.parse(localStorage.getItem("customProducts") || "[]");
-        window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.concat(custom);
-    } catch (e) {
-        console.error("Error loading edits:", e);
+    }
+    
+    // Apply featured
+    if (cloudData.featured) {
+        window.MATTHEW_PRODUCTS.forEach(p => {
+            p.featured = cloudData.featured.includes(p.id);
+        });
+    }
+    
+    // Apply deleted (filter out)
+    if (cloudData.deleted && cloudData.deleted.length > 0) {
+        window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.filter(p => !cloudData.deleted.includes(p.id));
+    }
+    
+    // Apply status updates (draft/sold)
+    if (cloudData.status) {
+        window.MATTHEW_PRODUCTS.forEach(p => {
+            if (cloudData.status[p.id]) {
+                p.status = cloudData.status[p.id].status || p.status || 'published';
+                p.soldDate = cloudData.status[p.id].soldDate || null;
+                p.originalCategory = cloudData.status[p.id].originalCategory || null;
+            }
+        });
+    }
+    
+    // Add custom products
+    if (cloudData.custom) {
+        // Ensure each custom product has all required fields
+        const customProducts = cloudData.custom.map(p => ({
+            status: 'published',
+            featured: false,
+            images: [],
+            badges: [],
+            ...p
+        }));
+        window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.concat(customProducts);
+    }
+    
+    // Notify listeners that products are ready
+    window.dispatchEvent(new CustomEvent('productsUpdated'));
+}
+
+async function saveCloudData(dataObj) {
+    try {
+        const response = await fetch('/.netlify/functions/save-products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataObj)
+        });
+        if (!response.ok) throw new Error(`Save failed (${response.status})`);
+        // Update local cache
+        try {
+            localStorage.setItem('cloudProductCache', JSON.stringify(dataObj));
+        } catch (e) {}
+        return await response.json();
+    } catch (error) {
+        console.error('Cloud save failed:', error);
+        throw error;
     }
 }
 
-loadUserEdits();
+// ============================
+// PUBLIC API
+// ============================
 
 function getAllProducts() { return window.MATTHEW_PRODUCTS || []; }
-function getProductById(id) { return getAllProducts().find(p => p.id == id); }
-function getProductsByCategory(cat) { return getAllProducts().filter(p => p.category === cat); }
-function getFeaturedProducts() { return getAllProducts().filter(p => p.featured); }
 
+function getProductById(id) { 
+    return getAllProducts().find(p => p.id == id); 
+}
+
+// Get products for PUBLIC shop (published only, excludes drafts and sold)
+function getPublicProducts() {
+    return getAllProducts().filter(p => 
+        (p.status || 'published') === 'published'
+    );
+}
+
+// Get sold/archive products for public Archive page
+function getArchiveProducts() {
+    return getAllProducts().filter(p => p.status === 'sold');
+}
+
+// Get products for ADMIN (includes drafts and sold, filterable)
+function getProductsByStatus(status) {
+    if (!status) return getAllProducts();
+    return getAllProducts().filter(p => (p.status || 'published') === status);
+}
+
+function getProductsByCategory(cat, includeArchive = false) {
+    if (includeArchive) {
+        return getPublicProducts().concat(getArchiveProducts()).filter(p => p.category === cat);
+    }
+    return getPublicProducts().filter(p => p.category === cat);
+}
+
+function getFeaturedProducts() { 
+    return getPublicProducts().filter(p => p.featured); 
+}
+
+// ============================
 // TRANSLATION SUPPORT
-// Get product with translated hook/description based on current language
+// ============================
+
 function getTranslatedProduct(id) {
     const product = getProductById(id);
     if (!product) return null;
     
-    // Check BOTH possible localStorage keys for compatibility
     const lang = localStorage.getItem("matthew_language") || localStorage.getItem("language") || "de";
     
     if (lang === "de") return product;
     
+    // Built-in translations
     const translations = window.PRODUCT_TRANSLATIONS && window.PRODUCT_TRANSLATIONS[id];
     if (translations && translations[lang]) {
         return {
@@ -1157,34 +1387,65 @@ function getTranslatedProduct(id) {
         };
     }
     
-    const customTrans = JSON.parse(localStorage.getItem("productTranslations") || "{}");
-    if (customTrans[id] && customTrans[id][lang]) {
-        return {
-            ...product,
-            shortHook: customTrans[id][lang].hook || product.shortHook,
-            description: customTrans[id][lang].desc || product.description
-        };
-    }
+    // Cloud translations (added via admin)
+    try {
+        const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+        if (cached.translations && cached.translations[id] && cached.translations[id][lang]) {
+            return {
+                ...product,
+                shortHook: cached.translations[id][lang].hook || product.shortHook,
+                description: cached.translations[id][lang].desc || product.description
+            };
+        }
+    } catch (e) {}
     
     return { ...product, _needsTranslation: true };
 }
 
 function getAllTranslatedProducts() {
-    return getAllProducts().map(p => getTranslatedProduct(p.id) || p);
+    return getPublicProducts().map(p => getTranslatedProduct(p.id) || p);
 }
 
-// Expose globally
-window.getTranslatedProduct = getTranslatedProduct;
-window.getAllTranslatedProducts = getAllTranslatedProducts;
-window.getFeaturedProducts = getFeaturedProducts;
+// ============================
+// IMAGE HELPER
+// ============================
 
-console.log(`✅ Products loaded: ${window.MATTHEW_PRODUCTS.length} items`);
-// Get correct image URL: handle both /images/ paths and Netlify function URLs
 function getImageUrl(filename) {
     if (!filename) return '';
-    // Netlify function URL or absolute URL - use as-is
     if (filename.startsWith('http') || filename.startsWith('/')) return filename;
-    // Regular filename - prefix with images/
     return `images/${filename}`;
 }
+
+// ============================
+// EXPOSE GLOBALLY
+// ============================
+
+window.getAllProducts = getAllProducts;
+window.getProductById = getProductById;
+window.getPublicProducts = getPublicProducts;
+window.getArchiveProducts = getArchiveProducts;
+window.getProductsByStatus = getProductsByStatus;
+window.getProductsByCategory = getProductsByCategory;
+window.getFeaturedProducts = getFeaturedProducts;
+window.getTranslatedProduct = getTranslatedProduct;
+window.getAllTranslatedProducts = getAllTranslatedProducts;
 window.getImageUrl = getImageUrl;
+window.loadCloudData = loadCloudData;
+window.saveCloudData = saveCloudData;
+
+// Auto-load cloud data on script load (with cache fallback for instant display)
+try {
+    const cached = localStorage.getItem('cloudProductCache');
+    if (cached) {
+        applyDataToProducts(JSON.parse(cached));
+    }
+} catch (e) {}
+
+// Then fetch fresh data from cloud
+loadCloudData().then(() => {
+    console.log('✅ Cloud data loaded');
+}).catch(err => {
+    console.warn('⚠️ Using cached data:', err);
+});
+
+console.log(`✅ Products loaded: ${window.MATTHEW_PRODUCTS.length} items`);

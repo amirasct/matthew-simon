@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=11">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -114,6 +114,57 @@
         .toast.success { background: #28a745; }
         .toast.error { background: #dc3545; }
         .toast.info { background: #17a2b8; }
+        
+        /* Status tabs */
+        .status-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 0;
+        }
+        .status-tab {
+            padding: 12px 20px;
+            border: none;
+            background: #f5f3f0;
+            color: #666;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        .status-tab:hover { background: #eae5dd; color: #2C2C2C; }
+        .status-tab.active {
+            background: white;
+            color: #1B3A52;
+            border-bottom-color: #B8860B;
+        }
+        .tab-count {
+            display: inline-block;
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 6px;
+        }
+        .status-tab.active .tab-count {
+            background: #B8860B;
+            color: white;
+        }
+        
+        /* Status badges in table rows */
+        .row-status {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .row-status.published { background: #e8f5e9; color: #2c5e2e; }
+        .row-status.draft { background: #fff3cd; color: #856404; }
+        .row-status.sold { background: #f8d7da; color: #721c24; }
         
         /* Translation tabs */
         .trans-tab {
@@ -299,7 +350,50 @@ if (checkAuth()) {
         </div>
     </div>
     
-    <div class="admin-toolbar">
+    <!-- Cloud sync status bar with backup controls -->
+    <div id="cloudStatusBar" style="background:#e8f5e9;border-left:3px solid #28a745;padding:10px 16px;margin-bottom:16px;font-size:0.85rem;color:#2c5e2e;border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div>
+            ☁️ <strong>Cloud-Synchronisation aktiv</strong> — <span id="cloudLastUpdate">Lädt...</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="downloadBackup()" style="background:#1B3A52;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;" title="Backup aller Daten als JSON herunterladen">
+                📥 Backup
+            </button>
+            <button onclick="triggerRestoreFile()" style="background:#B8860B;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;" title="Backup wiederherstellen">
+                📤 Wiederherstellen
+            </button>
+            <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleRestoreFile(event)">
+            <button onclick="forceCloudSync()" style="background:#28a745;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;">
+                🔄 Neu laden
+            </button>
+        </div>
+    </div>
+    
+    <!-- Backup reminder banner (hidden by default) -->
+    <div id="backupReminder" style="display:none;background:#fff3cd;border-left:3px solid #B8860B;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;color:#856404;border-radius:4px;">
+        💡 <strong>Tipp:</strong> Sie haben viele Änderungen vorgenommen. Es ist eine gute Idee, ein Backup zu erstellen.
+        <button onclick="downloadBackup();hideBackupReminder();" style="background:#B8860B;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;margin-left:8px;">
+            📥 Backup jetzt herunterladen
+        </button>
+        <button onclick="hideBackupReminder()" style="background:transparent;color:#856404;border:1px solid #856404;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;margin-left:4px;">
+            Später
+        </button>
+    </div>
+    
+    <!-- Status Tabs -->
+    <div class="status-tabs" style="display:flex;gap:2px;margin-bottom:0;border-bottom:2px solid #e0e0e0;">
+        <button class="status-tab active" data-status="published" onclick="switchStatusTab('published')">
+            🟢 Veröffentlicht <span class="tab-count" id="countPublished">0</span>
+        </button>
+        <button class="status-tab" data-status="draft" onclick="switchStatusTab('draft')">
+            📝 Entwürfe <span class="tab-count" id="countDraft">0</span>
+        </button>
+        <button class="status-tab" data-status="sold" onclick="switchStatusTab('sold')">
+            📦 Archiv (Verkauft) <span class="tab-count" id="countSold">0</span>
+        </button>
+    </div>
+    
+    <div class="admin-toolbar" style="border-top:0;border-radius:0 0 6px 6px;">
         <input type="text" class="admin-search" id="searchBox" placeholder="🔍 Produkt suchen (Name, Kategorie...)">
         <select class="admin-filter" id="categoryFilter">
             <option value="">Alle Kategorien</option>
@@ -307,13 +401,15 @@ if (checkAuth()) {
             <option value="Glas">Glas</option>
             <option value="Leuchten">Leuchten</option>
             <option value="Objekte">Objekte</option>
+            <option value="Accessoires">Accessoires</option>
+            <option value="Sonstiges">Sonstiges</option>
         </select>
         <button class="btn-add" onclick="openAddModal()">+ Neues Produkt</button>
         <button class="btn-add" style="background:#dc3545;" onclick="resetAllChanges()" title="Alle Änderungen zurücksetzen">↺ Reset</button>
     </div>
     
-    <div style="background:#f9f7f4;border-left:3px solid #B8860B;padding:12px 16px;margin-bottom:20px;font-size:0.85rem;color:#666;border-radius:4px;">
-        💡 <strong>Tipp:</strong> Aktivieren Sie ⭐ Featured für Produkte, die auf der Startseite hervorgehoben werden sollen (max. 6 empfohlen).
+    <div style="background:#f9f7f4;border-left:3px solid #B8860B;padding:12px 16px;margin-bottom:20px;font-size:0.85rem;color:#666;border-radius:0 0 4px 4px;">
+        💡 <strong>Tipp:</strong> Aktivieren Sie ⭐ Featured für Produkte, die auf der Startseite hervorgehoben werden sollen (max. 6 empfohlen). Alle Änderungen werden automatisch in der Cloud gespeichert.
     </div>
     
     <div class="products-table">
@@ -359,12 +455,39 @@ if (checkAuth()) {
                         <option value="Glas">Glas (Glass)</option>
                         <option value="Leuchten">Leuchten (Lighting)</option>
                         <option value="Objekte">Objekte (Objects)</option>
+                        <option value="Accessoires">Accessoires (Jewelry & Accessories)</option>
+                        <option value="Sonstiges">Sonstiges (Miscellaneous)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Preis</label>
                     <input type="text" id="editPrice" placeholder="z.B. CHF 900 oder Preis auf Anfrage">
                 </div>
+            </div>
+            
+            <!-- Status / Publishing controls -->
+            <div class="form-group" style="background:#f9f7f4;padding:14px;border-radius:8px;border-left:3px solid #B8860B;">
+                <label style="font-weight:700;margin-bottom:10px;display:block;">📢 Veröffentlichung & Status</label>
+                
+                <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;">
+                        <input type="checkbox" id="editPublished" checked style="width:18px;height:18px;cursor:pointer;">
+                        <span>✅ <strong>Auf Website anzeigen</strong> (unchecked = Entwurf)</span>
+                    </label>
+                </div>
+                
+                <div id="soldSection" style="margin-top:12px;padding-top:12px;border-top:1px dashed #ddd;display:none;">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;color:#721c24;">
+                        <input type="checkbox" id="editSold" style="width:18px;height:18px;cursor:pointer;">
+                        <span>📦 <strong>Als VERKAUFT markieren</strong> (in Archiv verschieben)</span>
+                    </label>
+                    <div id="soldDateWrapper" style="display:none;margin-top:8px;padding-left:26px;">
+                        <label style="font-size:0.85rem;color:#666;">Verkaufsdatum:</label>
+                        <input type="date" id="editSoldDate" style="margin-left:8px;padding:4px 8px;border:1px solid #ddd;border-radius:4px;">
+                    </div>
+                </div>
+                
+                <div id="statusHint" style="margin-top:10px;font-size:0.8rem;color:#666;font-style:italic;"></div>
             </div>
             
             <div class="form-group">
@@ -469,25 +592,37 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=9"></script>
-<script src="translations_part1.js?v=9"></script>
-<script src="translations_part2.js?v=9"></script>
+<script src="products.js?v=11"></script>
+<script src="translations_part1.js?v=11"></script>
+<script src="translations_part2.js?v=11"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
 let filterCategory = '';
+let currentStatusTab = 'published';
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initAdmin, 100);
 });
 
-function initAdmin() {
+async function initAdmin() {
+    // Wait for cloud data to load
+    if (window.loadCloudData) {
+        try {
+            await window.loadCloudData();
+        } catch (e) {
+            console.warn('Cloud load failed, using cached data');
+        }
+    }
+    
     if (!window.MATTHEW_PRODUCTS) {
         showToast('Produkte konnten nicht geladen werden', 'error');
         return;
     }
     
     updateStats();
+    updateTabCounts();
+    updateCloudStatus();
     renderTable();
     
     document.getElementById('searchBox').addEventListener('input', (e) => {
@@ -504,6 +639,300 @@ function initAdmin() {
         const cb = label.querySelector('input');
         cb.addEventListener('change', () => label.classList.toggle('checked', cb.checked));
     });
+    
+    // Sold checkbox toggles date field visibility
+    document.getElementById('editSold').addEventListener('change', function() {
+        document.getElementById('soldDateWrapper').style.display = this.checked ? 'block' : 'none';
+        if (this.checked && !document.getElementById('editSoldDate').value) {
+            document.getElementById('editSoldDate').valueAsDate = new Date();
+        }
+    });
+    
+    // Refresh products when cloud data updates
+    window.addEventListener('productsUpdated', () => {
+        updateStats();
+        updateTabCounts();
+        renderTable();
+    });
+}
+
+function switchStatusTab(status) {
+    currentStatusTab = status;
+    document.querySelectorAll('.status-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.status === status);
+    });
+    renderTable();
+}
+
+function updateTabCounts() {
+    const all = window.MATTHEW_PRODUCTS || [];
+    document.getElementById('countPublished').textContent = all.filter(p => (p.status || 'published') === 'published').length;
+    document.getElementById('countDraft').textContent = all.filter(p => p.status === 'draft').length;
+    document.getElementById('countSold').textContent = all.filter(p => p.status === 'sold').length;
+}
+
+function updateCloudStatus() {
+    try {
+        const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+        const el = document.getElementById('cloudLastUpdate');
+        if (cached.lastUpdated) {
+            const date = new Date(cached.lastUpdated);
+            const now = new Date();
+            const diffMin = Math.round((now - date) / 60000);
+            let timeStr;
+            if (diffMin < 1) timeStr = 'gerade eben';
+            else if (diffMin < 60) timeStr = `vor ${diffMin} Min.`;
+            else if (diffMin < 1440) timeStr = `vor ${Math.round(diffMin/60)} Std.`;
+            else timeStr = date.toLocaleDateString('de-DE');
+            el.textContent = `Letzte Aktualisierung: ${timeStr}`;
+        } else {
+            el.textContent = 'Noch keine Cloud-Daten';
+        }
+    } catch (e) {}
+}
+
+async function forceCloudSync() {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = '⏳ Lädt...';
+    try {
+        await window.loadCloudData(true);
+        updateStats();
+        updateTabCounts();
+        updateCloudStatus();
+        renderTable();
+        showToast('Cloud-Daten aktualisiert', 'success');
+    } catch (e) {
+        showToast('Aktualisierung fehlgeschlagen', 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = '🔄 Neu laden';
+}
+
+// ============================
+// BACKUP & RESTORE
+// ============================
+
+function downloadBackup() {
+    try {
+        // Get current cloud data from cache (most up-to-date)
+        const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+        
+        // Bundle everything with metadata
+        const backup = {
+            _meta: {
+                version: '1.0',
+                createdAt: new Date().toISOString(),
+                site: 'matthew-simon.ch',
+                itemCount: {
+                    edits: Object.keys(cloudData.edits || {}).length,
+                    custom: (cloudData.custom || []).length,
+                    featured: (cloudData.featured || []).length,
+                    deleted: (cloudData.deleted || []).length,
+                    translations: Object.keys(cloudData.translations || {}).length,
+                    statusChanges: Object.keys(cloudData.status || {}).length
+                }
+            },
+            data: cloudData
+        };
+        
+        // Create downloadable file
+        const jsonStr = JSON.stringify(backup, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        // Filename with timestamp
+        const now = new Date();
+        const dateStr = now.getFullYear() + '-' + 
+            String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+            String(now.getDate()).padStart(2, '0');
+        const timeStr = String(now.getHours()).padStart(2, '0') + '-' + 
+            String(now.getMinutes()).padStart(2, '0');
+        const filename = `matthew-simon-backup-${dateStr}_${timeStr}.json`;
+        
+        // Trigger download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Track that a backup was made
+        localStorage.setItem('lastBackupDate', new Date().toISOString());
+        localStorage.setItem('changesSinceBackup', '0');
+        
+        showToast(`✅ Backup heruntergeladen: ${filename}`, 'success');
+    } catch (err) {
+        console.error('Backup failed:', err);
+        showToast('❌ Backup fehlgeschlagen', 'error');
+    }
+}
+
+function triggerRestoreFile() {
+    document.getElementById('restoreFileInput').click();
+}
+
+function handleRestoreFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const backup = JSON.parse(e.target.result);
+            
+            // Validate backup structure
+            if (!backup.data && !backup.edits) {
+                throw new Error('Ungültiges Backup-Format');
+            }
+            
+            // Support both new (with _meta wrapper) and old (raw data) formats
+            const data = backup.data || backup;
+            
+            // Show confirmation modal with details
+            showRestoreConfirmation(data, backup._meta);
+        } catch (err) {
+            console.error('Restore parse error:', err);
+            showToast('❌ Ungültige Backup-Datei', 'error');
+        }
+    };
+    reader.readAsText(file);
+    
+    // Reset input so same file can be selected again
+    event.target.value = '';
+}
+
+function showRestoreConfirmation(data, meta) {
+    const modal = document.createElement('div');
+    modal.id = 'restoreConfirmModal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    
+    // Count items
+    const counts = meta?.itemCount || {
+        edits: Object.keys(data.edits || {}).length,
+        custom: (data.custom || []).length,
+        featured: (data.featured || []).length,
+        deleted: (data.deleted || []).length,
+        translations: Object.keys(data.translations || {}).length,
+        statusChanges: Object.keys(data.status || {}).length
+    };
+    
+    const createdDate = meta?.createdAt 
+        ? new Date(meta.createdAt).toLocaleString('de-DE') 
+        : 'Unbekannt';
+    
+    modal.innerHTML = `
+        <div style="background:white;border-radius:12px;padding:32px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:85vh;overflow-y:auto;">
+            <div style="text-align:center;margin-bottom:20px;">
+                <div style="font-size:2.5rem;margin-bottom:8px;">📤</div>
+                <h2 style="margin:0;font-family:'Playfair Display',Georgia,serif;color:#2C2C2C;font-size:1.5rem;">Backup wiederherstellen?</h2>
+            </div>
+            
+            <div style="background:#fff3cd;border-left:3px solid #B8860B;padding:12px 16px;margin:16px 0;border-radius:4px;font-size:0.85rem;color:#856404;">
+                ⚠️ <strong>Achtung:</strong> Dies überschreibt alle aktuellen Änderungen mit den Daten aus dem Backup.
+            </div>
+            
+            <div style="background:#f9f7f4;border-radius:8px;padding:16px;margin:16px 0;font-size:0.9rem;">
+                <div style="font-weight:600;margin-bottom:8px;color:#1B3A52;">📊 Backup-Inhalt:</div>
+                <div style="color:#666;line-height:1.8;">
+                    📅 Erstellt: ${createdDate}<br>
+                    ✏️ Bearbeitete Produkte: ${counts.edits}<br>
+                    ➕ Neue Produkte: ${counts.custom}<br>
+                    ⭐ Featured: ${counts.featured}<br>
+                    🗑️ Gelöschte: ${counts.deleted}<br>
+                    🌐 Übersetzungen: ${counts.translations}<br>
+                    📢 Status-Änderungen: ${counts.statusChanges}
+                </div>
+            </div>
+            
+            <p style="color:#dc3545;text-align:center;margin:16px 0;font-size:0.85rem;font-weight:600;">
+                Ihre aktuellen Cloud-Daten werden dauerhaft ersetzt!
+            </p>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;">
+                <button type="button" onclick="closeRestoreConfirm()" style="padding:12px;border:1px solid #ddd;background:white;border-radius:6px;cursor:pointer;font-size:0.95rem;font-weight:600;color:#666;">
+                    Abbrechen
+                </button>
+                <button type="button" onclick="doRestore()" style="padding:12px;border:none;background:#dc3545;color:white;border-radius:6px;cursor:pointer;font-size:0.95rem;font-weight:600;">
+                    📤 Wiederherstellen
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Store the data to restore
+    modal.dataset.restoreData = JSON.stringify(data);
+    
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeRestoreConfirm();
+    });
+    
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            closeRestoreConfirm();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+}
+
+function closeRestoreConfirm() {
+    const modal = document.getElementById('restoreConfirmModal');
+    if (modal) modal.remove();
+}
+
+async function doRestore() {
+    const modal = document.getElementById('restoreConfirmModal');
+    if (!modal) return;
+    
+    const data = JSON.parse(modal.dataset.restoreData);
+    closeRestoreConfirm();
+    
+    showToast('⏳ Backup wird wiederhergestellt...', 'info');
+    
+    try {
+        await window.saveCloudData(data);
+        // Reload everything
+        await window.loadCloudData(true);
+        updateStats();
+        updateTabCounts();
+        updateCloudStatus();
+        renderTable();
+        showToast('✅ Backup erfolgreich wiederhergestellt!', 'success');
+        // Reset changes counter
+        localStorage.setItem('changesSinceBackup', '0');
+    } catch (err) {
+        console.error('Restore failed:', err);
+        showToast('❌ Wiederherstellung fehlgeschlagen', 'error');
+    }
+}
+
+// ============================
+// BACKUP REMINDER
+// ============================
+
+function incrementChangeCounter() {
+    const count = parseInt(localStorage.getItem('changesSinceBackup') || '0') + 1;
+    localStorage.setItem('changesSinceBackup', count.toString());
+    
+    // Show reminder every 20 changes
+    if (count >= 20 && count % 20 === 0) {
+        showBackupReminder();
+    }
+}
+
+function showBackupReminder() {
+    const banner = document.getElementById('backupReminder');
+    if (banner) banner.style.display = 'block';
+}
+
+function hideBackupReminder() {
+    const banner = document.getElementById('backupReminder');
+    if (banner) banner.style.display = 'none';
 }
 
 function updateStats() {
@@ -518,6 +947,12 @@ function renderTable() {
     const tbody = document.getElementById('productsTableBody');
     let products = window.MATTHEW_PRODUCTS || [];
     
+    // Filter by current tab
+    products = products.filter(p => {
+        const status = p.status || 'published';
+        return status === currentStatusTab;
+    });
+    
     if (searchTerm) {
         products = products.filter(p => 
             p.name.toLowerCase().includes(searchTerm) ||
@@ -530,57 +965,118 @@ function renderTable() {
     }
     
     if (products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;">Keine Produkte gefunden</td></tr>';
+        const emptyMsg = {
+            published: 'Keine veröffentlichten Produkte in dieser Ansicht',
+            draft: 'Keine Entwürfe vorhanden. Erstellen Sie ein neues Produkt und lassen Sie „Auf Website anzeigen" unangehakt.',
+            sold: 'Noch keine verkauften Stücke im Archiv.'
+        };
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;">${emptyMsg[currentStatusTab] || 'Keine Produkte gefunden'}</td></tr>`;
         return;
     }
     
-    tbody.innerHTML = products.map(p => `
+    tbody.innerHTML = products.map(p => {
+        const imgSrc = p.images && p.images.length > 0 
+            ? (p.images[0].startsWith('http') || p.images[0].startsWith('/') ? p.images[0] : `images/${p.images[0]}`)
+            : null;
+        const status = p.status || 'published';
+        const statusBadge = `<span class="row-status ${status}">${status === 'published' ? 'Live' : status === 'draft' ? 'Entwurf' : 'Verkauft'}</span>`;
+        
+        // Different actions per status
+        let actionButtons = `
+            <a href="product-detail.html?id=${p.id}" class="btn-icon btn-view" target="_blank">👁 Ansehen</a>
+            <button class="btn-icon btn-edit" onclick="openEditModal(${p.id})">✎ Bearbeiten</button>
+        `;
+        if (status === 'sold') {
+            actionButtons += `<button class="btn-icon btn-edit" style="background:#28a745;color:white;" onclick="restoreFromArchive(${p.id})" title="Zurück zu Live">↺ Reaktivieren</button>`;
+        }
+        actionButtons += `<button class="btn-icon btn-delete" onclick="deleteProduct(${p.id})">🗑 Löschen</button>`;
+        
+        return `
         <tr>
             <td>
                 <div class="table-thumb">
-                    ${p.images && p.images.length > 0 
-                        ? `<img src="images/${p.images[0]}" alt="" onerror="this.parentElement.innerHTML='📷';">`
-                        : '📷'}
+                    ${imgSrc ? `<img src="${imgSrc}" alt="" onerror="this.parentElement.innerHTML='📷';">` : '📷'}
                 </div>
             </td>
-            <td><strong>${p.name}</strong></td>
+            <td>
+                <strong>${p.name}</strong>
+                <div style="margin-top:4px;">${statusBadge}</div>
+                ${p.soldDate ? `<div style="font-size:0.7rem;color:#999;margin-top:2px;">Verkauft: ${new Date(p.soldDate).toLocaleDateString('de-DE')}</div>` : ''}
+            </td>
             <td>${p.category}</td>
             <td><strong style="color:#1B3A52;">${p.price}</strong></td>
             <td>${p.images ? p.images.length : 0}</td>
             <td style="text-align:center;">
                 <label style="cursor:pointer;display:inline-block;">
-                    <input type="checkbox" ${p.featured ? 'checked' : ''} onchange="toggleFeatured(${p.id}, this.checked)" style="cursor:pointer;transform:scale(1.4);"/>
+                    <input type="checkbox" ${p.featured ? 'checked' : ''} onchange="toggleFeatured(${p.id}, this.checked)" style="cursor:pointer;transform:scale(1.4);" ${status !== 'published' ? 'disabled title="Nur veröffentlichte Produkte können Featured sein"' : ''}/>
                 </label>
             </td>
             <td>${(p.badges || []).map(b => `<span class="row-badge">${b}</span>`).join('')}</td>
             <td>
                 <div class="row-actions" style="justify-content:flex-end;">
-                    <a href="product-detail.html?id=${p.id}" class="btn-icon btn-view" target="_blank">👁 Ansehen</a>
-                    <button class="btn-icon btn-edit" onclick="openEditModal(${p.id})">✎ Bearbeiten</button>
-                    <button class="btn-icon btn-delete" onclick="deleteProduct(${p.id})">🗑 Löschen</button>
+                    ${actionButtons}
                 </div>
             </td>
         </tr>
-    `).join('');
+    `;}).join('');
 }
 
-function toggleFeatured(id, isFeatured) {
-    const featured = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
-    const idx = featured.indexOf(id);
+async function toggleFeatured(id, isFeatured) {
+    // Get current cloud data
+    const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+    if (!cached.featured) cached.featured = [];
     
+    const idx = cached.featured.indexOf(id);
     if (isFeatured && idx === -1) {
-        featured.push(id);
+        cached.featured.push(id);
     } else if (!isFeatured && idx !== -1) {
-        featured.splice(idx, 1);
+        cached.featured.splice(idx, 1);
     }
-    
-    localStorage.setItem('featuredProducts', JSON.stringify(featured));
     
     // Update in-memory
     const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
     if (product) product.featured = isFeatured;
     
-    showToast(isFeatured ? `Zu Featured hinzugefügt (${featured.length} total)` : 'Von Featured entfernt', 'success');
+    updateStats();
+    
+    // Save to cloud
+    try {
+        await window.saveCloudData(cached);
+        incrementChangeCounter();
+        showToast(isFeatured ? `Zu Featured hinzugefügt (${cached.featured.length} total)` : 'Von Featured entfernt', 'success');
+        updateCloudStatus();
+    } catch (e) {
+        showToast('Speichern fehlgeschlagen', 'error');
+    }
+}
+
+async function restoreFromArchive(id) {
+    if (!confirm('Dieses Produkt aus dem Archiv wieder auf die Website stellen?')) return;
+    
+    const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+    if (!cached.status) cached.status = {};
+    
+    // Restore original status
+    cached.status[id] = { status: 'published', soldDate: null };
+    
+    // Update in-memory
+    const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+    if (product) {
+        product.status = 'published';
+        product.soldDate = null;
+    }
+    
+    try {
+        await window.saveCloudData(cached);
+        incrementChangeCounter();
+        updateStats();
+        updateTabCounts();
+        renderTable();
+        updateCloudStatus();
+        showToast('Produkt reaktiviert!', 'success');
+    } catch (e) {
+        showToast('Fehler beim Speichern', 'error');
+    }
 }
 
 function openAddModal() {
@@ -595,6 +1091,15 @@ function openAddModal() {
         cb.checked = false;
         cb.parentElement.classList.remove('checked');
     });
+    
+    // Status defaults: new products default to published
+    document.getElementById('editPublished').checked = true;
+    document.getElementById('soldSection').style.display = 'none';  // New products can't be sold
+    document.getElementById('editSold').checked = false;
+    document.getElementById('soldDateWrapper').style.display = 'none';
+    document.getElementById('editSoldDate').value = '';
+    document.getElementById('statusHint').textContent = 'Neue Produkte werden standardmäßig auf der Website angezeigt.';
+    
     // Clear translations
     ['En', 'Fr', 'It'].forEach(l => {
         document.getElementById('transHook' + l).value = '';
@@ -628,14 +1133,30 @@ function openEditModal(id) {
         cb.parentElement.classList.toggle('checked', cb.checked);
     });
     
-    // Load translations - first check built-in, then localStorage
+    // Load status
+    const status = product.status || 'published';
+    document.getElementById('editPublished').checked = (status === 'published');
+    document.getElementById('editSold').checked = (status === 'sold');
+    document.getElementById('soldSection').style.display = 'block';  // Existing products can be marked sold
+    document.getElementById('soldDateWrapper').style.display = (status === 'sold') ? 'block' : 'none';
+    document.getElementById('editSoldDate').value = product.soldDate ? product.soldDate.substring(0, 10) : '';
+    
+    // Status hint
+    const hints = {
+        published: '✅ Dieses Produkt ist auf der Website sichtbar.',
+        draft: '📝 Dieses Produkt ist ein Entwurf und wird NICHT auf der Website angezeigt.',
+        sold: '📦 Dieses Produkt ist als verkauft markiert und wird im Archiv angezeigt.'
+    };
+    document.getElementById('statusHint').textContent = hints[status] || '';
+    
+    // Load translations
     const builtin = window.PRODUCT_TRANSLATIONS && window.PRODUCT_TRANSLATIONS[id];
-    const custom = JSON.parse(localStorage.getItem('productTranslations') || '{}');
-    const customTrans = custom[id] || {};
+    const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+    const cloudTrans = (cached.translations && cached.translations[id]) || {};
     
     ['en', 'fr', 'it'].forEach(lang => {
         const suffix = lang.charAt(0).toUpperCase() + lang.slice(1);
-        const source = customTrans[lang] || (builtin && builtin[lang]) || {};
+        const source = cloudTrans[lang] || (builtin && builtin[lang]) || {};
         document.getElementById('transHook' + suffix).value = source.hook || '';
         document.getElementById('transDesc' + suffix).value = source.desc || '';
     });
@@ -1033,13 +1554,22 @@ async function uploadFile(file, categoryPrefix) {
     return result;
 }
 
-function saveProduct(e) {
+async function saveProduct(e) {
     e.preventDefault();
     
     const id = document.getElementById('editId').value;
     const isNew = !id;
     
     const badges = Array.from(document.querySelectorAll('.badge-checkbox input:checked')).map(cb => cb.value);
+    
+    // Determine status from checkboxes
+    const isPublished = document.getElementById('editPublished').checked;
+    const isSold = document.getElementById('editSold').checked;
+    let status = 'published';
+    if (isSold) status = 'sold';
+    else if (!isPublished) status = 'draft';
+    
+    const soldDate = document.getElementById('editSoldDate').value || null;
     
     const productData = {
         name: document.getElementById('editName').value.trim(),
@@ -1051,59 +1581,133 @@ function saveProduct(e) {
         badges: badges
     };
     
+    // Get current cloud data as starting point
+    const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+    if (!cloudData.edits) cloudData.edits = {};
+    if (!cloudData.custom) cloudData.custom = [];
+    if (!cloudData.status) cloudData.status = {};
+    if (!cloudData.translations) cloudData.translations = {};
+    if (!cloudData.featured) cloudData.featured = [];
+    if (!cloudData.deleted) cloudData.deleted = [];
+    
+    let savedId = id;
+    
     if (isNew) {
         // Add custom product
-        const custom = JSON.parse(localStorage.getItem('customProducts') || '[]');
-        const newId = Math.max(1000, ...custom.map(p => p.id || 0)) + 1;
-        custom.push({ id: newId, ...productData, featured: false });
-        localStorage.setItem('customProducts', JSON.stringify(custom));
-        // Save translations for new product
-        saveTranslations(newId);
-        showToast(`Produkt "${productData.name}" hinzugefügt`, 'success');
+        const existingIds = [...cloudData.custom.map(p => p.id || 0)];
+        const newId = Math.max(1000, ...existingIds) + 1;
+        savedId = newId;
+        cloudData.custom.push({ id: newId, ...productData, featured: false });
+        // Store status for new product
+        cloudData.status[newId] = { status, soldDate };
     } else {
-        // Save edit
-        const edits = JSON.parse(localStorage.getItem('productEdits') || '{}');
-        edits[id] = productData;
-        localStorage.setItem('productEdits', JSON.stringify(edits));
-        // Save translations for existing product
-        saveTranslations(parseInt(id));
-        showToast(`Änderungen und Übersetzungen gespeichert`, 'success');
+        const numId = parseInt(id);
+        savedId = numId;
+        
+        if (numId >= 1000) {
+            // Custom product - update in custom array
+            const idx = cloudData.custom.findIndex(p => p.id === numId);
+            if (idx !== -1) {
+                cloudData.custom[idx] = { ...cloudData.custom[idx], ...productData };
+            }
+        } else {
+            // Original product - save as edit
+            cloudData.edits[numId] = productData;
+        }
+        
+        // Update status
+        cloudData.status[numId] = { status, soldDate };
     }
     
-    // Reload products
-    location.reload();
+    // Save translations
+    const trans = {};
+    let hasTrans = false;
+    ['en', 'fr', 'it'].forEach(lang => {
+        const suffix = lang.charAt(0).toUpperCase() + lang.slice(1);
+        const hook = document.getElementById('transHook' + suffix).value.trim();
+        const desc = document.getElementById('transDesc' + suffix).value.trim();
+        if (hook || desc) {
+            trans[lang] = { hook, desc };
+            hasTrans = true;
+        }
+    });
+    if (hasTrans) {
+        cloudData.translations[savedId] = trans;
+    }
+    
+    // Show saving indicator
+    const saveBtn = e.target.querySelector('button[type="submit"]');
+    const origText = saveBtn.textContent;
+    saveBtn.disabled = true;
+    saveBtn.textContent = '⏳ Speichert in Cloud...';
+    
+    try {
+        await window.saveCloudData(cloudData);
+        incrementChangeCounter();
+        showToast(`✅ In Cloud gespeichert - für alle Besucher sichtbar!`, 'success');
+        closeModal();
+        // Refresh data
+        await window.loadCloudData(true);
+        updateStats();
+        updateTabCounts();
+        updateCloudStatus();
+        renderTable();
+    } catch (err) {
+        showToast('❌ Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
+        saveBtn.disabled = false;
+        saveBtn.textContent = origText;
+    }
 }
 
-function deleteProduct(id) {
+async function deleteProduct(id) {
     const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
     if (!product) return;
     
     if (!confirm(`Produkt "${product.name}" wirklich löschen?\n\nHinweis: Original-Produkte werden ausgeblendet, können mit "Reset" wiederhergestellt werden.`)) return;
     
+    const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+    if (!cloudData.deleted) cloudData.deleted = [];
+    if (!cloudData.custom) cloudData.custom = [];
+    
     if (id >= 1000) {
         // Custom product - remove entirely
-        const custom = JSON.parse(localStorage.getItem('customProducts') || '[]');
-        const filtered = custom.filter(p => p.id !== id);
-        localStorage.setItem('customProducts', JSON.stringify(filtered));
+        cloudData.custom = cloudData.custom.filter(p => p.id !== id);
     } else {
         // Original - mark as deleted
-        const deleted = JSON.parse(localStorage.getItem('productDeleted') || '[]');
-        if (!deleted.includes(id)) deleted.push(id);
-        localStorage.setItem('productDeleted', JSON.stringify(deleted));
+        if (!cloudData.deleted.includes(id)) cloudData.deleted.push(id);
     }
     
-    showToast(`Produkt gelöscht`, 'success');
-    setTimeout(() => location.reload(), 500);
+    try {
+        await window.saveCloudData(cloudData);
+        incrementChangeCounter();
+        showToast(`Produkt gelöscht`, 'success');
+        await window.loadCloudData(true);
+        updateStats();
+        updateTabCounts();
+        renderTable();
+    } catch (err) {
+        showToast('Löschen fehlgeschlagen', 'error');
+    }
 }
 
-function resetAllChanges() {
-    if (!confirm('Alle Änderungen (Edits, gelöschte Produkte, neue Produkte, Featured) zurücksetzen?')) return;
-    localStorage.removeItem('productEdits');
-    localStorage.removeItem('productDeleted');
-    localStorage.removeItem('customProducts');
-    localStorage.removeItem('featuredProducts');
-    showToast('Alle Änderungen zurückgesetzt', 'info');
-    setTimeout(() => location.reload(), 500);
+async function resetAllChanges() {
+    if (!confirm('WIRKLICH alle Änderungen zurücksetzen?\n\nAlle Edits, neue Produkte, gelöschte, Featured und Verkauft-Status werden zurückgesetzt.\nDies gilt auch für die veröffentlichte Website!')) return;
+    
+    try {
+        await window.saveCloudData({
+            edits: {},
+            custom: [],
+            deleted: [],
+            featured: [],
+            translations: {},
+            status: {}
+        });
+        localStorage.removeItem('cloudProductCache');
+        showToast('Alle Änderungen zurückgesetzt', 'info');
+        setTimeout(() => location.reload(), 500);
+    } catch (err) {
+        showToast('Reset fehlgeschlagen', 'error');
+    }
 }
 
 function showToast(msg, type = 'success') {

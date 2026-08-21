@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=10">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -101,6 +101,7 @@
         <ul class="nav-menu">
             <li><a href="index.html" data-i18n="nav.home">Home</a></li>
             <li><a href="shop.html" class="active" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="archive.html" data-i18n="nav.archive">Archiv</a></li>
             <li><a href="about.html" data-i18n="nav.about">About</a></li>
             <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
             <li class="nav-language">
@@ -157,10 +158,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=5"></script>
-<script src="products.js?v=5"></script>
-<script src="translations_part1.js?v=5"></script>
-<script src="translations_part2.js?v=5"></script>
+<script src="languages.js?v=10"></script>
+<script src="products.js?v=10"></script>
+<script src="translations_part1.js?v=10"></script>
+<script src="translations_part2.js?v=10"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -230,8 +231,24 @@ function renderProductDetail(product) {
     const badges = product.badges && product.badges.length > 0
         ? `<div class="detail-badges">${product.badges.map(renderBadge).join('')}</div>` : '';
     
+    const isSold = product.status === 'sold';
+    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
+    
+    // SOLD banner overlay
+    const soldLabels = { de: 'VERKAUFT', en: 'SOLD', fr: 'VENDU', it: 'VENDUTO' };
+    const soldOnLabels = { de: 'Verkauft am', en: 'Sold on', fr: 'Vendu le', it: 'Venduto il' };
+    const inquireLabels = { de: 'Ähnliches Stück anfragen', en: 'Inquire about similar', fr: 'Demander pièce similaire', it: 'Richiedi pezzo simile' };
+    
+    const soldOverlay = isSold
+        ? `<div style="position:absolute;top:16px;right:16px;background:rgba(139,20,20,0.95);color:white;padding:8px 20px;font-size:1rem;font-weight:700;letter-spacing:3px;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:5;">${soldLabels[lang] || 'SOLD'}</div>`
+        : '';
+    
+    const soldDateHtml = isSold && product.soldDate
+        ? `<div style="background:#f8d7da;color:#721c24;padding:10px 14px;border-radius:6px;margin:12px 0;font-size:0.9rem;text-align:center;font-weight:600;">📦 ${soldOnLabels[lang]} ${new Date(product.soldDate).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'fr' ? 'fr-FR' : lang === 'it' ? 'it-IT' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`
+        : '';
+    
     const mainImageHtml = hasImages
-        ? `<img src="${getImageUrl(product.images[0])}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        ? `<img src="${getImageUrl(product.images[0])}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" style="${isSold ? 'filter:grayscale(15%);' : ''}" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
         : `<div class="main-image-placeholder">📷<br><span>Foto folgt</span></div>`;
     
     const thumbnailsHtml = hasImages && product.images.length > 1
@@ -242,8 +259,7 @@ function renderProductDetail(product) {
           `).join('')}</div>`
         : '';
     
-    // If translation is missing, offer Google Translate as fallback
-    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
+    // Google Translate fallback
     const descriptionNote = (product._needsTranslation && lang !== 'de')
         ? `<div class="description-note" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
                 <span data-i18n="detail.description_note">Detaillierte Beschreibung nur auf Deutsch verfügbar.</span>
@@ -253,10 +269,16 @@ function renderProductDetail(product) {
            </div>`
         : '';
     
+    // Different inquiry text for sold items
+    const inquireBtnText = isSold ? inquireLabels[lang] : null;
+    
     const html = `
         <div class="detail-grid">
             <div class="gallery-container">
-                <div class="main-image-wrapper">${mainImageHtml}</div>
+                <div class="main-image-wrapper" style="position:relative;">
+                    ${soldOverlay}
+                    ${mainImageHtml}
+                </div>
                 ${thumbnailsHtml}
             </div>
             
@@ -264,16 +286,18 @@ function renderProductDetail(product) {
                 <div class="detail-category">${product.category}</div>
                 <h1>${product.name}</h1>
                 ${badges}
-                <div class="detail-price">${product.price}</div>
+                ${soldDateHtml}
+                <div class="detail-price" style="${isSold ? 'text-decoration:line-through;color:#999;' : ''}">${product.price}</div>
                 <div class="detail-description">${product.description || product.shortHook}</div>
                 
                 ${descriptionNote}
                 
                 <div class="detail-cta">
-                    <button class="cta-inquire" onclick="inquireAbout('${product.name.replace(/'/g, "\\'")}')">
-                        <span data-i18n="detail.inquire">✉ Anfrage senden</span>
+                    <button class="cta-inquire" onclick="inquireAbout('${product.name.replace(/'/g, "\\'")}', ${isSold})">
+                        <span>${inquireBtnText ? '✉ ' + inquireBtnText : ''}</span>
+                        ${!inquireBtnText ? '<span data-i18n="detail.inquire">✉ Anfrage senden</span>' : ''}
                     </button>
-                    <button class="cta-whatsapp" onclick="whatsappInquiry('${product.name.replace(/'/g, "\\'")}')">
+                    <button class="cta-whatsapp" onclick="whatsappInquiry('${product.name.replace(/'/g, "\\'")}', ${isSold})">
                         <span data-i18n="detail.whatsapp">💬 WhatsApp</span>
                     </button>
                 </div>
@@ -304,31 +328,41 @@ function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
 }
 
-function inquireAbout(name) {
-    const lang = localStorage.getItem('language') || 'de';
-    const subject = encodeURIComponent(`Anfrage: ${name}`);
+function inquireAbout(name, isSold) {
+    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
+    const subjectPrefix = isSold ? 'Anfrage ähnliches Stück: ' : 'Anfrage: ';
+    const subject = encodeURIComponent(`${subjectPrefix}${name}`);
     
     let message = '';
-    if (lang === 'de') {
-        message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
-    } else if (lang === 'fr') {
-        message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${name}". Pourriez-vous m'envoyer plus de détails, des photos haute résolution et les informations d'expédition ?\n\nCordialement`);
-    } else if (lang === 'it') {
-        message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${name}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
+    if (isSold) {
+        if (lang === 'de') message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch sehe, dass "${name}" bereits verkauft wurde. Haben Sie ähnliche Stücke in Ihrer Sammlung? Ich wäre sehr interessiert, mehr zu erfahren.\n\nMit freundlichen Grüßen`);
+        else if (lang === 'fr') message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe vois que "${name}" a déjà été vendu. Auriez-vous des pièces similaires dans votre collection ? Je serais très intéressé(e) d'en savoir plus.\n\nCordialement`);
+        else if (lang === 'it') message = encodeURIComponent(`Buongiorno Signor Simon,\n\nVedo che "${name}" è già stato venduto. Avete pezzi simili nella vostra collezione? Sarei molto interessato/a a saperne di più.\n\nCordiali saluti`);
+        else message = encodeURIComponent(`Dear Mr. Simon,\n\nI see that "${name}" has already been sold. Do you have similar pieces in your collection? I would be very interested to learn more.\n\nBest regards`);
     } else {
-        message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${name}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
+        if (lang === 'de') message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
+        else if (lang === 'fr') message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${name}". Pourriez-vous m'envoyer plus de détails, des photos haute résolution et les informations d'expédition ?\n\nCordialement`);
+        else if (lang === 'it') message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${name}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
+        else message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${name}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
     }
     
     window.location.href = `contact.html?subject=${subject}&message=${message}`;
 }
 
-function whatsappInquiry(name) {
+function whatsappInquiry(name, isSold) {
     const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
     let message;
-    if (lang === 'de') message = `Guten Tag Herr Simon, ich interessiere mich für "${name}". Können Sie mir mehr Informationen dazu senden?`;
-    else if (lang === 'fr') message = `Bonjour Monsieur Simon, je suis intéressé(e) par "${name}". Pouvez-vous m'envoyer plus d'informations ?`;
-    else if (lang === 'it') message = `Buongiorno Signor Simon, sono interessato/a a "${name}". Può inviarmi maggiori informazioni?`;
-    else message = `Hello Mr. Simon, I'm interested in "${name}". Could you send me more information?`;
+    if (isSold) {
+        if (lang === 'de') message = `Guten Tag Herr Simon, ich sehe "${name}" ist bereits verkauft. Haben Sie ähnliche Stücke?`;
+        else if (lang === 'fr') message = `Bonjour Monsieur Simon, je vois que "${name}" est déjà vendu. Auriez-vous des pièces similaires ?`;
+        else if (lang === 'it') message = `Buongiorno Signor Simon, vedo che "${name}" è già venduto. Avete pezzi simili?`;
+        else message = `Hello Mr. Simon, I see "${name}" is already sold. Do you have similar pieces?`;
+    } else {
+        if (lang === 'de') message = `Guten Tag Herr Simon, ich interessiere mich für "${name}". Können Sie mir mehr Informationen dazu senden?`;
+        else if (lang === 'fr') message = `Bonjour Monsieur Simon, je suis intéressé(e) par "${name}". Pouvez-vous m'envoyer plus d'informations ?`;
+        else if (lang === 'it') message = `Buongiorno Signor Simon, sono interessato/a a "${name}". Può inviarmi maggiori informazioni?`;
+        else message = `Hello Mr. Simon, I'm interested in "${name}". Could you send me more information?`;
+    }
     
     window.open(`https://wa.me/41793021985?text=${encodeURIComponent(message)}`, '_blank');
 }

@@ -6,7 +6,16 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initializeShop, 100);
 });
 
-function initializeShop() {
+async function initializeShop() {
+    // Wait for cloud data
+    if (window.loadCloudData) {
+        try {
+            await window.loadCloudData();
+        } catch (e) {
+            console.warn('Cloud load failed, using cached data');
+        }
+    }
+    
     if (!window.MATTHEW_PRODUCTS || window.MATTHEW_PRODUCTS.length === 0) {
         console.error('❌ Products database not loaded');
         return;
@@ -19,6 +28,9 @@ function initializeShop() {
     
     if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
     if (sortFilter) sortFilter.addEventListener('change', applyFilters);
+    
+    // Re-render when cloud data updates
+    window.addEventListener('productsUpdated', applyFilters);
 }
 
 function getTranslated(products) {
@@ -32,9 +44,12 @@ function applyFilters() {
     const category = document.getElementById('categoryFilter')?.value || '';
     const sort = document.getElementById('sortFilter')?.value || 'featured';
     
-    let base = category 
-        ? window.MATTHEW_PRODUCTS.filter(p => p.category === category)
-        : [...window.MATTHEW_PRODUCTS];
+    // Use getPublicProducts to exclude drafts and sold items
+    let base = window.getPublicProducts ? window.getPublicProducts() : (window.MATTHEW_PRODUCTS || []);
+    
+    if (category) {
+        base = base.filter(p => p.category === category);
+    }
     
     filteredProducts = getTranslated(base);
     

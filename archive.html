@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archiv - Verkaufte Stücke | Matthew Simon</title>
+    <link rel="stylesheet" href="style.css?v=10">
+    <style>
+        .archive-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .archive-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .archive-header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            color: #2C2C2C;
+            margin: 0 0 12px 0;
+        }
+        .archive-header p {
+            color: #666;
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .archive-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .archive-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        
+        .archive-image {
+            aspect-ratio: 1;
+            overflow: hidden;
+            position: relative;
+            background: #f5f3f0;
+        }
+        .archive-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+            transition: filter 0.3s;
+        }
+        .archive-item:hover .archive-image img {
+            filter: grayscale(0%);
+        }
+        
+        .sold-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(139, 20, 20, 0.95);
+            color: white;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        
+        .archive-info {
+            padding: 16px;
+        }
+        .archive-category {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #B8860B;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .archive-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            margin: 0 0 8px 0;
+            color: #2C2C2C;
+            line-height: 1.3;
+        }
+        .archive-hook {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .archive-sold-date {
+            font-size: 0.75rem;
+            color: #999;
+            font-style: italic;
+            margin-top: 8px;
+        }
+        
+        .archive-empty {
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+        }
+        .archive-empty div {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">Matthew Simon <span class="logo-tagline">European Design & Antiques</span></div>
+        <ul class="nav-menu">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+            <li><a href="archive.html" class="active" data-i18n="nav.archive">Archiv</a></li>
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+            <li class="nav-language">
+                <div class="language-boxes">
+                    <button class="lang-box" data-lang="de" onclick="setLanguage('de'); return false;">DE</button>
+                    <button class="lang-box" data-lang="en" onclick="setLanguage('en'); return false;">EN</button>
+                    <button class="lang-box" data-lang="fr" onclick="setLanguage('fr'); return false;">FR</button>
+                    <button class="lang-box" data-lang="it" onclick="setLanguage('it'); return false;">IT</button>
+                </div>
+                <div class="language-dropdown-mobile">
+                    <button class="language-selector-mobile" onclick="toggleLanguageMenu()">DE / EN / FR / IT</button>
+                    <div class="language-menu-mobile" id="languageMenu">
+                        <a href="#" onclick="setLanguage('de'); return false;">Deutsch</a>
+                        <a href="#" onclick="setLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="setLanguage('fr'); return false;">Français</a>
+                        <a href="#" onclick="setLanguage('it'); return false;">Italiano</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="archive-container">
+    <div class="archive-header">
+        <h1 data-i18n="archive.title">Verkaufte Stücke</h1>
+        <p data-i18n="archive.subtitle">Eine Auswahl bereits verkaufter Objekte aus unserer Sammlung</p>
+    </div>
+    
+    <div id="archiveGrid" class="archive-grid">
+        <div class="archive-empty" style="grid-column:1/-1;">
+            <div>⏳</div>
+            <p>Lädt Archiv...</p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Matthew Simon</h4>
+            <p>Authenticated European Design & Antiques<br>Bern, Switzerland</p>
+        </div>
+        <div class="footer-section">
+            <h4 data-i18n="footer.contact">Kontakt</h4>
+            <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
+            📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
+            🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="languages.js?v=10"></script>
+<script src="products.js?v=10"></script>
+<script src="translations_part1.js?v=10"></script>
+<script src="translations_part2.js?v=10"></script>
+<script>
+function toggleLanguageMenu() {
+    const menu = document.getElementById('languageMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function formatDate(dateStr, lang) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const locales = { de: 'de-DE', en: 'en-US', fr: 'fr-FR', it: 'it-IT' };
+    return date.toLocaleDateString(locales[lang] || 'de-DE', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+async function loadArchive() {
+    if (window.loadCloudData) {
+        try { await window.loadCloudData(); } catch (e) {}
+    }
+    renderArchive();
+}
+
+function renderArchive() {
+    const grid = document.getElementById('archiveGrid');
+    const soldProducts = window.getArchiveProducts ? window.getArchiveProducts() : [];
+    const lang = localStorage.getItem('matthew_language') || localStorage.getItem('language') || 'de';
+    
+    if (soldProducts.length === 0) {
+        const emptyMessages = {
+            de: 'Noch keine verkauften Stücke',
+            en: 'No sold pieces yet',
+            fr: 'Aucune pièce vendue pour le moment',
+            it: 'Nessun pezzo venduto per ora'
+        };
+        grid.innerHTML = `
+            <div class="archive-empty" style="grid-column:1/-1;">
+                <div>📦</div>
+                <p>${emptyMessages[lang]}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Sort by sold date (newest first)
+    const sorted = [...soldProducts].sort((a, b) => {
+        if (!a.soldDate) return 1;
+        if (!b.soldDate) return -1;
+        return new Date(b.soldDate) - new Date(a.soldDate);
+    });
+    
+    const soldLabels = {
+        de: 'VERKAUFT',
+        en: 'SOLD',
+        fr: 'VENDU',
+        it: 'VENDUTO'
+    };
+    const soldOnLabels = {
+        de: 'Verkauft am',
+        en: 'Sold on',
+        fr: 'Vendu le',
+        it: 'Venduto il'
+    };
+    
+    grid.innerHTML = sorted.map(p => {
+        // Get translated version
+        const translated = window.getTranslatedProduct ? window.getTranslatedProduct(p.id) : p;
+        const escName = translated.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        
+        const img = translated.images && translated.images.length > 0
+            ? `<img src="${getImageUrl(translated.images[0])}" alt="${escName}" onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=&quot;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#999;font-size:3rem;&quot;>📷</div>';">`
+            : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#999;font-size:3rem;">📷</div>`;
+        
+        return `
+            <a href="product-detail.html?id=${p.id}" class="archive-item">
+                <div class="archive-image">
+                    <span class="sold-badge">${soldLabels[lang]}</span>
+                    ${img}
+                </div>
+                <div class="archive-info">
+                    <div class="archive-category">${translated.category}</div>
+                    <h3 class="archive-name">${translated.name}</h3>
+                    ${translated.shortHook ? `<p class="archive-hook">${translated.shortHook}</p>` : ''}
+                    ${p.soldDate ? `<p class="archive-sold-date">${soldOnLabels[lang]} ${formatDate(p.soldDate, lang)}</p>` : ''}
+                </div>
+            </a>
+        `;
+    }).join('');
+    
+    if (window.updatePageLanguage) window.updatePageLanguage();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(loadArchive, 100);
+});
+
+window.addEventListener('languageChanged', renderArchive);
+window.addEventListener('productsUpdated', renderArchive);
+
+document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.language-dropdown-mobile');
+    if (dropdown && !dropdown.contains(event.target)) {
+        const menu = document.getElementById('languageMenu');
+        if (menu) menu.style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>
