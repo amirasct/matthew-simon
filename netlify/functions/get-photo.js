@@ -7,16 +7,19 @@ export default async (req, context) => {
         const filename = url.searchParams.get('name');
         
         if (!filename) {
-            return new Response('Missing filename', { status: 400 });
+            return new Response('Missing filename parameter', { status: 400 });
         }
 
         const store = getStore('product-photos');
-        const blob = await store.get(filename, { type: 'arrayBuffer' });
+        
+        // Get the blob as a Blob object (native v2 approach)
+        const blob = await store.get(filename, { type: 'blob' });
         
         if (!blob) {
             return new Response('Photo not found', { status: 404 });
         }
-
+        
+        // Get metadata for content type
         const metadata = await store.getMetadata(filename);
         const contentType = metadata?.metadata?.contentType || 'image/jpeg';
 
@@ -29,6 +32,6 @@ export default async (req, context) => {
         });
     } catch (error) {
         console.error('Get photo error:', error);
-        return new Response('Error retrieving photo', { status: 500 });
+        return new Response(`Error retrieving photo: ${error.message}`, { status: 500 });
     }
 };
