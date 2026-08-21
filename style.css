@@ -1749,7 +1749,7 @@ a:hover {
    ============================== */
 
 .hero-refined {
-    padding: 3.5rem 2rem;  /* Reduced from 5rem - about 20% less vertical space */
+    padding: 3rem 2rem;
     text-align: center;
     background: linear-gradient(135deg, #F5F3F0 0%, #F5F9FC 100%);
     border-bottom: 3px solid #1B3A52;
@@ -1798,8 +1798,29 @@ a:hover {
    ============================== */
 
 .featured-mosaic-section {
-    padding: 5rem 2rem;
-    background: white;
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, #f9f7f4 0%, #f5f3f0 100%);
+    border-top: 1px solid rgba(184, 134, 11, 0.15);
+    border-bottom: 1px solid rgba(184, 134, 11, 0.15);
+    position: relative;
+}
+
+/* Subtle decorative accents on borders */
+.featured-mosaic-section::before,
+.featured-mosaic-section::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #B8860B, transparent);
+}
+.featured-mosaic-section::before {
+    top: -2px;
+}
+.featured-mosaic-section::after {
+    bottom: -2px;
 }
 
 .featured-mosaic-container {
@@ -1822,8 +1843,23 @@ a:hover {
 .featured-mosaic {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 200px;
-    gap: 12px;
+    grid-auto-rows: 180px;
+    gap: 10px;
+}
+
+/* 9 items with large: 4 cols x 3 rows = 12 cells, large=4 + 8x1 = 12 ✓ */
+.featured-mosaic.with-large.items-9 {
+    grid-template-rows: repeat(3, 180px);
+}
+
+/* 5 items with large: 4 cols x 2 rows = 8 cells, large=4 + 4x1 = 8 ✓ */
+.featured-mosaic.with-large.items-5 {
+    grid-template-rows: repeat(2, 180px);
+}
+
+/* Uniform 8: 4 cols x 2 rows */
+.featured-mosaic.uniform.items-8 {
+    grid-template-rows: repeat(2, 180px);
 }
 
 .mosaic-tile {
@@ -1887,10 +1923,10 @@ a:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 16px;
+    padding: 14px 16px;
     background: linear-gradient(to top, rgba(28, 40, 60, 0.95) 0%, rgba(28, 40, 60, 0.85) 60%, transparent 100%);
     color: white;
-    transform: translateY(70%);
+    transform: translateY(100%);
     transition: transform 0.35s ease;
     text-align: left;
 }
@@ -1904,15 +1940,6 @@ a:hover {
     .mosaic-tile-overlay {
         transform: translateY(0);
     }
-}
-
-.mosaic-tile-category {
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #E5C687;
-    font-weight: 600;
-    margin-bottom: 4px;
 }
 
 .mosaic-tile-name {
@@ -1972,10 +1999,6 @@ a:hover {
         padding: 10px;
         transform: translateY(0);
     }
-    .mosaic-tile-category {
-        font-size: 0.55rem;
-        letter-spacing: 1.5px;
-    }
     .mosaic-tile-name {
         font-size: 0.8rem;
     }
@@ -1983,7 +2006,7 @@ a:hover {
         font-size: 0.7rem;
     }
     .hero-refined {
-        padding: 2.2rem 1.5rem;
+        padding: 2rem 1.5rem;
     }
 }
 
@@ -2127,3 +2150,148 @@ a:hover {
     }
 }
 
+
+/* ==============================
+   ADAPTIVE MOSAIC - Tablet layout fix
+   ============================== */
+
+@media (max-width: 900px) {
+    .featured-mosaic.with-large.items-9,
+    .featured-mosaic.with-large.items-5,
+    .featured-mosaic.uniform.items-8 {
+        grid-template-rows: auto;
+    }
+}
+
+/* ==============================
+   REFINED CATEGORY TILES (elegant photos instead of emoji)
+   ============================== */
+
+.categories-refined {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.categories-refined .category-tile {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: white;
+    border: 1px solid #eae5dd;
+    padding: 0;
+    text-align: center;
+    transition: all 0.35s;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
+    border-radius: 2px;
+}
+
+.categories-refined .category-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(184, 134, 11, 0.2);
+    border-color: #B8860B;
+}
+
+.category-tile-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-size: cover;
+    background-position: center;
+    background-color: #f5f3f0;
+    position: relative;
+    transition: transform 0.6s;
+    background-image: linear-gradient(135deg, #f5f3f0 0%, #eae5dd 100%);
+    overflow: hidden;
+}
+
+.category-tile-image.has-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.15) 100%);
+    transition: background 0.3s;
+}
+
+/* Elegant placeholder when no image */
+.category-tile-image:not(.has-image)::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 1px solid #B8860B;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+.category-tile-image:not(.has-image)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: #B8860B;
+    border-radius: 50%;
+    opacity: 0.4;
+}
+
+.categories-refined .category-tile:hover .category-tile-image {
+    transform: scale(1.04);
+}
+
+.categories-refined .category-tile:hover .category-tile-image.has-image::after {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.05) 100%);
+}
+
+.categories-refined .category-tile-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    color: #2C2C2C;
+    margin: 18px 0 4px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.categories-refined .category-tile-label {
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #B8860B;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.categories-refined .category-tile-count {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0 0 20px;
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .categories-refined {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px;
+    }
+    .categories-refined .category-tile-name {
+        font-size: 1.1rem;
+        margin: 12px 0 4px;
+    }
+    .categories-refined .category-tile-label {
+        font-size: 0.6rem;
+        letter-spacing: 1.5px;
+    }
+    .categories-refined .category-tile-count {
+        font-size: 0.7rem;
+        margin-bottom: 12px;
+    }
+}

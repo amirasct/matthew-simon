@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matthew Simon - European Design and Antiques | 40 Years Authenticated</title>
-    <link rel="stylesheet" href="style.css?v=16">
+    <link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 
@@ -41,11 +41,6 @@
 <!-- Hero Section -->
 <section class="hero hero-refined">
     <div class="hero-content">
-        <div class="hero-decoration">
-            <span class="hero-line-left"></span>
-            <span class="hero-ornament">◆</span>
-            <span class="hero-line-right"></span>
-        </div>
         <h1 data-i18n="hero.title">Matthew Simon</h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle">40 Years | Authenticated European Design & Antiques</p>
         <p class="hero-location" data-i18n="hero.location">Bern, Switzerland</p>
@@ -60,11 +55,6 @@
 <section class="featured-mosaic-section">
     <div class="featured-mosaic-container">
         <div class="featured-mosaic-header">
-            <div class="hero-decoration">
-                <span class="hero-line-left"></span>
-                <span class="hero-ornament">◆</span>
-                <span class="hero-line-right"></span>
-            </div>
             <h2 data-i18n="featured.discover">Curated Treasures</h2>
             <p style="color:#666;margin-top:8px;font-size:0.95rem;" data-i18n="featured.subtitle">Highlights from the Collection</p>
         </div>
@@ -111,44 +101,44 @@
     <div class="categories-container">
         <h2 data-i18n="categories.title">Browse by Category</h2>
         
-        <div class="categories-grid no-images" id="categoriesGrid">
+        <div class="categories-grid categories-refined" id="categoriesGrid">
             <a href="shop.html?category=Möbel" class="category-tile">
-                <div class="category-tile-icon">🪑</div>
+                <div class="category-tile-image" data-cat="Möbel"></div>
                 <h3 class="category-tile-name">Möbel</h3>
                 <p class="category-tile-label" data-i18n="categories.furniture.label">Furniture</p>
                 <p class="category-tile-count"><span data-count="Möbel">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Glas" class="category-tile">
-                <div class="category-tile-icon">🏺</div>
+                <div class="category-tile-image" data-cat="Glas"></div>
                 <h3 class="category-tile-name">Glas</h3>
                 <p class="category-tile-label" data-i18n="categories.glass.label">Glass</p>
                 <p class="category-tile-count"><span data-count="Glas">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Leuchten" class="category-tile">
-                <div class="category-tile-icon">💡</div>
+                <div class="category-tile-image" data-cat="Leuchten"></div>
                 <h3 class="category-tile-name">Leuchten</h3>
                 <p class="category-tile-label" data-i18n="categories.lighting.label">Lighting</p>
                 <p class="category-tile-count"><span data-count="Leuchten">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Objekte" class="category-tile">
-                <div class="category-tile-icon">🎨</div>
+                <div class="category-tile-image" data-cat="Objekte"></div>
                 <h3 class="category-tile-name">Objekte</h3>
                 <p class="category-tile-label" data-i18n="categories.objects.label">Objects</p>
                 <p class="category-tile-count"><span data-count="Objekte">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Accessoires" class="category-tile">
-                <div class="category-tile-icon">💎</div>
+                <div class="category-tile-image" data-cat="Accessoires"></div>
                 <h3 class="category-tile-name">Accessoires</h3>
                 <p class="category-tile-label" data-i18n="categories.accessoires.label">Accessories</p>
                 <p class="category-tile-count"><span data-count="Accessoires">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Sonstiges" class="category-tile">
-                <div class="category-tile-icon">🎁</div>
+                <div class="category-tile-image" data-cat="Sonstiges"></div>
                 <h3 class="category-tile-name">Sonstiges</h3>
                 <p class="category-tile-label" data-i18n="categories.sonstiges.label">Miscellaneous</p>
                 <p class="category-tile-count"><span data-count="Sonstiges">0</span> <span data-i18n="categories.count">pieces</span></p>
@@ -189,10 +179,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=16"></script>
-<script src="products.js?v=16"></script>
-<script src="translations_part1.js?v=16"></script>
-<script src="translations_part2.js?v=16"></script>
+<script src="languages.js?v=17"></script>
+<script src="products.js?v=17"></script>
+<script src="translations_part1.js?v=17"></script>
+<script src="translations_part2.js?v=17"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -235,15 +225,33 @@ function loadFeaturedMosaic() {
     const rest = withPhotos.filter(p => !p.featured && !(p.badges && p.badges.length > 0));
     const pool = [...featured, ...badged, ...rest];
     
-    // Take up to 8 items
-    const selection = pool.slice(0, 8);
+    // Adaptive layout: aim to fill the grid perfectly
+    // 4 cols x 3 rows = 12 cells. Large=4 cells, so we need 8 more = 9 total items
+    // If fewer items available, use uniform 1x1 tiles without a "large" one
+    let selection, useLarge;
+    if (pool.length >= 9) {
+        selection = pool.slice(0, 9);
+        useLarge = true;
+    } else if (pool.length >= 8) {
+        // Use 8 tiles in 4x2 grid, no large
+        selection = pool.slice(0, 8);
+        useLarge = false;
+    } else if (pool.length >= 5) {
+        // 5 = 1 large + 4 smalls = 8 cells (4x2)
+        selection = pool.slice(0, 5);
+        useLarge = true;
+    } else {
+        // Just show what we have in uniform grid
+        selection = pool;
+        useLarge = false;
+    }
     
-    // Layout pattern for visual interest
-    // Position 0 = large (2x2), others = normal
-    const layoutClasses = ['large', '', '', '', '', '', '', ''];
+    // Set the grid layout based on selection
+    mosaic.className = 'featured-mosaic ' + (useLarge ? 'with-large' : 'uniform') + 
+                       ' items-' + selection.length;
     
     mosaic.innerHTML = selection.map((p, i) => {
-        const layoutClass = layoutClasses[i] || '';
+        const layoutClass = (useLarge && i === 0) ? 'large' : '';
         const imgUrl = getImageUrl(p.images[0]);
         const escName = p.name.replace(/'/g, "&#39;").replace(/"/g, '&quot;');
         const isFeatured = p.featured;
@@ -253,7 +261,6 @@ function loadFeaturedMosaic() {
                 ${isFeatured ? '<span class="mosaic-featured-badge">★</span>' : ''}
                 <img src="${imgUrl}" alt="${escName}" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.style.display='none';">
                 <div class="mosaic-tile-overlay">
-                    <div class="mosaic-tile-category">${p.category}</div>
                     <div class="mosaic-tile-name">${p.name}</div>
                     <div class="mosaic-tile-price">${p.price}</div>
                 </div>
@@ -267,9 +274,26 @@ function loadFeaturedMosaic() {
 function updateCategoryCounts() {
     const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
     ['Möbel', 'Glas', 'Leuchten', 'Objekte', 'Accessoires', 'Sonstiges'].forEach(cat => {
-        const count = publicProducts.filter(p => p.category === cat).length;
-        const el = document.querySelector(`[data-count="${cat}"]`);
-        if (el) el.textContent = count;
+        const catProducts = publicProducts.filter(p => p.category === cat);
+        
+        // Update count
+        const countEl = document.querySelector(`[data-count="${cat}"]`);
+        if (countEl) countEl.textContent = catProducts.length;
+        
+        // Load a representative photo for this category
+        const imageEl = document.querySelector(`.category-tile-image[data-cat="${cat}"]`);
+        if (imageEl) {
+            // Prefer featured, then any with photos
+            const withPhotos = catProducts.filter(p => p.images && p.images.length > 0);
+            const featured = withPhotos.filter(p => p.featured);
+            const pick = featured[0] || withPhotos[0];
+            
+            if (pick) {
+                const url = getImageUrl(pick.images[0]);
+                imageEl.style.backgroundImage = `url('${url}')`;
+                imageEl.classList.add('has-image');
+            }
+        }
     });
 }
 
