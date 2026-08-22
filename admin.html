@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="style.css?v=22">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -594,9 +594,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=19"></script>
-<script src="translations_part1.js?v=19"></script>
-<script src="translations_part2.js?v=19"></script>
+<script src="products.js?v=22"></script>
+<script src="translations_part1.js?v=22"></script>
+<script src="translations_part2.js?v=22"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -1082,6 +1082,14 @@ async function restoreFromArchive(id) {
 }
 
 function openAddModal() {
+    // Defensively reset the save button in case it was stuck
+    const modal = document.getElementById('editModal');
+    const saveBtn = modal.querySelector('button[type="submit"].btn-save');
+    if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 Speichern';
+    }
+    
     document.getElementById('modalTitle').textContent = 'Neues Produkt hinzufügen';
     document.getElementById('editId').value = '';
     document.getElementById('editName').value = '';
@@ -1119,6 +1127,14 @@ function openEditModal(id) {
     if (!product) {
         showToast('Produkt nicht gefunden', 'error');
         return;
+    }
+    
+    // Defensively reset the save button in case it was stuck
+    const modal = document.getElementById('editModal');
+    const saveBtn = modal.querySelector('button[type="submit"].btn-save');
+    if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 Speichern';
     }
     
     document.getElementById('modalTitle').textContent = `Bearbeiten: ${product.name}`;
@@ -1620,12 +1636,12 @@ async function saveProduct(e) {
     const saveBtn = e.target.querySelector('button[type="submit"]');
     const origText = saveBtn.textContent;
     saveBtn.disabled = true;
-    saveBtn.textContent = '⏳ Speichert in Cloud...';
+    saveBtn.textContent = '⏳ Speichert...';
     
     try {
         await window.saveCloudData(cloudData);
         incrementChangeCounter();
-        showToast(`✅ In Cloud gespeichert - für alle Besucher sichtbar!`, 'success');
+        showToast(`✅ Gespeichert — für alle Besucher sichtbar!`, 'success');
         closeModal();
         // Refresh data
         await window.loadCloudData(true);
@@ -1634,7 +1650,10 @@ async function saveProduct(e) {
         updateCloudStatus();
         renderTable();
     } catch (err) {
+        console.error('Save failed:', err);
         showToast('❌ Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
+    } finally {
+        // ALWAYS reset button state — whether save succeeded or failed
         saveBtn.disabled = false;
         saveBtn.textContent = origText;
     }
