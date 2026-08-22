@@ -22,6 +22,24 @@ async function initializeShop() {
         return;
     }
     
+    // Check URL params for initial view (e.g. ?view=archive from homepage tile)
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view');
+    if (viewParam === 'archive') {
+        currentView = 'archive';
+        // Update tabs to reflect this
+        document.querySelectorAll('.shop-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.view === 'archive');
+        });
+    }
+    
+    // Check for category param (e.g. ?category=Möbel from homepage tile)
+    const categoryParam = params.get('category');
+    if (categoryParam) {
+        const catFilter = document.getElementById('categoryFilter');
+        if (catFilter) catFilter.value = categoryParam;
+    }
+    
     updateShopCounts();
     applyFilters();
     

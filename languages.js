@@ -152,6 +152,9 @@ const translations = {
     // v10 keys - Why Matthew refined
     'why.eyebrow': 'Expertise',
 
+    // v11 keys - Archive category tile
+    'categories.archive.name': 'Archiv',
+
   },
   fr: {
     // Navigation
@@ -327,6 +330,9 @@ const translations = {
     // v10 keys - Why Matthew refined
     'why.eyebrow': 'Expertise',
 
+    // v11 keys - Archive category tile
+    'categories.archive.name': 'Archive',
+
   },
   it: {
     // Navigation
@@ -483,6 +489,9 @@ const translations = {
 
     // v10 keys - Why Matthew refined
     'why.eyebrow': 'Competenza',
+
+    // v11 keys - Archive category tile
+    'categories.archive.name': 'Archivio',
 
   },
   en: {
@@ -700,6 +709,9 @@ const translations = {
 
     // v10 keys - Why Matthew refined
     'why.eyebrow': 'Expertise',
+
+    // v11 keys - Archive category tile
+    'categories.archive.name': 'Archive',
 
   }
 };

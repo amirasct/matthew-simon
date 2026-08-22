@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=20">
+    <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
@@ -197,6 +197,13 @@
                 <p class="category-tile-label" data-i18n="categories.sonstiges.label">Miscellaneous</p>
                 <p class="category-tile-count"><span data-count="Sonstiges">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
+            
+            <a href="shop.html?view=archive" class="category-tile category-tile-archive">
+                <div class="category-tile-image" data-cat="Archive"></div>
+                <h3 class="category-tile-name" data-i18n="categories.archive.name">Archiv</h3>
+                <p class="category-tile-label" data-i18n="categories.archive.label">Sold Pieces</p>
+                <p class="category-tile-count"><span data-count="Archive">0</span> <span data-i18n="categories.count">pieces</span></p>
+            </a>
         </div>
     </div>
 </section>
@@ -233,10 +240,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=20"></script>
-<script src="products.js?v=20"></script>
-<script src="translations_part1.js?v=20"></script>
-<script src="translations_part2.js?v=20"></script>
+<script src="languages.js?v=21"></script>
+<script src="products.js?v=21"></script>
+<script src="translations_part1.js?v=21"></script>
+<script src="translations_part2.js?v=21"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -327,6 +334,9 @@ function loadFeaturedMosaic() {
 
 function updateCategoryCounts() {
     const publicProducts = window.getPublicProducts ? window.getPublicProducts() : [];
+    const archiveProducts = window.getArchiveProducts ? window.getArchiveProducts() : [];
+    
+    // Regular categories (available items)
     ['Möbel', 'Glas', 'Leuchten', 'Objekte', 'Kunst', 'Accessoires', 'Sonstiges'].forEach(cat => {
         const catProducts = publicProducts.filter(p => p.category === cat);
         
@@ -337,7 +347,6 @@ function updateCategoryCounts() {
         // Load a representative photo for this category
         const imageEl = document.querySelector(`.category-tile-image[data-cat="${cat}"]`);
         if (imageEl) {
-            // Prefer featured, then any with photos
             const withPhotos = catProducts.filter(p => p.images && p.images.length > 0);
             const featured = withPhotos.filter(p => p.featured);
             const pick = featured[0] || withPhotos[0];
@@ -349,6 +358,27 @@ function updateCategoryCounts() {
             }
         }
     });
+    
+    // Archive category (sold items)
+    const archiveCountEl = document.querySelector('[data-count="Archive"]');
+    if (archiveCountEl) archiveCountEl.textContent = archiveProducts.length;
+    
+    const archiveImageEl = document.querySelector('.category-tile-image[data-cat="Archive"]');
+    if (archiveImageEl) {
+        // Sort by newest sold, pick one with a photo
+        const sorted = [...archiveProducts].sort((a, b) => {
+            if (!a.soldDate) return 1;
+            if (!b.soldDate) return -1;
+            return new Date(b.soldDate) - new Date(a.soldDate);
+        });
+        const withPhoto = sorted.find(p => p.images && p.images.length > 0);
+        
+        if (withPhoto) {
+            const url = getImageUrl(withPhoto.images[0]);
+            archiveImageEl.style.backgroundImage = `url('${url}')`;
+            archiveImageEl.classList.add('has-image');
+        }
+    }
 }
 
 async function initHomepage() {

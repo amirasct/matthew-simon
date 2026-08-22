@@ -2425,3 +2425,47 @@ a:hover {
         gap: 2rem;
     }
 }
+
+/* ==============================
+   ARCHIVE CATEGORY TILE (subtle differentiation)
+   ============================== */
+
+.category-tile-archive .category-tile-image {
+    /* Slight desaturation for "past" feel — matches Archive page */
+    filter: grayscale(15%);
+    transition: filter 0.4s, transform 0.6s;
+}
+
+.category-tile-archive:hover .category-tile-image {
+    filter: grayscale(0%);
+}
+
+.category-tile-archive .category-tile-image.has-image::before {
+    content: 'VERKAUFT';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(139, 20, 20, 0.9);
+    color: white;
+    padding: 3px 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-radius: 2px;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    /* Reset the pattern-only placeholder styling */
+    border: none;
+    width: auto;
+    height: auto;
+    top: 12px !important;
+    left: auto !important;
+    transform: none !important;
+    opacity: 1;
+    border-radius: 2px;
+}
+
+.category-tile-archive .category-tile-image.has-image::after {
+    /* Slightly darker overlay for archived feel */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.25) 100%);
+}
