@@ -2,9 +2,13 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <!-- Prevent browser caching for admin page - always fetch latest -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=22">
+    <link rel="stylesheet" href="style.css?v=23">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -586,7 +590,7 @@ if (checkAuth()) {
             
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeModal()">Abbrechen</button>
-                <button type="submit" class="btn-save">💾 Speichern</button>
+                <button type="submit" class="btn-save" id="btnSaveProduct">💾 Speichern</button>
             </div>
         </form>
     </div>
@@ -594,9 +598,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=22"></script>
-<script src="translations_part1.js?v=22"></script>
-<script src="translations_part2.js?v=22"></script>
+<script src="products.js?v=23"></script>
+<script src="translations_part1.js?v=23"></script>
+<script src="translations_part2.js?v=23"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -1083,8 +1087,7 @@ async function restoreFromArchive(id) {
 
 function openAddModal() {
     // Defensively reset the save button in case it was stuck
-    const modal = document.getElementById('editModal');
-    const saveBtn = modal.querySelector('button[type="submit"].btn-save');
+    const saveBtn = document.getElementById('btnSaveProduct');
     if (saveBtn) {
         saveBtn.disabled = false;
         saveBtn.textContent = '💾 Speichern';
@@ -1104,7 +1107,7 @@ function openAddModal() {
     
     // Status defaults: new products default to published
     document.getElementById('editPublished').checked = true;
-    document.getElementById('soldSection').style.display = 'none';  // New products can't be sold
+    document.getElementById('soldSection').style.display = 'block';  // Allow marking new products as sold (for adding to archive)
     document.getElementById('editSold').checked = false;
     document.getElementById('soldDateWrapper').style.display = 'none';
     document.getElementById('editSoldDate').value = '';
@@ -1130,8 +1133,7 @@ function openEditModal(id) {
     }
     
     // Defensively reset the save button in case it was stuck
-    const modal = document.getElementById('editModal');
-    const saveBtn = modal.querySelector('button[type="submit"].btn-save');
+    const saveBtn = document.getElementById('btnSaveProduct');
     if (saveBtn) {
         saveBtn.disabled = false;
         saveBtn.textContent = '💾 Speichern';
@@ -1633,8 +1635,7 @@ async function saveProduct(e) {
     }
     
     // Show saving indicator
-    const saveBtn = e.target.querySelector('button[type="submit"]');
-    const origText = saveBtn.textContent;
+    const saveBtn = document.getElementById('btnSaveProduct');
     saveBtn.disabled = true;
     saveBtn.textContent = '⏳ Speichert...';
     
@@ -1655,7 +1656,7 @@ async function saveProduct(e) {
     } finally {
         // ALWAYS reset button state — whether save succeeded or failed
         saveBtn.disabled = false;
-        saveBtn.textContent = origText;
+        saveBtn.textContent = '💾 Speichern';
     }
 }
 

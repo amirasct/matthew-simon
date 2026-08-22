@@ -1,25 +1,49 @@
 # Netlify configuration for Matthew Simon website
 
 [build]
-  # Publish directory (all HTML/CSS/JS files at root)
   publish = "."
-  # Functions directory
   functions = "netlify/functions"
 
 [functions]
-  # Increase body size limit for photo uploads (up to 10MB per photo)
   node_bundler = "esbuild"
 
+# HTML files should NEVER be cached - always fetch fresh
+# This ensures updates go live immediately after deploy
 [[headers]]
-  for = "/*"
+  for = "/*.html"
   [headers.values]
-    # Prevent old cached files (fixes the ? still showing on phone issue)
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
 
+# Admin page: extra insurance no caching
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Homepage (root) - no cache
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# JS and CSS - short cache with revalidation
+# (we bump version numbers, so browsers WILL fetch new versions)
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# Images - can be cached longer since filenames change when updated
 [[headers]]
   for = "/images/*"
   [headers.values]
-    # Images can be cached longer since filenames change when updated
     Cache-Control = "public, max-age=86400"
-
-# Redirect old paths if needed (currently none)
