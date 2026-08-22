@@ -1267,32 +1267,13 @@ function applyDataToProducts(cloudData) {
         });
     }
     
-    // Apply featured
-    if (cloudData.featured) {
-        window.MATTHEW_PRODUCTS.forEach(p => {
-            p.featured = cloudData.featured.includes(p.id);
-        });
-    }
-    
     // Apply deleted (filter out)
     if (cloudData.deleted && cloudData.deleted.length > 0) {
         window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.filter(p => !cloudData.deleted.includes(p.id));
     }
     
-    // Apply status updates (draft/sold)
-    if (cloudData.status) {
-        window.MATTHEW_PRODUCTS.forEach(p => {
-            if (cloudData.status[p.id]) {
-                p.status = cloudData.status[p.id].status || p.status || 'published';
-                p.soldDate = cloudData.status[p.id].soldDate || null;
-                p.originalCategory = cloudData.status[p.id].originalCategory || null;
-            }
-        });
-    }
-    
-    // Add custom products
+    // Add custom products FIRST (so status/featured can apply to them below)
     if (cloudData.custom) {
-        // Ensure each custom product has all required fields
         const customProducts = cloudData.custom.map(p => ({
             status: 'published',
             featured: false,
@@ -1301,6 +1282,24 @@ function applyDataToProducts(cloudData) {
             ...p
         }));
         window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.concat(customProducts);
+    }
+    
+    // NOW apply featured (works for both original AND custom products)
+    if (cloudData.featured) {
+        window.MATTHEW_PRODUCTS.forEach(p => {
+            p.featured = cloudData.featured.includes(p.id);
+        });
+    }
+    
+    // NOW apply status updates (works for both original AND custom products)
+    if (cloudData.status) {
+        window.MATTHEW_PRODUCTS.forEach(p => {
+            if (cloudData.status[p.id]) {
+                p.status = cloudData.status[p.id].status || p.status || 'published';
+                p.soldDate = cloudData.status[p.id].soldDate || null;
+                p.originalCategory = cloudData.status[p.id].originalCategory || null;
+            }
+        });
     }
     
     // Notify listeners that products are ready

@@ -145,6 +145,13 @@ const translations = {
     // v8 keys - About pullquote
     'about.pullquote': '„Jedes Stück wird persönlich auf Authentizität, Zustand und Provenienz geprüft."',
 
+    // v9 keys - Kunst (Fine Art) category
+    'categories.kunst.label': 'Kunst',
+    'categories.kunst.desc': 'Gemälde, Skulpturen & Grafik',
+
+    // v10 keys - Why Matthew refined
+    'why.eyebrow': 'Expertise',
+
   },
   fr: {
     // Navigation
@@ -313,6 +320,13 @@ const translations = {
     // v8 keys - About pullquote
     'about.pullquote': '« Chaque pièce est personnellement évaluée pour son authenticité, son état et sa provenance. »',
 
+    // v9 keys - Kunst (Fine Art) category
+    'categories.kunst.label': 'Beaux-Arts',
+    'categories.kunst.desc': 'Peintures, Sculptures & Estampes',
+
+    // v10 keys - Why Matthew refined
+    'why.eyebrow': 'Expertise',
+
   },
   it: {
     // Navigation
@@ -462,6 +476,13 @@ const translations = {
 
     // v8 keys - About pullquote
     'about.pullquote': '«Ogni pezzo è personalmente valutato per autenticità, condizione e provenienza.»',
+
+    // v9 keys - Kunst (Fine Art) category
+    'categories.kunst.label': 'Belle Arti',
+    'categories.kunst.desc': 'Dipinti, Sculture & Grafica',
+
+    // v10 keys - Why Matthew refined
+    'why.eyebrow': 'Competenza',
 
   },
   en: {
@@ -672,6 +693,13 @@ const translations = {
 
     // v8 keys - About pullquote
     'about.pullquote': '"Every piece is personally evaluated for authenticity, condition, and provenance."',
+
+    // v9 keys - Kunst (Fine Art) category
+    'categories.kunst.label': 'Fine Art',
+    'categories.kunst.desc': 'Paintings, Sculpture & Prints',
+
+    // v10 keys - Why Matthew refined
+    'why.eyebrow': 'Expertise',
 
   }
 };

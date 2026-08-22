@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=19">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -157,10 +157,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=13"></script>
-<script src="products.js?v=13"></script>
-<script src="translations_part1.js?v=13"></script>
-<script src="translations_part2.js?v=13"></script>
+<script src="languages.js?v=19"></script>
+<script src="products.js?v=19"></script>
+<script src="translations_part1.js?v=19"></script>
+<script src="translations_part2.js?v=19"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -179,7 +179,7 @@ function renderBadge(type) {
     return b ? `<span class="detail-badge" style="background:${b.bg}">${b.label}</span>` : '';
 }
 
-function loadProduct() {
+async function loadProduct() {
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get('id'));
     
@@ -189,9 +189,20 @@ function loadProduct() {
         return;
     }
     
-    setTimeout(() => {
-        renderCurrentProduct(id);
-    }, 100);
+    // Show loading state while cloud data loads
+    document.getElementById('productContent').innerHTML = 
+        '<div style="text-align:center;padding:60px;color:#999;"><div style="font-size:2rem;margin-bottom:12px;">⏳</div><p>Lädt...</p></div>';
+    
+    // Wait for cloud data before rendering (fixes race condition for newly-added products)
+    if (window.loadCloudData) {
+        try {
+            await window.loadCloudData();
+        } catch (e) {
+            console.warn('Cloud load failed, using cached data:', e);
+        }
+    }
+    
+    renderCurrentProduct(id);
 }
 
 let currentProductId = null;
@@ -212,12 +223,47 @@ function renderCurrentProduct(id) {
     }
     
     document.getElementById('pageTitle').textContent = `${product.name} - Matthew Simon`;
+    
+    // Update SEO meta tags for social sharing (WhatsApp, Facebook, etc.)
+    updateProductMetaTags(product);
+    
     renderProductDetail(product);
     
     // Apply translations to labels/buttons (data-i18n elements)
     if (window.updatePageLanguage) {
         window.updatePageLanguage();
     }
+}
+
+function updateProductMetaTags(product) {
+    // Build a compelling description
+    const desc = (product.shortHook || product.description || '').substring(0, 200);
+    const fullDesc = `${product.name} - ${desc}${product.price !== 'Preis auf Anfrage' ? ' | ' + product.price : ''}`;
+    
+    // Get first image URL (absolute)
+    const imgFilename = product.images && product.images[0];
+    let imgUrl = 'https://matthew-simon.ch/images/ms_gl_02_dino_martens_01.jpg';
+    if (imgFilename) {
+        imgUrl = imgFilename.startsWith('http') ? imgFilename : 
+                 imgFilename.startsWith('/') ? 'https://matthew-simon.ch' + imgFilename :
+                 'https://matthew-simon.ch/images/' + imgFilename;
+    }
+    
+    // Update all meta tags
+    const setMeta = (selector, attr, value) => {
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute(attr, value);
+    };
+    
+    setMeta('meta[name="description"]', 'content', fullDesc);
+    setMeta('meta[property="og:title"]', 'content', `${product.name} | Matthew Simon`);
+    setMeta('meta[property="og:description"]', 'content', fullDesc);
+    setMeta('meta[property="og:image"]', 'content', imgUrl);
+    setMeta('meta[property="og:url"]', 'content', window.location.href);
+    setMeta('meta[name="twitter:title"]', 'content', `${product.name} | Matthew Simon`);
+    setMeta('meta[name="twitter:description"]', 'content', fullDesc);
+    setMeta('meta[name="twitter:image"]', 'content', imgUrl);
+    setMeta('link[rel="canonical"]', 'href', window.location.href);
 }
 
 // Listen for language changes and re-render product content
@@ -425,6 +471,16 @@ async function translateDescription(button, targetLang) {
 }
 
 document.addEventListener('DOMContentLoaded', loadProduct);
+
+// Re-render when cloud data updates (e.g., after admin edits from another device)
+window.addEventListener('productsUpdated', () => {
+    if (currentProductId) renderCurrentProduct(currentProductId);
+});
+
+// Re-render when language changes to update translated content
+window.addEventListener('languageChanged', () => {
+    if (currentProductId) renderCurrentProduct(currentProductId);
+});
 </script>
 
 </body>

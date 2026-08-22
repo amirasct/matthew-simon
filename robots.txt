@@ -1,0 +1,14 @@
+# Matthew Simon - robots.txt
+# Allows all search engines to crawl the site
+# Disallows admin area
+
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /.netlify/
+
+# Sitemap location
+Sitemap: https://matthew-simon.ch/sitemap.xml
+
+# Crawl politely (2 seconds between requests)
+Crawl-delay: 2
