@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="style.css?v=25">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -157,10 +157,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=19"></script>
-<script src="products.js?v=19"></script>
-<script src="translations_part1.js?v=19"></script>
-<script src="translations_part2.js?v=19"></script>
+<script src="languages.js?v=25"></script>
+<script src="products.js?v=25"></script>
+<script src="translations_part1.js?v=25"></script>
+<script src="translations_part2.js?v=25"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -281,15 +281,10 @@ function renderProductDetail(product) {
     
     // SOLD banner overlay
     const soldLabels = { de: 'VERKAUFT', en: 'SOLD', fr: 'VENDU', it: 'VENDUTO' };
-    const soldOnLabels = { de: 'Verkauft am', en: 'Sold on', fr: 'Vendu le', it: 'Venduto il' };
     const inquireLabels = { de: 'Ähnliches Stück anfragen', en: 'Inquire about similar', fr: 'Demander pièce similaire', it: 'Richiedi pezzo simile' };
     
     const soldOverlay = isSold
         ? `<div style="position:absolute;top:16px;right:16px;background:rgba(139,20,20,0.95);color:white;padding:8px 20px;font-size:1rem;font-weight:700;letter-spacing:3px;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:5;">${soldLabels[lang] || 'SOLD'}</div>`
-        : '';
-    
-    const soldDateHtml = isSold && product.soldDate
-        ? `<div style="background:#f8d7da;color:#721c24;padding:10px 14px;border-radius:6px;margin:12px 0;font-size:0.9rem;text-align:center;font-weight:600;">📦 ${soldOnLabels[lang]} ${new Date(product.soldDate).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'fr' ? 'fr-FR' : lang === 'it' ? 'it-IT' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`
         : '';
     
     const mainImageHtml = hasImages
@@ -331,7 +326,6 @@ function renderProductDetail(product) {
                 <div class="detail-category">${product.category}</div>
                 <h1>${product.name}</h1>
                 ${badges}
-                ${soldDateHtml}
                 <div class="detail-price" style="${isSold ? 'text-decoration:line-through;color:#999;' : ''}">${product.price}</div>
                 <div class="detail-description">${product.description || product.shortHook}</div>
                 
