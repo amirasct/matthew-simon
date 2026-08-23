@@ -1213,16 +1213,39 @@ window.MATTHEW_PRODUCTS = [...window.MATTHEW_PRODUCTS_BASE];
 
 let cloudDataLoaded = false;
 let cloudLoadPromise = null;
+let cloudLoadController = null;  // Aborts stale fetches when a fresh one is requested
+let cloudLoadGeneration = 0;      // Tracks fetch generation to ignore stale responses
 
 async function loadCloudData(forceRefresh = false) {
-    // Return cached promise if already loading
+    // Return cached promise if already loading (only if not forcing)
     if (cloudLoadPromise && !forceRefresh) return cloudLoadPromise;
+    
+    // ABORT any previous in-flight fetch - critical to prevent stale data overwriting newer state
+    if (cloudLoadController) {
+        try { cloudLoadController.abort(); } catch (e) {}
+    }
+    cloudLoadController = new AbortController();
+    const thisController = cloudLoadController;  // Capture for this closure
+    
+    // Increment generation - responses from previous fetches will be ignored
+    cloudLoadGeneration++;
+    const thisGeneration = cloudLoadGeneration;
     
     cloudLoadPromise = (async () => {
         try {
-            const response = await fetch('/.netlify/functions/load-products' + (forceRefresh ? '?t=' + Date.now() : ''));
+            const response = await fetch('/.netlify/functions/load-products?t=' + Date.now(), {
+                signal: thisController.signal,
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache' }
+            });
             if (!response.ok) throw new Error('Load failed');
             const cloudData = await response.json();
+            
+            // Check if this response is still relevant (not superseded by newer fetch)
+            if (thisGeneration !== cloudLoadGeneration) {
+                console.log(`[LOAD] Discarding stale fetch response (gen ${thisGeneration} vs current ${cloudLoadGeneration})`);
+                return null;
+            }
             
             // Apply cloud data to products
             applyDataToProducts(cloudData);
@@ -1235,11 +1258,17 @@ async function loadCloudData(forceRefresh = false) {
             cloudDataLoaded = true;
             return cloudData;
         } catch (error) {
+            // Ignore aborted requests - they were intentionally cancelled
+            if (error.name === 'AbortError') {
+                console.log('[LOAD] Fetch aborted (superseded by newer request)');
+                return null;
+            }
+            
             console.warn('Cloud load failed, using local cache:', error);
             // Fallback to localStorage cache
             try {
                 const cached = localStorage.getItem('cloudProductCache');
-                if (cached) {
+                if (cached && thisGeneration === cloudLoadGeneration) {
                     applyDataToProducts(JSON.parse(cached));
                     cloudDataLoaded = true;
                 }
@@ -1274,12 +1303,27 @@ function applyDataToProducts(cloudData) {
     
     // Add custom products FIRST (so status/featured can apply to them below)
     if (cloudData.custom) {
-        const customProducts = cloudData.custom.map(p => ({
+        // Deduplicate by id (safety against corrupted state from concurrent saves)
+        // If duplicates exist, keep the LAST one (most recent)
+        const seen = new Map();
+        cloudData.custom.forEach(p => {
+            if (p && p.id != null) {
+                seen.set(Number(p.id), p);  // Number() ensures consistent key type
+            }
+        });
+        const dedupedCustom = Array.from(seen.values());
+        
+        if (dedupedCustom.length !== cloudData.custom.length) {
+            console.warn(`[LOAD] Deduped custom products: ${cloudData.custom.length} → ${dedupedCustom.length}`);
+        }
+        
+        const customProducts = dedupedCustom.map(p => ({
             status: 'published',
             featured: false,
             images: [],
             badges: [],
-            ...p
+            ...p,
+            id: Number(p.id)  // Enforce number type
         }));
         window.MATTHEW_PRODUCTS = window.MATTHEW_PRODUCTS.concat(customProducts);
     }
@@ -1307,22 +1351,116 @@ function applyDataToProducts(cloudData) {
 }
 
 async function saveCloudData(dataObj) {
-    try {
-        const response = await fetch('/.netlify/functions/save-products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
-        });
-        if (!response.ok) throw new Error(`Save failed (${response.status})`);
-        // Update local cache
+    const startTime = Date.now();
+    const changeSignature = (dataObj.custom || []).length + '/' + 
+                             Object.keys(dataObj.edits || {}).length + '/' +
+                             Object.keys(dataObj.status || {}).length + '/' +
+                             (dataObj.featured || []).length;
+    console.log(`[SAVE] Starting (signature: ${changeSignature})`);
+    
+    let lastError = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
         try {
-            localStorage.setItem('cloudProductCache', JSON.stringify(dataObj));
-        } catch (e) {}
-        return await response.json();
-    } catch (error) {
-        console.error('Cloud save failed:', error);
-        throw error;
+            console.log(`[SAVE] Attempt ${attempt}/3 - sending POST...`);
+            const t1 = Date.now();
+            const response = await fetch('/.netlify/functions/save-products', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                },
+                cache: 'no-store',
+                body: JSON.stringify(dataObj)
+            });
+            console.log(`[SAVE] POST response in ${Date.now() - t1}ms, status: ${response.status}`);
+            
+            if (!response.ok) {
+                const errText = await response.text().catch(() => '');
+                throw new Error(`Save failed (${response.status}): ${errText}`);
+            }
+            const result = await response.json();
+            console.log('[SAVE] Server confirmed:', result);
+            
+            // Wait for Blobs to settle before verification
+            // On first attempt, wait longer to handle cold-start / consistency lag
+            const settleTime = attempt === 1 ? 500 : 800 * attempt;
+            console.log(`[SAVE] Waiting ${settleTime}ms for cloud to settle...`);
+            await new Promise(r => setTimeout(r, settleTime));
+            
+            // VERIFY: fetch back and compare
+            const t2 = Date.now();
+            const verifyResp = await fetch('/.netlify/functions/load-products?verify=' + Date.now(), {
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+            console.log(`[SAVE] Verify fetch in ${Date.now() - t2}ms`);
+            
+            if (!verifyResp.ok) throw new Error('Verify fetch failed');
+            const verifyData = await verifyResp.json();
+            
+            // Full content signature comparison
+            const makeSignature = (data) => {
+                return JSON.stringify({
+                    edits: data.edits || {},
+                    custom: (data.custom || []).map(p => ({
+                        id: Number(p.id),
+                        name: p.name || '',
+                        category: p.category || '',
+                        price: p.price || '',
+                        shortHook: p.shortHook || '',
+                        description: p.description || '',
+                        images: p.images || [],
+                        badges: p.badges || []
+                    })).sort((a,b) => a.id - b.id),
+                    status: data.status || {},
+                    featured: (data.featured || []).slice().sort(),
+                    deleted: (data.deleted || []).slice().sort(),
+                    translations: data.translations || {}
+                });
+            };
+            
+            const sentSig = makeSignature(dataObj);
+            const gotSig = makeSignature(verifyData);
+            
+            if (sentSig !== gotSig) {
+                console.warn(`[SAVE] ❌ Attempt ${attempt}: Cloud state doesn't match what we sent`);
+                console.warn('[SAVE] Sent size:', sentSig.length, 'Got size:', gotSig.length);
+                // Log first difference
+                for (let i = 0; i < Math.min(sentSig.length, gotSig.length); i++) {
+                    if (sentSig[i] !== gotSig[i]) {
+                        console.warn(`[SAVE] First diff at position ${i}:`);
+                        console.warn('  Sent:', sentSig.substring(Math.max(0, i-50), i+100));
+                        console.warn('  Got: ', gotSig.substring(Math.max(0, i-50), i+100));
+                        break;
+                    }
+                }
+                if (attempt < 3) {
+                    console.log(`[SAVE] Retrying in ${attempt * 1000}ms...`);
+                    await new Promise(r => setTimeout(r, attempt * 1000));
+                    continue;
+                }
+                throw new Error(`Save verification failed after ${attempt} attempts. Cloud state doesn't match sent data.`);
+            }
+            
+            console.log(`[SAVE] ✅ Verified in cloud (total time: ${Date.now() - startTime}ms, attempts: ${attempt})`);
+            
+            // Update local cache with verified cloud data
+            try {
+                localStorage.setItem('cloudProductCache', JSON.stringify(verifyData));
+            } catch (e) {}
+            return result;
+        } catch (error) {
+            lastError = error;
+            console.error(`[SAVE] ❌ Attempt ${attempt} threw:`, error.message);
+            if (attempt < 3) {
+                const wait = attempt * 800;
+                console.log(`[SAVE] Waiting ${wait}ms before retry...`);
+                await new Promise(r => setTimeout(r, wait));
+            }
+        }
     }
+    console.error(`[SAVE] 💀 All 3 attempts failed. Last error:`, lastError);
+    throw lastError || new Error('Save failed after 3 attempts');
 }
 
 // ============================
