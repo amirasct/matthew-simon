@@ -1431,6 +1431,7 @@ window.getAllTranslatedProducts = getAllTranslatedProducts;
 window.getImageUrl = getImageUrl;
 window.loadCloudData = loadCloudData;
 window.saveCloudData = saveCloudData;
+window.applyDataToProducts = applyDataToProducts;
 
 // Auto-load cloud data on script load (with cache fallback for instant display)
 try {

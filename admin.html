@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=26">
+    <link rel="stylesheet" href="style.css?v=27">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -370,7 +370,25 @@ if (checkAuth()) {
             <button onclick="forceCloudSync()" style="background:#28a745;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;">
                 🔄 Neu laden
             </button>
+            <button onclick="toggleChangeLog()" style="background:#6c757d;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;" title="Verlauf der letzten Änderungen anzeigen">
+                📜 Verlauf
+            </button>
         </div>
+    </div>
+    
+    <!-- Change Log Panel (hidden by default) -->
+    <div id="changeLogPanel" style="display:none;background:white;border:1px solid #ddd;border-radius:6px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;">
+        <div style="background:#f8f9fa;padding:12px 16px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+                <strong style="color:#1B3A52;">📜 Änderungsprotokoll</strong>
+                <span style="color:#999;font-size:0.8rem;margin-left:8px;">(letzte 30 Aktionen, nur lokal)</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+                <button onclick="clearChangeLog()" style="background:transparent;color:#dc3545;border:1px solid #dc3545;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;">Leeren</button>
+                <button onclick="toggleChangeLog()" style="background:transparent;color:#666;border:1px solid #ccc;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;">Schließen</button>
+            </div>
+        </div>
+        <div id="changeLogList" style="max-height:400px;overflow-y:auto;"></div>
     </div>
     
     <!-- Backup reminder banner (hidden by default) -->
@@ -594,9 +612,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=26"></script>
-<script src="translations_part1.js?v=26"></script>
-<script src="translations_part2.js?v=26"></script>
+<script src="products.js?v=27"></script>
+<script src="translations_part1.js?v=27"></script>
+<script src="translations_part2.js?v=27"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -683,6 +701,94 @@ function updateCloudStatus() {
             el.textContent = 'Noch keine Cloud-Daten';
         }
     } catch (e) {}
+}
+
+// ============================
+// CHANGE LOG (last 30 actions)
+// ============================
+
+function logChange(action, productName, productId) {
+    try {
+        const log = JSON.parse(localStorage.getItem('adminChangeLog') || '[]');
+        const entry = {
+            action: action,  // 'add', 'edit', 'delete', 'feature', 'unfeature', 'archive', 'restore'
+            productName: productName,
+            productId: productId,
+            timestamp: new Date().toISOString()
+        };
+        log.unshift(entry);  // Newest first
+        // Keep only last 30
+        const trimmed = log.slice(0, 30);
+        localStorage.setItem('adminChangeLog', JSON.stringify(trimmed));
+        renderChangeLog();
+    } catch (e) {
+        console.warn('Could not log change:', e);
+    }
+}
+
+function renderChangeLog() {
+    const container = document.getElementById('changeLogList');
+    if (!container) return;
+    
+    try {
+        const log = JSON.parse(localStorage.getItem('adminChangeLog') || '[]');
+        
+        if (log.length === 0) {
+            container.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-style:italic;">Noch keine Änderungen protokolliert.</div>';
+            return;
+        }
+        
+        const actionLabels = {
+            add: { icon: '➕', text: 'Erstellt', color: '#28a745' },
+            edit: { icon: '✎', text: 'Bearbeitet', color: '#1B3A52' },
+            delete: { icon: '🗑', text: 'Gelöscht', color: '#dc3545' },
+            feature: { icon: '⭐', text: 'Featured', color: '#B8860B' },
+            unfeature: { icon: '☆', text: 'Featured entfernt', color: '#888' },
+            archive: { icon: '📦', text: 'Ins Archiv', color: '#721c24' },
+            restore: { icon: '↺', text: 'Reaktiviert', color: '#28a745' }
+        };
+        
+        container.innerHTML = log.map(entry => {
+            const meta = actionLabels[entry.action] || { icon: '•', text: entry.action, color: '#666' };
+            const date = new Date(entry.timestamp);
+            const now = new Date();
+            const diffMin = Math.round((now - date) / 60000);
+            let timeStr;
+            if (diffMin < 1) timeStr = 'gerade eben';
+            else if (diffMin < 60) timeStr = `vor ${diffMin} Min.`;
+            else if (diffMin < 1440) timeStr = `vor ${Math.round(diffMin/60)} Std.`;
+            else timeStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'});
+            
+            return `
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #f0f0f0;font-size:0.9rem;">
+                    <span style="font-size:1.1rem;flex-shrink:0;">${meta.icon}</span>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:600;color:${meta.color};font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;">${meta.text}</div>
+                        <div style="color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${entry.productName || `Produkt #${entry.productId}`}</div>
+                    </div>
+                    <span style="color:#999;font-size:0.75rem;flex-shrink:0;">${timeStr}</span>
+                </div>
+            `;
+        }).join('');
+    } catch (e) {
+        console.warn('Could not render change log:', e);
+    }
+}
+
+function toggleChangeLog() {
+    const panel = document.getElementById('changeLogPanel');
+    if (panel) {
+        const isOpen = panel.style.display === 'block';
+        panel.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) renderChangeLog();
+    }
+}
+
+function clearChangeLog() {
+    if (!confirm('Änderungsprotokoll wirklich löschen?\n\n(Dies löscht nur die Anzeige — Ihre eigentlichen Änderungen bleiben bestehen.)')) return;
+    localStorage.removeItem('adminChangeLog');
+    renderChangeLog();
+    showToast('Protokoll gelöscht', 'success');
 }
 
 async function forceCloudSync() {
@@ -1038,6 +1144,8 @@ async function toggleFeatured(id, isFeatured) {
         // Save to cloud
         await window.saveCloudData(cached);
         incrementChangeCounter();
+        const productForLog = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+        logChange(isFeatured ? 'feature' : 'unfeature', productForLog?.name || `#${id}`, id);
         showToast(isFeatured ? `Zu Featured hinzugefügt (${cached.featured.length} total)` : 'Von Featured entfernt', 'success');
         updateCloudStatus();
     } catch (e) {
@@ -1067,6 +1175,7 @@ async function restoreFromArchive(id) {
         
         await window.saveCloudData(cached);
         incrementChangeCounter();
+        logChange('restore', product?.name || `#${id}`, id);
         updateStats();
         updateTabCounts();
         renderTable();
@@ -1630,12 +1739,11 @@ async function saveProduct(e) {
             cloudData.translations[savedId] = trans;
         }
         
-        // Save to cloud
-        await window.saveCloudData(cloudData);
-        incrementChangeCounter();
-        
-        // Fetch again to confirm & sync UI with server state
-        await window.loadCloudData(true);
+        // ⚡ OPTIMISTIC UPDATE: Apply changes to UI INSTANTLY
+        // This makes the save feel immediate - user sees changes right away
+        // instead of waiting for cloud round-trip (which adds 500-2000ms delay)
+        window.applyDataToProducts(cloudData);
+        localStorage.setItem('cloudProductCache', JSON.stringify(cloudData));
         
         // Check if the saved product's status matches the current tab
         const savedProduct = window.MATTHEW_PRODUCTS.find(p => p.id === savedId);
@@ -1650,12 +1758,30 @@ async function saveProduct(e) {
             }
         }
         
-        showToast(`✅ Gespeichert${tabMessage}`, 'success');
+        // Close modal and update UI IMMEDIATELY
         closeModal();
         updateStats();
         updateTabCounts();
-        updateCloudStatus();
         renderTable();
+        showToast(`✅ Gespeichert${tabMessage}`, 'success');
+        
+        // Log the change
+        logChange(isNew ? 'add' : 'edit', savedProduct?.name || productData.name, savedId);
+        
+        // NOW save to cloud in the background
+        try {
+            await window.saveCloudData(cloudData);
+            incrementChangeCounter();
+            updateCloudStatus();
+        } catch (cloudErr) {
+            console.error('Cloud save failed after optimistic update:', cloudErr);
+            showToast('⚠️ Cloud-Speicherung fehlgeschlagen. Änderung nur lokal sichtbar. Bitte erneut versuchen.', 'error');
+            // Revert optimistic UI by refetching
+            await window.loadCloudData(true);
+            renderTable();
+            updateStats();
+            updateTabCounts();
+        }
     } catch (err) {
         console.error('Save failed:', err);
         showToast('❌ Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
@@ -1688,6 +1814,7 @@ async function deleteProduct(id) {
         
         await window.saveCloudData(cloudData);
         incrementChangeCounter();
+        logChange('delete', product.name, id);
         showToast(`Produkt gelöscht`, 'success');
         await window.loadCloudData(true);
         updateStats();
