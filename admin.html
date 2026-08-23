@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=27">
+    <link rel="stylesheet" href="style.css?v=29">
     <style>
         .admin-container { max-width: 1400px; margin: 20px auto; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
@@ -373,6 +373,7 @@ if (checkAuth()) {
             <button onclick="toggleChangeLog()" style="background:#6c757d;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:600;" title="Verlauf der letzten Änderungen anzeigen">
                 📜 Verlauf
             </button>
+            <span id="pendingSaveIndicator" style="display:none;background:#fff3cd;color:#856404;padding:6px 12px;border-radius:4px;font-size:0.75rem;font-weight:600;border:1px solid #B8860B;"></span>
         </div>
     </div>
     
@@ -612,9 +613,9 @@ if (checkAuth()) {
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js?v=27"></script>
-<script src="translations_part1.js?v=27"></script>
-<script src="translations_part2.js?v=27"></script>
+<script src="products.js?v=29"></script>
+<script src="translations_part1.js?v=29"></script>
+<script src="translations_part2.js?v=29"></script>
 <script>
 let currentEditPhotos = [];
 let searchTerm = '';
@@ -706,6 +707,52 @@ function updateCloudStatus() {
 // ============================
 // CHANGE LOG (last 30 actions)
 // ============================
+
+// Global save queue — ensures saves happen sequentially (never in parallel)
+// This prevents data loss when user makes multiple quick edits
+let savePromise = Promise.resolve();
+let pendingSaveCount = 0;
+
+async function queueSave(saveFn) {
+    pendingSaveCount++;
+    updatePendingSaveIndicator();
+    
+    // Chain onto the previous save so they run one at a time
+    const thisSave = savePromise.then(saveFn).catch(err => {
+        console.error('Queued save failed:', err);
+        throw err;
+    });
+    
+    // Update the queue promise (subsequent saves will wait for this one)
+    savePromise = thisSave.catch(() => {});  // Prevent unhandled rejection
+    
+    try {
+        return await thisSave;
+    } finally {
+        pendingSaveCount--;
+        updatePendingSaveIndicator();
+    }
+}
+
+function updatePendingSaveIndicator() {
+    const el = document.getElementById('pendingSaveIndicator');
+    if (!el) return;
+    if (pendingSaveCount > 0) {
+        el.style.display = 'inline-block';
+        el.textContent = pendingSaveCount === 1 ? '⏳ Speichere...' : `⏳ ${pendingSaveCount} Speicherungen...`;
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+// Warn user if they try to leave with pending saves
+window.addEventListener('beforeunload', (e) => {
+    if (pendingSaveCount > 0) {
+        e.preventDefault();
+        e.returnValue = 'Ihre Änderungen werden noch gespeichert. Wirklich verlassen?';
+        return e.returnValue;
+    }
+});
 
 function logChange(action, productName, productId) {
     try {
@@ -1122,35 +1169,43 @@ function renderTable() {
 
 async function toggleFeatured(id, isFeatured) {
     try {
-        // Always fetch fresh data first
-        await window.loadCloudData(true);
-        
-        const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
-        if (!cached.featured) cached.featured = [];
-        
-        const idx = cached.featured.indexOf(id);
-        if (isFeatured && idx === -1) {
-            cached.featured.push(id);
-        } else if (!isFeatured && idx !== -1) {
-            cached.featured.splice(idx, 1);
-        }
-        
-        // Update in-memory
-        const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
-        if (product) product.featured = isFeatured;
-        
-        updateStats();
-        
-        // Save to cloud
-        await window.saveCloudData(cached);
-        incrementChangeCounter();
-        const productForLog = window.MATTHEW_PRODUCTS.find(p => p.id === id);
-        logChange(isFeatured ? 'feature' : 'unfeature', productForLog?.name || `#${id}`, id);
-        showToast(isFeatured ? `Zu Featured hinzugefügt (${cached.featured.length} total)` : 'Von Featured entfernt', 'success');
-        updateCloudStatus();
+        await queueSave(async () => {
+            // Fetch fresh data first
+            await window.loadCloudData(true);
+            
+            const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+            if (!cached.featured) cached.featured = [];
+            
+            const idx = cached.featured.indexOf(id);
+            if (isFeatured && idx === -1) {
+                cached.featured.push(id);
+            } else if (!isFeatured && idx !== -1) {
+                cached.featured.splice(idx, 1);
+            }
+            
+            // Optimistic UI update
+            const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+            if (product) product.featured = isFeatured;
+            updateStats();
+            
+            // AWAIT cloud save
+            await window.saveCloudData(cached);
+            localStorage.setItem('cloudProductCache', JSON.stringify(cached));
+            incrementChangeCounter();
+            const productForLog = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+            logChange(isFeatured ? 'feature' : 'unfeature', productForLog?.name || `#${id}`, id);
+            showToast(isFeatured ? `Zu Featured hinzugefügt (${cached.featured.length} total)` : 'Von Featured entfernt', 'success');
+            updateCloudStatus();
+        });
     } catch (e) {
         console.error('Featured toggle failed:', e);
-        showToast('Speichern fehlgeschlagen', 'error');
+        showToast('❌ Speichern fehlgeschlagen', 'error');
+        // Revert
+        try {
+            await window.loadCloudData(true);
+            renderTable();
+            updateStats();
+        } catch (err) {}
     }
 }
 
@@ -1158,32 +1213,32 @@ async function restoreFromArchive(id) {
     if (!confirm('Dieses Produkt aus dem Archiv wieder auf die Website stellen?')) return;
     
     try {
-        // Always fetch fresh data first
-        await window.loadCloudData(true);
-        
-        const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
-        if (!cached.status) cached.status = {};
-        
-        // Restore original status
-        cached.status[id] = { status: 'published' };
-        
-        // Update in-memory
-        const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
-        if (product) {
-            product.status = 'published';
-        }
-        
-        await window.saveCloudData(cached);
-        incrementChangeCounter();
-        logChange('restore', product?.name || `#${id}`, id);
-        updateStats();
-        updateTabCounts();
-        renderTable();
-        updateCloudStatus();
-        showToast('Produkt reaktiviert!', 'success');
+        await queueSave(async () => {
+            // Fetch fresh data first
+            await window.loadCloudData(true);
+            
+            const cached = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+            if (!cached.status) cached.status = {};
+            cached.status[id] = { status: 'published' };
+            
+            // Optimistic UI
+            const product = window.MATTHEW_PRODUCTS.find(p => p.id === id);
+            if (product) product.status = 'published';
+            
+            // AWAIT cloud save
+            await window.saveCloudData(cached);
+            localStorage.setItem('cloudProductCache', JSON.stringify(cached));
+            incrementChangeCounter();
+            logChange('restore', product?.name || `#${id}`, id);
+            updateStats();
+            updateTabCounts();
+            renderTable();
+            updateCloudStatus();
+            showToast('Produkt reaktiviert!', 'success');
+        });
     } catch (e) {
         console.error('Restore failed:', e);
-        showToast('Fehler beim Speichern', 'error');
+        showToast('❌ Fehler beim Speichern', 'error');
     }
 }
 
@@ -1682,111 +1737,106 @@ async function saveProduct(e) {
     saveBtn.textContent = '⏳ Speichert...';
     
     try {
-        // CRITICAL: Always fetch FRESH cloud data before applying changes
-        // This eliminates race conditions where localStorage might be stale
-        // (e.g. background load still in progress, or another device made changes)
-        await window.loadCloudData(true);
-        
-        // NOW get the truly-fresh cloud data
-        const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
-        if (!cloudData.edits) cloudData.edits = {};
-        if (!cloudData.custom) cloudData.custom = [];
-        if (!cloudData.status) cloudData.status = {};
-        if (!cloudData.translations) cloudData.translations = {};
-        if (!cloudData.featured) cloudData.featured = [];
-        if (!cloudData.deleted) cloudData.deleted = [];
-        
-        let savedId = id;
-        
-        if (isNew) {
-            const existingIds = [...cloudData.custom.map(p => p.id || 0)];
-            const newId = Math.max(1000, ...existingIds) + 1;
-            savedId = newId;
-            cloudData.custom.push({ id: newId, ...productData, featured: false });
-            cloudData.status[newId] = { status };
-        } else {
-            const numId = parseInt(id);
-            savedId = numId;
+        // QUEUE the save — waits for any previous saves to complete first
+        // This prevents data loss from concurrent saves overwriting each other
+        await queueSave(async () => {
+            // CRITICAL: Fetch FRESH cloud data (previous saves in queue are done)
+            await window.loadCloudData(true);
             
-            if (numId >= 1000) {
-                const idx = cloudData.custom.findIndex(p => p.id === numId);
-                if (idx !== -1) {
-                    cloudData.custom[idx] = { ...cloudData.custom[idx], ...productData };
-                } else {
-                    // Fallback: if not found (shouldn't happen), add it
-                    cloudData.custom.push({ id: numId, ...productData });
-                }
+            // Get truly-fresh cloud data
+            const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+            if (!cloudData.edits) cloudData.edits = {};
+            if (!cloudData.custom) cloudData.custom = [];
+            if (!cloudData.status) cloudData.status = {};
+            if (!cloudData.translations) cloudData.translations = {};
+            if (!cloudData.featured) cloudData.featured = [];
+            if (!cloudData.deleted) cloudData.deleted = [];
+            
+            let savedId = id;
+            
+            if (isNew) {
+                const existingIds = [...cloudData.custom.map(p => p.id || 0)];
+                const newId = Math.max(1000, ...existingIds) + 1;
+                savedId = newId;
+                cloudData.custom.push({ id: newId, ...productData, featured: false });
+                cloudData.status[newId] = { status };
             } else {
-                cloudData.edits[numId] = productData;
+                const numId = parseInt(id);
+                savedId = numId;
+                
+                if (numId >= 1000) {
+                    const idx = cloudData.custom.findIndex(p => p.id === numId);
+                    if (idx !== -1) {
+                        cloudData.custom[idx] = { ...cloudData.custom[idx], ...productData };
+                    } else {
+                        cloudData.custom.push({ id: numId, ...productData });
+                    }
+                } else {
+                    cloudData.edits[numId] = productData;
+                }
+                
+                cloudData.status[numId] = { status };
             }
             
-            cloudData.status[numId] = { status };
-        }
-        
-        // Apply translations
-        const trans = {};
-        let hasTrans = false;
-        ['en', 'fr', 'it'].forEach(lang => {
-            const suffix = lang.charAt(0).toUpperCase() + lang.slice(1);
-            const hook = document.getElementById('transHook' + suffix).value.trim();
-            const desc = document.getElementById('transDesc' + suffix).value.trim();
-            if (hook || desc) {
-                trans[lang] = { hook, desc };
-                hasTrans = true;
+            // Apply translations
+            const trans = {};
+            let hasTrans = false;
+            ['en', 'fr', 'it'].forEach(lang => {
+                const suffix = lang.charAt(0).toUpperCase() + lang.slice(1);
+                const hook = document.getElementById('transHook' + suffix).value.trim();
+                const desc = document.getElementById('transDesc' + suffix).value.trim();
+                if (hook || desc) {
+                    trans[lang] = { hook, desc };
+                    hasTrans = true;
+                }
+            });
+            if (hasTrans) {
+                cloudData.translations[savedId] = trans;
             }
-        });
-        if (hasTrans) {
-            cloudData.translations[savedId] = trans;
-        }
-        
-        // ⚡ OPTIMISTIC UPDATE: Apply changes to UI INSTANTLY
-        // This makes the save feel immediate - user sees changes right away
-        // instead of waiting for cloud round-trip (which adds 500-2000ms delay)
-        window.applyDataToProducts(cloudData);
-        localStorage.setItem('cloudProductCache', JSON.stringify(cloudData));
-        
-        // Check if the saved product's status matches the current tab
-        const savedProduct = window.MATTHEW_PRODUCTS.find(p => p.id === savedId);
-        let tabMessage = '';
-        
-        if (savedProduct) {
-            const productStatus = savedProduct.status || 'published';
-            if (productStatus !== currentStatusTab) {
-                const tabLabels = { published: 'Veröffentlicht', draft: 'Entwürfe', sold: 'Archiv' };
-                switchStatusTab(productStatus);
-                tabMessage = ` (→ ${tabLabels[productStatus]})`;
+            
+            // ⚡ OPTIMISTIC UI: Apply to local state instantly for fast feel
+            window.applyDataToProducts(cloudData);
+            localStorage.setItem('cloudProductCache', JSON.stringify(cloudData));
+            
+            const savedProduct = window.MATTHEW_PRODUCTS.find(p => p.id === savedId);
+            let tabMessage = '';
+            
+            if (savedProduct) {
+                const productStatus = savedProduct.status || 'published';
+                if (productStatus !== currentStatusTab) {
+                    const tabLabels = { published: 'Veröffentlicht', draft: 'Entwürfe', sold: 'Archiv' };
+                    switchStatusTab(productStatus);
+                    tabMessage = ` (→ ${tabLabels[productStatus]})`;
+                }
             }
-        }
-        
-        // Close modal and update UI IMMEDIATELY
-        closeModal();
-        updateStats();
-        updateTabCounts();
-        renderTable();
-        showToast(`✅ Gespeichert${tabMessage}`, 'success');
-        
-        // Log the change
-        logChange(isNew ? 'add' : 'edit', savedProduct?.name || productData.name, savedId);
-        
-        // NOW save to cloud in the background
-        try {
+            
+            // Close modal + refresh UI immediately (looks fast)
+            closeModal();
+            updateStats();
+            updateTabCounts();
+            renderTable();
+            
+            // CRITICAL: NOW await cloud save. Only show final success after cloud confirms.
+            // If this fails, we revert. This ensures NO DATA LOSS.
             await window.saveCloudData(cloudData);
+            
             incrementChangeCounter();
             updateCloudStatus();
-        } catch (cloudErr) {
-            console.error('Cloud save failed after optimistic update:', cloudErr);
-            showToast('⚠️ Cloud-Speicherung fehlgeschlagen. Änderung nur lokal sichtbar. Bitte erneut versuchen.', 'error');
-            // Revert optimistic UI by refetching
+            showToast(`✅ Gespeichert${tabMessage}`, 'success');
+            logChange(isNew ? 'add' : 'edit', savedProduct?.name || productData.name, savedId);
+        });
+    } catch (err) {
+        console.error('Save failed:', err);
+        showToast('❌ Cloud-Speicherung fehlgeschlagen! Änderung nicht gespeichert. Bitte erneut versuchen.', 'error');
+        // Revert optimistic UI by fetching fresh cloud state
+        try {
             await window.loadCloudData(true);
             renderTable();
             updateStats();
             updateTabCounts();
-        }
-    } catch (err) {
-        console.error('Save failed:', err);
-        showToast('❌ Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
+        } catch (e) {}
     } finally {
-        // ALWAYS reset button state — whether save succeeded or failed
+        // ALWAYS reset button state
         saveBtn.disabled = false;
         saveBtn.textContent = '💾 Speichern';
     }
@@ -1799,30 +1849,37 @@ async function deleteProduct(id) {
     if (!confirm(`Produkt "${product.name}" wirklich löschen?\n\nHinweis: Original-Produkte werden ausgeblendet, können mit "Reset" wiederhergestellt werden.`)) return;
     
     try {
-        // Always fetch fresh data first to avoid race conditions
-        await window.loadCloudData(true);
-        
-        const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
-        if (!cloudData.deleted) cloudData.deleted = [];
-        if (!cloudData.custom) cloudData.custom = [];
-        
-        if (id >= 1000) {
-            cloudData.custom = cloudData.custom.filter(p => p.id !== id);
-        } else {
-            if (!cloudData.deleted.includes(id)) cloudData.deleted.push(id);
-        }
-        
-        await window.saveCloudData(cloudData);
-        incrementChangeCounter();
-        logChange('delete', product.name, id);
-        showToast(`Produkt gelöscht`, 'success');
-        await window.loadCloudData(true);
-        updateStats();
-        updateTabCounts();
-        renderTable();
+        await queueSave(async () => {
+            // Fetch fresh data first
+            await window.loadCloudData(true);
+            
+            const cloudData = JSON.parse(localStorage.getItem('cloudProductCache') || '{}');
+            if (!cloudData.deleted) cloudData.deleted = [];
+            if (!cloudData.custom) cloudData.custom = [];
+            
+            if (id >= 1000) {
+                cloudData.deleted.push(id);
+                cloudData.custom = cloudData.custom.filter(p => p.id !== id);
+            } else {
+                if (!cloudData.deleted.includes(id)) cloudData.deleted.push(id);
+            }
+            
+            // AWAIT cloud save
+            await window.saveCloudData(cloudData);
+            localStorage.setItem('cloudProductCache', JSON.stringify(cloudData));
+            incrementChangeCounter();
+            logChange('delete', product.name, id);
+            showToast(`Produkt gelöscht`, 'success');
+            
+            // Refresh UI
+            await window.loadCloudData(true);
+            updateStats();
+            updateTabCounts();
+            renderTable();
+        });
     } catch (err) {
         console.error('Delete failed:', err);
-        showToast('Löschen fehlgeschlagen', 'error');
+        showToast('❌ Löschen fehlgeschlagen', 'error');
     }
 }
 
