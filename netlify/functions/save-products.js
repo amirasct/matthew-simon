@@ -1,5 +1,10 @@
 // Netlify Function v2: Save product data to Netlify Blobs
 // Stores: product edits, custom products, deleted IDs, featured IDs, translations, sold status
+//
+// CRITICAL: consistency:'strong' is required. Without it, Netlify Blobs uses
+// "eventual consistency" by default, meaning writes can take up to 60 SECONDS
+// to propagate across their edge network. This was causing edits to appear to
+// succeed but then get silently reverted by a later save that read stale data.
 import { getStore } from '@netlify/blobs';
 
 export default async (req, context) => {
@@ -21,7 +26,7 @@ export default async (req, context) => {
             });
         }
         
-        const store = getStore('product-data');
+        const store = getStore({ name: 'product-data', consistency: 'strong' });
         
         // Save with timestamp
         const payload = {

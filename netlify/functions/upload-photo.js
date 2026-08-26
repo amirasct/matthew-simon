@@ -1,4 +1,6 @@
 // Netlify Function v2 syntax - properly configures Blobs environment
+// consistency:'strong' ensures the photo is immediately readable after upload
+// (without it, list-photos/get-photo could miss a just-uploaded photo for up to 60s)
 import { getStore } from '@netlify/blobs';
 
 export default async (req, context) => {
@@ -19,8 +21,7 @@ export default async (req, context) => {
             });
         }
 
-        // Get the photos store - v2 syntax auto-configures the environment
-        const store = getStore('product-photos');
+        const store = getStore({ name: 'product-photos', consistency: 'strong' });
 
         // Convert base64 to buffer
         const buffer = Buffer.from(base64Data, 'base64');

@@ -1,4 +1,5 @@
 // Netlify Function v2 syntax - serves photos from blob storage
+// consistency:'strong' ensures freshly-uploaded photos are found immediately
 import { getStore } from '@netlify/blobs';
 
 export default async (req, context) => {
@@ -10,7 +11,7 @@ export default async (req, context) => {
             return new Response('Missing filename parameter', { status: 400 });
         }
 
-        const store = getStore('product-photos');
+        const store = getStore({ name: 'product-photos', consistency: 'strong' });
         
         // Get the blob as a Blob object (native v2 approach)
         const blob = await store.get(filename, { type: 'blob' });

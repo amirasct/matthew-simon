@@ -1,14 +1,18 @@
 // Netlify Function v2: Load product data from Netlify Blobs
 // Public endpoint - anyone can read (needed for shop visitors)
-// NO CACHING - we want changes to appear immediately
+//
+// CRITICAL: consistency:'strong' ensures we always read the LATEST write,
+// never a stale cached copy. Without this, reads could lag up to 60 seconds
+// behind writes (Netlify's "eventual consistency" default), and using a stale
+// read as the base for a subsequent save could silently revert other edits.
 import { getStore } from '@netlify/blobs';
 
 export default async (req, context) => {
     try {
-        const store = getStore('product-data');
+        const store = getStore({ name: 'product-data', consistency: 'strong' });
         const data = await store.get('products', { type: 'json' });
         
-        // Headers that prevent any caching at any layer (browser, CDN, proxy)
+        // Headers that prevent any HTTP-layer caching (browser, CDN, proxy)
         const noCacheHeaders = { 
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
@@ -18,13 +22,13 @@ export default async (req, context) => {
         };
         
         if (!data) {
-            // Return empty structure if nothing saved yet
             return new Response(JSON.stringify({
                 edits: {},
                 custom: [],
                 deleted: [],
                 featured: [],
                 translations: {},
+                status: {},
                 lastUpdated: null
             }), {
                 status: 200,
@@ -40,7 +44,7 @@ export default async (req, context) => {
         console.error('Load products error:', error);
         return new Response(JSON.stringify({ 
             error: error.message,
-            edits: {}, custom: [], deleted: [], featured: [], translations: {}
+            edits: {}, custom: [], deleted: [], featured: [], translations: {}, status: {}
         }), {
             status: 200,  // Return 200 with empty data on error so site still works
             headers: { 
