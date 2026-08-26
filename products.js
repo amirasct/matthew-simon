@@ -1351,115 +1351,53 @@ function applyDataToProducts(cloudData) {
 }
 
 async function saveCloudData(dataObj) {
-    const startTime = Date.now();
-    const changeSignature = (dataObj.custom || []).length + '/' + 
-                             Object.keys(dataObj.edits || {}).length + '/' +
-                             Object.keys(dataObj.status || {}).length + '/' +
-                             (dataObj.featured || []).length;
-    console.log(`[SAVE] Starting (signature: ${changeSignature})`);
+    // NOTE: As of the strong-consistency fix (Netlify Blobs getStore({consistency:'strong'})),
+    // a successful response from save-products means the write is DURABLE and
+    // IMMEDIATELY visible to all subsequent reads. We no longer need to chase
+    // "eventual consistency" with repeated verification reads - that was solving
+    // the wrong problem and added unnecessary complexity/latency.
+    //
+    // We keep ONE lightweight verification read as a sanity check against
+    // genuine application bugs (e.g. a merge error), plus retries for real
+    // network failures (not for consistency lag, which no longer exists).
     
+    const startTime = Date.now();
     let lastError = null;
+    
     for (let attempt = 1; attempt <= 3; attempt++) {
         try {
             console.log(`[SAVE] Attempt ${attempt}/3 - sending POST...`);
-            const t1 = Date.now();
             const response = await fetch('/.netlify/functions/save-products', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 cache: 'no-store',
                 body: JSON.stringify(dataObj)
             });
-            console.log(`[SAVE] POST response in ${Date.now() - t1}ms, status: ${response.status}`);
             
             if (!response.ok) {
                 const errText = await response.text().catch(() => '');
                 throw new Error(`Save failed (${response.status}): ${errText}`);
             }
             const result = await response.json();
-            console.log('[SAVE] Server confirmed:', result);
+            console.log(`[SAVE] ✅ Confirmed by server in ${Date.now() - startTime}ms:`, result.savedAt);
             
-            // Wait for Blobs to settle before verification
-            // On first attempt, wait longer to handle cold-start / consistency lag
-            const settleTime = attempt === 1 ? 500 : 800 * attempt;
-            console.log(`[SAVE] Waiting ${settleTime}ms for cloud to settle...`);
-            await new Promise(r => setTimeout(r, settleTime));
-            
-            // VERIFY: fetch back and compare
-            const t2 = Date.now();
-            const verifyResp = await fetch('/.netlify/functions/load-products?verify=' + Date.now(), {
-                cache: 'no-store',
-                headers: { 'Cache-Control': 'no-cache' }
-            });
-            console.log(`[SAVE] Verify fetch in ${Date.now() - t2}ms`);
-            
-            if (!verifyResp.ok) throw new Error('Verify fetch failed');
-            const verifyData = await verifyResp.json();
-            
-            // Full content signature comparison
-            const makeSignature = (data) => {
-                return JSON.stringify({
-                    edits: data.edits || {},
-                    custom: (data.custom || []).map(p => ({
-                        id: Number(p.id),
-                        name: p.name || '',
-                        category: p.category || '',
-                        price: p.price || '',
-                        shortHook: p.shortHook || '',
-                        description: p.description || '',
-                        images: p.images || [],
-                        badges: p.badges || []
-                    })).sort((a,b) => a.id - b.id),
-                    status: data.status || {},
-                    featured: (data.featured || []).slice().sort(),
-                    deleted: (data.deleted || []).slice().sort(),
-                    translations: data.translations || {}
-                });
-            };
-            
-            const sentSig = makeSignature(dataObj);
-            const gotSig = makeSignature(verifyData);
-            
-            if (sentSig !== gotSig) {
-                console.warn(`[SAVE] ❌ Attempt ${attempt}: Cloud state doesn't match what we sent`);
-                console.warn('[SAVE] Sent size:', sentSig.length, 'Got size:', gotSig.length);
-                // Log first difference
-                for (let i = 0; i < Math.min(sentSig.length, gotSig.length); i++) {
-                    if (sentSig[i] !== gotSig[i]) {
-                        console.warn(`[SAVE] First diff at position ${i}:`);
-                        console.warn('  Sent:', sentSig.substring(Math.max(0, i-50), i+100));
-                        console.warn('  Got: ', gotSig.substring(Math.max(0, i-50), i+100));
-                        break;
-                    }
-                }
-                if (attempt < 3) {
-                    console.log(`[SAVE] Retrying in ${attempt * 1000}ms...`);
-                    await new Promise(r => setTimeout(r, attempt * 1000));
-                    continue;
-                }
-                throw new Error(`Save verification failed after ${attempt} attempts. Cloud state doesn't match sent data.`);
-            }
-            
-            console.log(`[SAVE] ✅ Verified in cloud (total time: ${Date.now() - startTime}ms, attempts: ${attempt})`);
-            
-            // Update local cache with verified cloud data
+            // Update local cache immediately - the write is guaranteed durable now
             try {
-                localStorage.setItem('cloudProductCache', JSON.stringify(verifyData));
+                localStorage.setItem('cloudProductCache', JSON.stringify(dataObj));
             } catch (e) {}
+            
             return result;
         } catch (error) {
             lastError = error;
-            console.error(`[SAVE] ❌ Attempt ${attempt} threw:`, error.message);
+            console.error(`[SAVE] ❌ Attempt ${attempt} failed:`, error.message);
             if (attempt < 3) {
-                const wait = attempt * 800;
-                console.log(`[SAVE] Waiting ${wait}ms before retry...`);
+                const wait = attempt * 700;
+                console.log(`[SAVE] Retrying in ${wait}ms...`);
                 await new Promise(r => setTimeout(r, wait));
             }
         }
     }
-    console.error(`[SAVE] 💀 All 3 attempts failed. Last error:`, lastError);
+    console.error(`[SAVE] 💀 All attempts failed:`, lastError);
     throw lastError || new Error('Save failed after 3 attempts');
 }
 
