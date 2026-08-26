@@ -4,6 +4,6 @@
   "description": "Matthew Simon European Design & Antiques website",
   "type": "module",
   "dependencies": {
-    "@netlify/blobs": "^7.4.0"
+    "@netlify/blobs": "^10.7.0"
   }
 }
