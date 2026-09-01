@@ -167,6 +167,17 @@ const translations = {
     'admin.era': 'Epoche / Jahr',
     'admin.artist': 'Künstler / Hersteller',
 
+    // v14 - search, sort, shipping
+    'shop.search.placeholder': 'Suchen: Murano, Barovier, 1950er …',
+    'shop.sort.recent': 'Neu hinzugefügt',
+    'shop.sort.era-old': 'Epoche: Älteste zuerst',
+    'detail.shipping': 'Abholung in Bern, Versand in der Schweiz und international auf Anfrage.',
+    'shipping.title': 'Versand & Abholung',
+    'shipping.pickup': 'Abholung in Bern ist jederzeit nach Vereinbarung möglich.',
+    'shipping.domestic': 'Versand innerhalb der Schweiz organisieren wir gerne für Sie.',
+    'shipping.intl': 'Internationaler Versand ist auf Anfrage möglich – wir finden für jedes Stück eine passende Lösung.',
+    'shipping.tax': 'Bei internationalem Versand können Zoll- und Einfuhrgebühren des Ziellandes anfallen.',
+
   },
   fr: {
     // Navigation
@@ -357,6 +368,17 @@ const translations = {
     'admin.era': 'Époque / Année',
     'admin.artist': 'Artiste / Fabricant',
 
+    // v14 - search, sort, shipping
+    'shop.search.placeholder': 'Rechercher : Murano, Barovier, années 1950 …',
+    'shop.sort.recent': 'Ajouts récents',
+    'shop.sort.era-old': 'Époque : les plus anciens',
+    'detail.shipping': 'Retrait à Berne, expédition en Suisse et à l\'international sur demande.',
+    'shipping.title': 'Expédition & Retrait',
+    'shipping.pickup': 'Le retrait à Berne est possible à tout moment sur rendez-vous.',
+    'shipping.domestic': 'Nous organisons volontiers l\'expédition en Suisse pour vous.',
+    'shipping.intl': 'L\'expédition internationale est possible sur demande – nous trouverons une solution adaptée à chaque pièce.',
+    'shipping.tax': 'Pour les envois internationaux, des droits de douane et taxes d\'importation du pays de destination peuvent s\'appliquer.',
+
   },
   it: {
     // Navigation
@@ -529,6 +551,17 @@ const translations = {
     'categories.sonstiges.label': 'Ceramica',
     'admin.era': 'Epoca / Anno',
     'admin.artist': 'Artista / Produttore',
+
+    // v14 - search, sort, shipping
+    'shop.search.placeholder': 'Cerca: Murano, Barovier, anni \'50 …',
+    'shop.sort.recent': 'Aggiunti di recente',
+    'shop.sort.era-old': 'Epoca: prima i più antichi',
+    'detail.shipping': 'Ritiro a Berna, spedizione in Svizzera e internazionale su richiesta.',
+    'shipping.title': 'Spedizione e Ritiro',
+    'shipping.pickup': 'Il ritiro a Berna è possibile in qualsiasi momento su appuntamento.',
+    'shipping.domestic': 'Organizziamo volentieri la spedizione all\'interno della Svizzera.',
+    'shipping.intl': 'La spedizione internazionale è possibile su richiesta – troveremo una soluzione adatta per ogni pezzo.',
+    'shipping.tax': 'Per le spedizioni internazionali possono essere applicati dazi doganali e tasse di importazione del paese di destinazione.',
 
   },
   en: {
@@ -760,6 +793,17 @@ const translations = {
     'categories.sonstiges.label': 'Ceramics',
     'admin.era': 'Era / Year',
     'admin.artist': 'Artist / Maker',
+
+    // v14 - search, sort, shipping
+    'shop.search.placeholder': 'Search: Murano, Barovier, 1950s …',
+    'shop.sort.recent': 'Recently added',
+    'shop.sort.era-old': 'Era: Oldest first',
+    'detail.shipping': 'Pickup in Bern, shipping within Switzerland and internationally on request.',
+    'shipping.title': 'Shipping & Pickup',
+    'shipping.pickup': 'Pickup in Bern is possible at any time by arrangement.',
+    'shipping.domestic': 'We are happy to arrange shipping within Switzerland for you.',
+    'shipping.intl': 'International shipping is available on request – we will find a suitable solution for every piece.',
+    'shipping.tax': 'For international shipments, customs and import duties of the destination country may apply.',
 
   }
 };

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -157,10 +157,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=35"></script>
-<script src="products.js?v=35"></script>
-<script src="translations_part1.js?v=35"></script>
-<script src="translations_part2.js?v=35"></script>
+<script src="languages.js?v=36"></script>
+<script src="products.js?v=36"></script>
+<script src="translations_part1.js?v=36"></script>
+<script src="translations_part2.js?v=36"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -288,7 +288,7 @@ function renderProductDetail(product) {
         : '';
     
     const mainImageHtml = hasImages
-        ? `<img src="${getImageUrl(product.images[0])}" class="main-image" id="mainImage" alt="${product.name}" onclick="openLightbox(this.src)" style="${isSold ? 'filter:grayscale(15%);' : ''}" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
+        ? `<img src="${getImageUrl(product.images[0])}" class="main-image" id="mainImage" alt="${(window.buildAltText ? window.buildAltText(product) : product.name).replace(/"/g,'&quot;')}" onclick="openLightbox(this.src)" style="${isSold ? 'filter:grayscale(15%);' : ''}" onerror="this.parentElement.innerHTML='<div class=\\'main-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
         : `<div class="main-image-placeholder">📷<br><span>Foto folgt</span></div>`;
     
     const thumbnailsHtml = hasImages && product.images.length > 1
@@ -323,7 +323,8 @@ function renderProductDetail(product) {
             </div>
             
             <div class="detail-info">
-                <div class="detail-category">${product.category}</div>
+                <div class="detail-category">${product.category}${product.era ? ' · ' + product.era : ''}</div>
+                ${product.artist ? `<div class="detail-artist">${product.artist}</div>` : ''}
                 <h1>${product.name}</h1>
                 ${badges}
                 <div class="detail-price" style="${isSold ? 'text-decoration:line-through;color:#999;' : ''}">${product.price}</div>
@@ -341,7 +342,12 @@ function renderProductDetail(product) {
                     </button>
                 </div>
                 
-                <p style="margin-top:20px;font-size:0.85rem;color:#666;text-align:center;">
+                <div class="shipping-note">
+                    <span class="shipping-note-icon">📦</span>
+                    <span data-i18n="detail.shipping">Abholung in Bern, Versand in der Schweiz und international auf Anfrage.</span>
+                </div>
+                
+                <p style="margin-top:16px;font-size:0.85rem;color:#666;text-align:center;">
                     📧 matthew.simon@gmx.net &nbsp;|&nbsp; 📱 +41 79 302 19 85
                 </p>
             </div>

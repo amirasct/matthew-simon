@@ -1331,7 +1331,7 @@ function applyDataToProducts(cloudData) {
     // NOW apply featured (works for both original AND custom products)
     if (cloudData.featured) {
         window.MATTHEW_PRODUCTS.forEach(p => {
-            p.featured = cloudData.featured.includes(p.id);
+            p.featured = cloudData.featured.some(f => Number(f) === Number(p.id));
         });
     }
     
@@ -1491,6 +1491,38 @@ function getImageUrl(filename) {
     return `images/${filename}`;
 }
 
+
+// ============================
+// SEO: descriptive alt text
+// ============================
+// Builds meaningful alt text from the structured fields rather than the
+// filename. Artist and era are language-neutral, so this works across DE/EN/FR/IT
+// and covers every product at render time - no file renaming required.
+function buildAltText(product) {
+    if (!product) return '';
+    const bits = [];
+    if (product.artist) bits.push(product.artist);
+    if (product.name) bits.push(product.name);
+    if (product.era) bits.push(product.era);
+    if (product.category) bits.push(product.category);
+    const out = bits.filter(Boolean).join(', ');
+    return out || (product.name || 'Matthew Simon');
+}
+
+// Slug used when naming NEW photo uploads: artist-era-category-name.jpg
+function buildPhotoSlug(product) {
+    const clean = (s) => String(s || '')
+        .toLowerCase()
+        .replace(/[äàáâ]/g, 'a').replace(/[öòóô]/g, 'o').replace(/[üùúû]/g, 'u')
+        .replace(/[ëèéê]/g, 'e').replace(/[ïìíî]/g, 'i').replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    const parts = [clean(product.artist), clean(product.era),
+                   clean(product.category), clean(product.name)].filter(Boolean);
+    let slug = parts.join('-').substring(0, 70).replace(/-+$/, '');
+    return slug || 'ms-produkt';
+}
+
 // ============================
 // EXPOSE GLOBALLY
 // ============================
@@ -1505,6 +1537,8 @@ window.getFeaturedProducts = getFeaturedProducts;
 window.getTranslatedProduct = getTranslatedProduct;
 window.getAllTranslatedProducts = getAllTranslatedProducts;
 window.getImageUrl = getImageUrl;
+window.buildAltText = buildAltText;
+window.buildPhotoSlug = buildPhotoSlug;
 window.loadCloudData = loadCloudData;
 window.saveCloudData = saveCloudData;
 window.applyDataToProducts = applyDataToProducts;

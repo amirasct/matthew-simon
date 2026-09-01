@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
 </head>
 <body>
 
@@ -101,12 +101,27 @@
     </div>
 </section>
 
-<!-- Filters -->
+<!-- Search -->
+<section class="shop-search-section">
+    <div class="shop-search-wrap">
+        <span class="shop-search-icon">⌕</span>
+        <input type="search" id="shopSearch" class="shop-search-input"
+               placeholder="Suchen: Murano, Barovier, 1950er …"
+               data-i18n-placeholder="shop.search.placeholder"
+               oninput="onSearchInput(this.value)" autocomplete="off">
+        <button type="button" id="searchClear" class="shop-search-clear"
+                onclick="clearSearch()" style="display:none;" aria-label="Suche löschen">×</button>
+    </div>
+    <div id="artistChips" class="artist-chips"></div>
+</section>
+
+<!-- Category pills (desktop) -->
 <section class="filters-section">
+    <div id="categoryPills" class="category-pills"></div>
     <div class="filters-container">
-        <div class="filter-group">
+        <div class="filter-group filter-group-mobile-cat">
             <label data-i18n="shop.filter.category">Category:</label>
-            <select id="categoryFilter">
+            <select id="categoryFilter" onchange="syncCategoryPills()">
                 <option value="">All Categories</option>
                 <option value="Möbel">Möbel (Furniture)</option>
                 <option value="Glas">Glas (Glass)</option>
@@ -122,11 +137,16 @@
         <div class="filter-group">
             <label data-i18n="shop.filter.sort">Sort:</label>
             <select id="sortFilter">
-                <option value="featured" data-i18n="shop.sort.featured">Featured</option>
+                <option value="recent" data-i18n="shop.sort.recent">Recently added</option>
                 <option value="price-high" data-i18n="shop.sort.price-high">Price: High to Low</option>
                 <option value="price-low" data-i18n="shop.sort.price-low">Price: Low to High</option>
-                <option value="era-new" data-i18n="shop.sort.era-new">Era: Newest First</option>
+                <option value="era-old" data-i18n="shop.sort.era-old">Era: Oldest first</option>
+                <option value="featured" data-i18n="shop.sort.featured">Featured</option>
             </select>
+        </div>
+        
+        <div class="filter-group filter-result-count">
+            <span id="resultCount"></span>
         </div>
     </div>
 </section>
@@ -171,11 +191,11 @@
     </div>
 </footer>
 
-<script src="languages.js?v=35"></script>
-<script src="products.js?v=35"></script>
-<script src="translations_part1.js?v=35"></script>
-<script src="translations_part2.js?v=35"></script>
-<script src="shop.js?v=35"></script>
+<script src="languages.js?v=36"></script>
+<script src="products.js?v=36"></script>
+<script src="translations_part1.js?v=36"></script>
+<script src="translations_part2.js?v=36"></script>
+<script src="shop.js?v=36"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -190,6 +210,9 @@ document.addEventListener('click', function(event) {
     }
 });
 </script>
+
+<!-- Back to top -->
+<button id="backToTop" class="back-to-top" onclick="scrollToTop()" aria-label="Nach oben" title="Nach oben">↑</button>
 
 </body>
 </html>

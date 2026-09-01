@@ -2469,3 +2469,242 @@ a:hover {
     /* Slightly darker overlay for archived feel */
     background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.25) 100%);
 }
+
+/* ==========================================================
+   IMAGE FIT — never crop the object
+   For antiques and art, cutting off a statue's head is worse
+   than a little letterboxing. `contain` guarantees the whole
+   piece is always visible, whatever the photo's aspect ratio.
+   ========================================================== */
+
+.product-image,
+.mosaic-tile img,
+.archive-image {
+    object-fit: contain !important;
+    background: #f7f5f2;
+    padding: 6px;
+}
+
+.product-image-container {
+    background: #f7f5f2;
+}
+
+/* Category tiles keep `cover` — they are decorative backdrops,
+   not the object itself, so cropping is fine there. */
+.category-tile-image {
+    object-fit: cover;
+}
+
+/* ==========================================================
+   SHOP SEARCH
+   ========================================================== */
+
+.shop-search-section {
+    max-width: 1400px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+}
+
+.shop-search-wrap {
+    position: relative;
+    max-width: 520px;
+}
+
+.shop-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #B8860B;
+    font-size: 1.15rem;
+    pointer-events: none;
+}
+
+.shop-search-input {
+    width: 100%;
+    padding: 12px 40px 12px 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+}
+
+.shop-search-input:focus {
+    outline: none;
+    border-color: #B8860B;
+    box-shadow: 0 0 0 3px rgba(184,134,11,0.12);
+}
+
+.shop-search-input::-webkit-search-cancel-button { display: none; }
+
+.shop-search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #999;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+.shop-search-clear:hover { color: #2C2C2C; }
+
+.artist-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.artist-chip {
+    background: white;
+    border: 1px solid #e0dbd2;
+    color: #444;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.artist-chip:hover {
+    border-color: #B8860B;
+    color: #1B3A52;
+    background: rgba(184,134,11,0.06);
+}
+.artist-chip span {
+    color: #B8860B;
+    font-weight: 700;
+    margin-left: 4px;
+    font-size: 0.72rem;
+}
+
+/* ==========================================================
+   CATEGORY PILLS
+   ========================================================== */
+
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 1400px;
+    margin: 0 auto 16px;
+    padding: 0 20px;
+}
+
+.cat-pill {
+    background: white;
+    border: 1px solid #e0dbd2;
+    color: #555;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.cat-pill:hover {
+    border-color: #B8860B;
+    color: #1B3A52;
+}
+.cat-pill.active {
+    background: #1B3A52;
+    border-color: #1B3A52;
+    color: white;
+}
+.cat-pill span {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    margin-left: 5px;
+    font-weight: 600;
+}
+.cat-pill.active span { opacity: 0.85; }
+
+.filter-result-count {
+    margin-left: auto;
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* Pills on desktop, dropdown on mobile — saves vertical space on phones */
+@media (min-width: 769px) {
+    .filter-group-mobile-cat { display: none; }
+}
+@media (max-width: 768px) {
+    .category-pills { display: none; }
+    .filter-result-count { margin-left: 0; width: 100%; }
+    .shop-search-section { padding: 0 12px; }
+    .shop-search-wrap { max-width: 100%; }
+}
+
+/* ==========================================================
+   BACK TO TOP
+   ========================================================== */
+
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid #B8860B;
+    background: rgba(27, 58, 82, 0.94);
+    color: white;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 900;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s, background 0.2s;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.back-to-top:hover { background: #B8860B; }
+
+@media (max-width: 600px) {
+    .back-to-top {
+        bottom: 16px;
+        right: 16px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* Product detail: artist line + shipping note */
+.detail-artist {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #B8860B;
+    margin: 2px 0 8px;
+}
+
+.shipping-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: #f9f7f4;
+    border-left: 2px solid #B8860B;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+}
+.shipping-note-icon { flex-shrink: 0; }
