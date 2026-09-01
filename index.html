@@ -33,7 +33,7 @@
       "description": "Authentifizierte europäische Antiquitäten und Designklassiker",
       "url": "https://matthew-simon.ch",
       "telephone": "+41793021985",
-      "email": "info@matthew-simon.ch",
+      "email": "matthew.simon@gmx.net",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Bern",
@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=34">
+    <link rel="stylesheet" href="style.css?v=35">
 </head>
 <body>
 
@@ -177,11 +177,11 @@
                 <p class="category-tile-count"><span data-count="Objekte">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
-            <a href="shop.html?category=Kunst" class="category-tile">
-                <div class="category-tile-image" data-cat="Kunst"></div>
-                <h3 class="category-tile-name">Kunst</h3>
-                <p class="category-tile-label" data-i18n="categories.kunst.label">Fine Art</p>
-                <p class="category-tile-count"><span data-count="Kunst">0</span> <span data-i18n="categories.count">pieces</span></p>
+            <a href="shop.html?category=Gemälde/Grafik" class="category-tile">
+                <div class="category-tile-image" data-cat="Gemälde/Grafik"></div>
+                <h3 class="category-tile-name">Gemälde/Grafik</h3>
+                <p class="category-tile-label" data-i18n="categories.kunst.label">Paintings &amp; Prints</p>
+                <p class="category-tile-count"><span data-count="Gemälde/Grafik">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?category=Accessoires" class="category-tile">
@@ -191,11 +191,18 @@
                 <p class="category-tile-count"><span data-count="Accessoires">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
-            <a href="shop.html?category=Sonstiges" class="category-tile">
-                <div class="category-tile-image" data-cat="Sonstiges"></div>
-                <h3 class="category-tile-name">Sonstiges</h3>
-                <p class="category-tile-label" data-i18n="categories.sonstiges.label">Miscellaneous</p>
-                <p class="category-tile-count"><span data-count="Sonstiges">0</span> <span data-i18n="categories.count">pieces</span></p>
+            <a href="shop.html?category=Keramik" class="category-tile">
+                <div class="category-tile-image" data-cat="Keramik"></div>
+                <h3 class="category-tile-name">Keramik</h3>
+                <p class="category-tile-label" data-i18n="categories.keramik.label">Ceramics</p>
+                <p class="category-tile-count"><span data-count="Keramik">0</span> <span data-i18n="categories.count">pieces</span></p>
+            </a>
+            
+            <a href="shop.html?category=Fundst%C3%BCcke" class="category-tile">
+                <div class="category-tile-image" data-cat="Fundstücke"></div>
+                <h3 class="category-tile-name">Fundstücke</h3>
+                <p class="category-tile-label" data-i18n="categories.fundstuecke.label">Finds</p>
+                <p class="category-tile-count"><span data-count="Fundstücke">0</span> <span data-i18n="categories.count">pieces</span></p>
             </a>
             
             <a href="shop.html?view=archive" class="category-tile category-tile-archive">
@@ -226,7 +233,7 @@
         </div>
         <div class="footer-section">
             <h4 data-i18n="footer.contact">Contact</h4>
-            <p>📧 <a href="mailto:info@matthew-simon.ch">info@matthew-simon.ch</a><br>
+            <p>📧 <a href="mailto:matthew.simon@gmx.net">matthew.simon@gmx.net</a><br>
             📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
             🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
         </div>
@@ -240,10 +247,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=34"></script>
-<script src="products.js?v=34"></script>
-<script src="translations_part1.js?v=34"></script>
-<script src="translations_part2.js?v=34"></script>
+<script src="languages.js?v=35"></script>
+<script src="products.js?v=35"></script>
+<script src="translations_part1.js?v=35"></script>
+<script src="translations_part2.js?v=35"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -337,7 +344,7 @@ function updateCategoryCounts() {
     const archiveProducts = window.getArchiveProducts ? window.getArchiveProducts() : [];
     
     // Regular categories (available items)
-    ['Möbel', 'Glas', 'Leuchten', 'Objekte', 'Kunst', 'Accessoires', 'Sonstiges'].forEach(cat => {
+    ['Möbel', 'Glas', 'Leuchten', 'Objekte', 'Gemälde/Grafik', 'Accessoires', 'Keramik', 'Fundstücke'].forEach(cat => {
         const catProducts = publicProducts.filter(p => p.category === cat);
         
         // Update count

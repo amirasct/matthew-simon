@@ -103,7 +103,6 @@ const translations = {
     // v4 keys - Archive, Draft, New categories
     'categories.accessoires.label': 'Accessoires',
     'categories.accessoires.desc': 'Schmuck & Accessoires',
-    'categories.sonstiges.label': 'Sonstiges',
     'categories.sonstiges.desc': 'Verschiedene Stücke',
     'categories.archive.label': 'Archiv',
     'categories.archive.desc': 'Verkaufte Stücke',
@@ -140,7 +139,6 @@ const translations = {
     'about.pullquote': '„Jedes Stück wird persönlich auf Authentizität, Zustand und Provenienz geprüft."',
 
     // v9 keys - Kunst (Fine Art) category
-    'categories.kunst.label': 'Kunst',
     'categories.kunst.desc': 'Gemälde, Skulpturen & Grafik',
 
     // v10 keys - Why Matthew refined
@@ -160,6 +158,14 @@ const translations = {
     'why.master': 'Meister Handwerker',
     'why.master.desc': 'Ausgebildet als Vergolder und Restaurator mit tiefem Verständnis von Materialien und Techniken.',
     'shop.subtitle': 'Kuratierte und authentifizierte Stücke',
+
+    // v13 - category rename + admin fields
+    'categories.kunst.label': 'Gemälde/Grafik',
+    'categories.keramik.label': 'Keramik',
+    'categories.fundstuecke.label': 'Fundstücke',
+    'categories.sonstiges.label': 'Keramik',
+    'admin.era': 'Epoche / Jahr',
+    'admin.artist': 'Künstler / Hersteller',
 
   },
   fr: {
@@ -287,7 +293,6 @@ const translations = {
     // v4 keys - Archive, Draft, New categories
     'categories.accessoires.label': 'Accessoires',
     'categories.accessoires.desc': 'Bijoux et accessoires',
-    'categories.sonstiges.label': 'Divers',
     'categories.sonstiges.desc': 'Pièces variées',
     'categories.archive.label': 'Archive',
     'categories.archive.desc': 'Pièces vendues',
@@ -324,7 +329,6 @@ const translations = {
     'about.pullquote': '« Chaque pièce est personnellement évaluée pour son authenticité, son état et sa provenance. »',
 
     // v9 keys - Kunst (Fine Art) category
-    'categories.kunst.label': 'Beaux-Arts',
     'categories.kunst.desc': 'Peintures, Sculptures & Estampes',
 
     // v10 keys - Why Matthew refined
@@ -344,6 +348,14 @@ const translations = {
     'why.master': 'Maître Artisan',
     'why.master.desc': 'Formé comme doreur et restaurateur, avec une connaissance approfondie des matériaux et des techniques.',
     'shop.subtitle': 'Pièces sélectionnées et authentifiées',
+
+    // v13 - category rename + admin fields
+    'categories.kunst.label': 'Peintures & Estampes',
+    'categories.keramik.label': 'Céramique',
+    'categories.fundstuecke.label': 'Trouvailles',
+    'categories.sonstiges.label': 'Céramique',
+    'admin.era': 'Époque / Année',
+    'admin.artist': 'Artiste / Fabricant',
 
   },
   it: {
@@ -490,7 +502,6 @@ const translations = {
     'about.pullquote': '«Ogni pezzo è personalmente valutato per autenticità, condizione e provenienza.»',
 
     // v9 keys - Kunst (Fine Art) category
-    'categories.kunst.label': 'Belle Arti',
     'categories.kunst.desc': 'Dipinti, Sculture & Grafica',
 
     // v10 keys - Why Matthew refined
@@ -510,6 +521,14 @@ const translations = {
     'why.master': 'Maestro Artigiano',
     'why.master.desc': 'Formato come doratore e restauratore, con profonda conoscenza di materiali e tecniche.',
     'shop.subtitle': 'Pezzi selezionati e autenticati',
+
+    // v13 - category rename + admin fields
+    'categories.kunst.label': 'Dipinti e Grafica',
+    'categories.keramik.label': 'Ceramica',
+    'categories.fundstuecke.label': 'Ritrovamenti',
+    'categories.sonstiges.label': 'Ceramica',
+    'admin.era': 'Epoca / Anno',
+    'admin.artist': 'Artista / Produttore',
 
   },
   en: {
@@ -661,7 +680,6 @@ const translations = {
     // v4 keys - Archive, Draft, New categories
     'categories.accessoires.label': 'Accessories',
     'categories.accessoires.desc': 'Jewelry & Accessories',
-    'categories.sonstiges.label': 'Miscellaneous',
     'categories.sonstiges.desc': 'Various Pieces',
     'categories.archive.label': 'Archive',
     'categories.archive.desc': 'Sold Pieces',
@@ -679,7 +697,6 @@ const translations = {
     // v4 keys - Archive, Draft, New categories
     'categories.accessoires.label': 'Accessori',
     'categories.accessoires.desc': 'Gioielli e accessori',
-    'categories.sonstiges.label': 'Varie',
     'categories.sonstiges.desc': 'Pezzi vari',
     'categories.archive.label': 'Archivio',
     'categories.archive.desc': 'Pezzi venduti',
@@ -716,7 +733,6 @@ const translations = {
     'about.pullquote': '"Every piece is personally evaluated for authenticity, condition, and provenance."',
 
     // v9 keys - Kunst (Fine Art) category
-    'categories.kunst.label': 'Fine Art',
     'categories.kunst.desc': 'Paintings, Sculpture & Prints',
 
     // v10 keys - Why Matthew refined
@@ -736,6 +752,14 @@ const translations = {
     'why.master': 'Master Craftsman',
     'why.master.desc': 'Trained as a gilder and restorer, with deep understanding of materials and techniques.',
     'shop.subtitle': 'Curated and authenticated pieces',
+
+    // v13 - category rename + admin fields
+    'categories.kunst.label': 'Paintings & Prints',
+    'categories.keramik.label': 'Ceramics',
+    'categories.fundstuecke.label': 'Finds',
+    'categories.sonstiges.label': 'Ceramics',
+    'admin.era': 'Era / Year',
+    'admin.artist': 'Artist / Maker',
 
   }
 };
