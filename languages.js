@@ -58,7 +58,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Kollektion',
-    'shop.subtitle': 'Kuratierte Stücke authentifiziert und gesourt von Matthew Simon',
     'shop.filter.category': 'Kategorie:',
     'shop.filter.sort': 'Sortieren:',
     'shop.sort.featured': 'Vorgestellt',
@@ -72,11 +71,6 @@ const translations = {
     // About Page
     'about.title': 'Über Matthew',
     'about.subtitle': '40 Jahre authentifizierte Design-Expertise',
-    'about.story.heading': '40 Jahre kuratiertes authentifiziertes Design',
-    'about.story.p1': 'Nach dem Austausch seines Handwerks als Vergolder und Restaurator mit Kunstvermittlung im Alter von 30 Jahren verbrachte Matthew 10 Jahre als Leitexperte für angewandte Kunst bei Berns renommiertem Stuker Auktionshaus und vertiefte sein Wissen über mehrere Designbewegungen und Ären.',
-    'about.story.p2': 'Heute, vier Jahrzehnte in seiner Karriere, konzentriert sich Matthew auf das, was er liebt: authentifizierte, seltene Stücke finden und mit Sammlern verbinden, die ihren Wert verstehen. Jedes Objekt in seiner Sammlung wird persönlich auf Authentizität, Zustand und Provenienz bewertet.',
-    'about.story.p3': 'Ob Sie ein sorgfältig kuratiertes Zuhause ausstatten, eine Anlagesammlung aufbauen oder Sachverständigengutachten für einen Nachlass suchen – Matthew sourced, authentifiziert und erzählt die Geschichte hinter jedem Stück.',
-    'about.based': 'Basierend in Bern, Schweiz',
     
     'about.experience': 'Erfahrung',
     'about.cred.40years': '40 Jahre',
@@ -155,6 +149,18 @@ const translations = {
     // v11 keys - Archive category tile
     'categories.archive.name': 'Archiv',
 
+    // v12 - About rewrite, Why Matthew, shop subtitle
+    'about.story.heading': '40 Jahre kuratiertes, authentifiziertes Design & Antiquitäten',
+    'about.story.p1': 'Im Alter von 30 Jahren wechselte ich vom Beruf des Vergolders und Restaurators zum Galeristen und eröffnete 1986 meine Galerie „die Zeit" in Bern.',
+    'about.story.p2': 'Ab den 2000er-Jahren arbeitete ich zusätzlich als Experte und Berater für verschiedene Auktionshäuser, unter anderem für das renommierte Auktionshaus Stuker.',
+    'about.story.p3': 'Heute konzentriere ich mich hauptsächlich auf seltene Objekte der angewandten Kunst des 20. Jahrhunderts, mit einem besonderen Schwerpunkt auf Murano-Glas.',
+    'about.story.p4': 'Anhand der von mir angebotenen Objekte können Sie sehen, welche Themen und Stilrichtungen zu meinen besonderen Steckenpferden gehören.',
+    'about.story.p5': 'Ob Sie ein sorgfältig kuratiertes Zuhause gestalten, eine Sammlung aufbauen oder ein Sachverständigengutachten für einen Nachlass benötigen – ich setze meine Erfahrung und mein Wissen gerne ein, um Sie bestmöglich zu unterstützen.',
+    'about.based': 'Basierend in Bern',
+    'why.master': 'Meister Handwerker',
+    'why.master.desc': 'Ausgebildet als Vergolder und Restaurator mit tiefem Verständnis von Materialien und Techniken.',
+    'shop.subtitle': 'Kuratierte und authentifizierte Stücke',
+
   },
   fr: {
     // Navigation
@@ -214,7 +220,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collection',
-    'shop.subtitle': 'Pièces curées authentifiées et sourcées par Matthew Simon',
     'shop.filter.category': 'Catégorie:',
     'shop.filter.sort': 'Trier:',
     'shop.sort.featured': 'En vedette',
@@ -228,11 +233,6 @@ const translations = {
     // About Page
     'about.title': 'À propos de Matthew',
     'about.subtitle': '40 ans d\'expertise en design authentifié',
-    'about.story.heading': '40 ans de design authentifié curé',
-    'about.story.p1': 'Après avoir échangé son métier de doreur et restaurateur pour la médiation artistique à l\'âge de 30 ans, Matthew a passé 10 ans comme expert principal en art appliqué à la prestigieuse maison de ventes aux enchères Stuker de Berne, approfondissant ses connaissances dans plusieurs mouvements et ères de design.',
-    'about.story.p2': 'Aujourd\'hui, quatre décennies dans sa carrière, Matthew se concentre sur ce qu\'il aime: trouver des pièces authentifiées et rares et les connecter avec des collectionneurs qui comprennent leur valeur. Chaque objet de sa collection est évalué personnellement pour l\'authenticité, la condition et la provenance.',
-    'about.story.p3': 'Que vous meubliez une maison soigneusement curée, construisiez une collection d\'investissement ou cherchiez des évaluations d\'experts pour une succession, Matthew source, authentifie et raconte l\'histoire derrière chaque pièce.',
-    'about.based': 'Basé à Berne, Suisse',
     
     'about.experience': 'Expérience',
     'about.cred.40years': '40 ans',
@@ -333,6 +333,18 @@ const translations = {
     // v11 keys - Archive category tile
     'categories.archive.name': 'Archive',
 
+    // v12 - About rewrite, Why Matthew, shop subtitle
+    'about.story.heading': '40 ans de design et d\'antiquités sélectionnés et authentifiés',
+    'about.story.p1': 'À l\'âge de 30 ans, j\'ai quitté mon métier de doreur et restaurateur pour devenir galeriste et j\'ai ouvert ma galerie « die Zeit » à Berne en 1986.',
+    'about.story.p2': 'À partir des années 2000, j\'ai également travaillé comme expert et conseiller pour différentes maisons de vente aux enchères, notamment pour la renommée maison Stuker.',
+    'about.story.p3': 'Aujourd\'hui, je me concentre principalement sur des objets rares des arts appliqués du XXe siècle, avec un intérêt particulier pour le verre de Murano.',
+    'about.story.p4': 'Les objets que je propose vous montreront quels thèmes et quels styles comptent parmi mes passions.',
+    'about.story.p5': 'Que vous aménagiez un intérieur soigneusement composé, que vous constituiez une collection ou que vous ayez besoin d\'une expertise pour une succession — je mets volontiers mon expérience et mes connaissances à votre service.',
+    'about.based': 'Basé à Berne',
+    'why.master': 'Maître Artisan',
+    'why.master.desc': 'Formé comme doreur et restaurateur, avec une connaissance approfondie des matériaux et des techniques.',
+    'shop.subtitle': 'Pièces sélectionnées et authentifiées',
+
   },
   it: {
     // Navigation
@@ -392,7 +404,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collezione',
-    'shop.subtitle': 'Pezzi curati autenticati e reperiti da Matthew Simon',
     'shop.filter.category': 'Categoria:',
     'shop.filter.sort': 'Ordina:',
     'shop.sort.featured': 'In Evidenza',
@@ -406,11 +417,6 @@ const translations = {
     // About Page
     'about.title': 'Su Matthew',
     'about.subtitle': '40 Anni di Expertise in Design Autenticato',
-    'about.story.heading': '40 Anni di Design Autenticato Curato',
-    'about.story.p1': 'Dopo aver scambiato il suo mestiere come doratore e restauratore con la consulenza artistica all\'età di 30 anni, Matthew ha trascorso 10 anni come esperto principale in arti applicate presso la rinomata casa d\'aste Stuker di Berna, approfondendo la sua conoscenza di molteplici movimenti di design e periodi.',
-    'about.story.p2': 'Oggi, quattro decenni nella sua carriera, Matthew si concentra su quello che ama: trovare pezzi autenticati e rari e connetterli con collezionisti che comprendono il loro valore. Ogni oggetto nella sua collezione viene valutato personalmente per autenticità, condizione e provenienza.',
-    'about.story.p3': 'Che tu stia arredando una casa accuratamente curata, costruendo una collezione di investimento o cercando perizie per una proprietà - Matthew ricerca, autentica e racconta la storia dietro ogni pezzo.',
-    'about.based': 'Con sede a Berna, Svizzera',
     
     'about.experience': 'Esperienza',
     'about.cred.40years': '40 Anni',
@@ -493,6 +499,18 @@ const translations = {
     // v11 keys - Archive category tile
     'categories.archive.name': 'Archivio',
 
+    // v12 - About rewrite, Why Matthew, shop subtitle
+    'about.story.heading': '40 anni di design e antiquariato selezionati e autenticati',
+    'about.story.p1': 'All\'età di 30 anni ho lasciato la professione di doratore e restauratore per diventare gallerista, aprendo nel 1986 la mia galleria «die Zeit» a Berna.',
+    'about.story.p2': 'Dagli anni 2000 ho lavorato anche come esperto e consulente per diverse case d\'asta, tra cui la rinomata casa d\'aste Stuker.',
+    'about.story.p3': 'Oggi mi concentro principalmente su oggetti rari delle arti applicate del XX secolo, con particolare attenzione al vetro di Murano.',
+    'about.story.p4': 'Dagli oggetti che propongo potrà capire quali temi e quali stili rientrano tra le mie passioni.',
+    'about.story.p5': 'Che stiate arredando una casa curata nei dettagli, costruendo una collezione o necessitando di una perizia per un\'eredità — metto volentieri a disposizione la mia esperienza e le mie conoscenze per assistervi al meglio.',
+    'about.based': 'Con sede a Berna',
+    'why.master': 'Maestro Artigiano',
+    'why.master.desc': 'Formato come doratore e restauratore, con profonda conoscenza di materiali e tecniche.',
+    'shop.subtitle': 'Pezzi selezionati e autenticati',
+
   },
   en: {
     // Navigation
@@ -552,7 +570,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collection',
-    'shop.subtitle': 'Curated pieces authenticated and sourced by Matthew Simon',
     'shop.filter.category': 'Category:',
     'shop.filter.sort': 'Sort:',
     'shop.sort.featured': 'Featured',
@@ -566,11 +583,6 @@ const translations = {
     // About Page
     'about.title': 'About Matthew',
     'about.subtitle': '40 years of authenticated design expertise',
-    'about.story.heading': '40 Years Curating Authenticated Design',
-    'about.story.p1': 'After trading his profession as a gilder and restorer for art mediation at 30, Matthew spent 10 years as Lead Expert in Applied Art at Bern\'s prestigious Stuker Auction House, deepening his knowledge across multiple design movements and eras.',
-    'about.story.p2': 'Today, four decades into his career, Matthew focuses on what he loves: finding authenticated, rare pieces and connecting them with collectors who understand their value. Every item in his collection is personally evaluated for authenticity, condition, and provenance.',
-    'about.story.p3': 'Whether you\'re furnishing a carefully curated home, building an investment collection, or seeking expert valuations for an estate—Matthew sources, authenticates, and tells the story behind each piece.',
-    'about.based': 'Based in Bern, Switzerland',
     
     'about.experience': 'Experience',
     'about.cred.40years': '40 Years',
@@ -712,6 +724,18 @@ const translations = {
 
     // v11 keys - Archive category tile
     'categories.archive.name': 'Archive',
+
+    // v12 - About rewrite, Why Matthew, shop subtitle
+    'about.story.heading': '40 Years of Curated, Authenticated Design & Antiques',
+    'about.story.p1': 'At the age of 30, I moved from my profession as a gilder and restorer to become a gallerist, opening my gallery "die Zeit" in Bern in 1986.',
+    'about.story.p2': 'From the 2000s onwards, I also worked as an expert and consultant for various auction houses, including the renowned Stuker auction house.',
+    'about.story.p3': 'Today I focus mainly on rare objects of 20th-century applied art, with a particular emphasis on Murano glass.',
+    'about.story.p4': 'The pieces I offer will show you which themes and styles are among my particular passions.',
+    'about.story.p5': 'Whether you are creating a carefully curated home, building a collection, or need an expert appraisal for an estate — I am glad to put my experience and knowledge to work to support you as best I can.',
+    'about.based': 'Based in Bern',
+    'why.master': 'Master Craftsman',
+    'why.master.desc': 'Trained as a gilder and restorer, with deep understanding of materials and techniques.',
+    'shop.subtitle': 'Curated and authenticated pieces',
 
   }
 };
