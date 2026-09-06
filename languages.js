@@ -98,8 +98,6 @@ const translations = {
     'contact.info.social': 'Sozial',
     'contact.info.follow': 'Folgen Sie für Updates',
     // v4 keys - Archive, Draft, New categories
-    'categories.accessoires.label': 'Accessoires',
-    'categories.accessoires.desc': 'Schmuck & Accessoires',
     'categories.sonstiges.desc': 'Verschiedene Stücke',
     'categories.archive.label': 'Archiv',
     'categories.archive.desc': 'Verkaufte Stücke',
@@ -181,6 +179,30 @@ const translations = {
     'shop.filter.sort': 'Sortieren',
     'hero.subtitle': '40 Jahre | Authentifiziertes europäisches Design & Antiquitäten',
 
+    // v16 - language gap fill + Accessoires/Jewellery
+    'categories.furniture.label': 'Möbel',
+    'categories.furniture.desc': 'Antike & Design-Möbel',
+    'categories.glass.label': 'Glas',
+    'categories.glass.desc': 'Murano & europäische Glaskunst',
+    'categories.lighting.label': 'Leuchten',
+    'categories.lighting.desc': 'Historische Beleuchtung',
+    'categories.objects.label': 'Objekte',
+    'categories.objects.desc': 'Skulpturen & Kunstobjekte',
+    'categories.count': 'Stücke',
+    'detail.back': '← Zurück zum Shop',
+    'detail.inquire': '✉ Anfrage senden',
+    'detail.whatsapp': '💬 WhatsApp',
+    'detail.contact': 'Kontakt',
+    'detail.not_found': 'Produkt nicht gefunden',
+    'detail.description_note': 'Die ausführliche Produktbeschreibung liegt im deutschen Original vor.',
+    'detail.loading': 'Produkt wird geladen …',
+    'featured.subtitle': 'Ausgewählte Höhepunkte der Sammlung',
+    'featured.empty': 'Noch keine ausgewählten Stücke. Über die Admin-Seite können Sie Stücke hervorheben.',
+    'featured.view_details': 'Details ansehen',
+    'featured.view_all': 'Alle ansehen →',
+    'categories.accessoires.label': 'Accessoires/Schmuck',
+    'categories.accessoires.desc': 'Schmuck & Accessoires',
+
   },
   fr: {
     // Navigation
@@ -233,7 +255,6 @@ const translations = {
     
     // Footer
     'footer.contact': 'Contact',
-    'footer.instagram': 'Instagram',
     'footer.admin': 'Admin',
     'footer.copyright': '© 2026 Matthew Simon. Tous droits réservés.',
     
@@ -302,8 +323,6 @@ const translations = {
     'featured.view_all': 'Voir tout →',
 
     // v4 keys - Archive, Draft, New categories
-    'categories.accessoires.label': 'Accessoires',
-    'categories.accessoires.desc': 'Bijoux et accessoires',
     'categories.sonstiges.desc': 'Pièces variées',
     'categories.archive.label': 'Archive',
     'categories.archive.desc': 'Pièces vendues',
@@ -384,6 +403,13 @@ const translations = {
     'shop.filter.category': 'Catégorie',
     'shop.filter.sort': 'Trier',
     'hero.subtitle': '40 ans | Design et antiquités européens authentifiés',
+
+    // v16 - language gap fill + Accessoires/Jewellery
+    'categories.accessoires.label': 'Accessoires/Bijoux',
+    'categories.accessoires.desc': 'Bijoux & accessoires',
+
+    // v17 - cross-language contamination fix
+    'footer.instagram': 'Instagram',
 
   },
   it: {
@@ -484,26 +510,7 @@ const translations = {
     'contact.info.social': 'Social',
     'contact.info.follow': 'Segui per gli aggiornamenti',
     // Added v3 keys
-    'categories.furniture.label': 'Möbel',
-    'categories.furniture.desc': 'Antike & Design-Möbel',
-    'categories.glass.label': 'Glas',
-    'categories.glass.desc': 'Murano & europäische Glaskunst',
-    'categories.lighting.label': 'Leuchten',
-    'categories.lighting.desc': 'Historische Beleuchtung',
-    'categories.objects.label': 'Objekte',
-    'categories.objects.desc': 'Skulpturen & Kunstobjekte',
-    'categories.count': 'Stücke',
-    'detail.back': '← Zurück zum Shop',
-    'detail.inquire': '✉ Anfrage senden',
     'detail.whatsapp': '💬 WhatsApp',
-    'detail.contact': 'Kontakt',
-    'detail.not_found': 'Produkt nicht gefunden',
-    'detail.description_note': 'Detaillierte Produktbeschreibung ist in deutscher Originalsprache. Für Übersetzungen kontaktieren Sie uns bitte direkt.',
-    'detail.loading': 'Lädt Produkt...',
-    'featured.subtitle': 'Ausgewählte Höhepunkte der Sammlung',
-    'featured.empty': 'Noch keine ausgewählten Stücke. Verwenden Sie die Admin-Seite, um Stücke hervorzuheben.',
-    'featured.view_details': 'Details ansehen',
-    'featured.view_all': 'Alle ansehen →',
 
     // v5 keys - Shop tabs & mobile nav
     'shop.tab.available': 'Disponibili',
@@ -571,6 +578,44 @@ const translations = {
     'shop.filter.category': 'Categoria',
     'shop.filter.sort': 'Ordina',
     'hero.subtitle': '40 Anni | Design e antiquariato europeo autenticato',
+
+    // v16 - language gap fill + Accessoires/Jewellery
+    'categories.accessoires.label': 'Accessori/Gioielli',
+    'categories.accessoires.desc': 'Gioielli e accessori',
+    'categories.sonstiges.desc': 'Ceramica e porcellana',
+    'categories.archive.label': 'Archivio',
+    'categories.archive.desc': 'Pezzi venduti',
+    'archive.subtitle': 'Una selezione di pezzi già venduti',
+    'archive.empty': 'Nessun pezzo in archivio al momento.',
+    'archive.link': 'Archivio (venduti)',
+    'nav.archive': 'Archivio',
+    'status.sold': 'VENDUTO',
+    'status.sold_on': 'Venduto il',
+    'status.draft': 'Bozza',
+    'status.inquire_similar': 'Richiedi un pezzo simile',
+    'shop.no_products': 'Nessun prodotto trovato. Prova a modificare i filtri.',
+
+    // v17 - cross-language contamination fix
+    'categories.furniture.label': 'Mobili',
+    'categories.furniture.desc': 'Mobili antichi e di design',
+    'categories.glass.label': 'Vetro',
+    'categories.glass.desc': 'Vetro di Murano e arte vetraria europea',
+    'categories.lighting.label': 'Illuminazione',
+    'categories.lighting.desc': 'Illuminazione storica',
+    'categories.objects.label': 'Oggetti',
+    'categories.objects.desc': 'Sculture e oggetti d\'arte',
+    'categories.count': 'pezzi',
+    'detail.back': '← Torna al negozio',
+    'detail.inquire': '✉ Invia richiesta',
+    'detail.contact': 'Contatto',
+    'detail.not_found': 'Prodotto non trovato',
+    'detail.description_note': 'La descrizione dettagliata del prodotto è nell\'originale tedesco. Contattateci direttamente per le traduzioni.',
+    'detail.loading': 'Caricamento del prodotto …',
+    'featured.subtitle': 'Momenti salienti selezionati della collezione',
+    'featured.empty': 'Nessun pezzo in evidenza al momento. Usa la pagina Admin per evidenziare i pezzi.',
+    'featured.view_details': 'Vedi dettagli',
+    'featured.view_all': 'Vedi tutto →',
+    'archive.title': 'Pezzi venduti',
 
   },
   en: {
@@ -717,38 +762,10 @@ const translations = {
     'featured.view_all': 'View All →',
 
     // v4 keys - Archive, Draft, New categories
-    'categories.accessoires.label': 'Accessories',
-    'categories.accessoires.desc': 'Jewelry & Accessories',
     'categories.sonstiges.desc': 'Various Pieces',
-    'categories.archive.label': 'Archive',
-    'categories.archive.desc': 'Sold Pieces',
-    'archive.title': 'Sold Pieces',
-    'archive.subtitle': 'A selection of previously sold objects from our collection',
-    'archive.empty': 'No sold pieces yet',
-    'archive.link': 'Archive (Sold)',
-    'nav.archive': 'Archive',
-    'status.sold': 'SOLD',
-    'status.sold_on': 'Sold on',
-    'status.draft': 'DRAFT',
-    'status.inquire_similar': 'Inquire about similar',
-    'shop.no_products': 'No products in this category',
 
     // v4 keys - Archive, Draft, New categories
-    'categories.accessoires.label': 'Accessori',
-    'categories.accessoires.desc': 'Gioielli e accessori',
     'categories.sonstiges.desc': 'Pezzi vari',
-    'categories.archive.label': 'Archivio',
-    'categories.archive.desc': 'Pezzi venduti',
-    'archive.title': 'Pezzi venduti',
-    'archive.subtitle': 'Una selezione di oggetti già venduti dalla nostra collezione',
-    'archive.empty': 'Nessun pezzo venduto per ora',
-    'archive.link': 'Archivio (Venduti)',
-    'nav.archive': 'Archivio',
-    'status.sold': 'VENDUTO',
-    'status.sold_on': 'Venduto il',
-    'status.draft': 'BOZZA',
-    'status.inquire_similar': 'Richiedi simile',
-    'shop.no_products': 'Nessun prodotto in questa categoria',
 
     // v5 keys - Shop tabs & mobile nav
     'shop.tab.available': 'Available',
@@ -778,7 +795,6 @@ const translations = {
     'why.eyebrow': 'Expertise',
 
     // v11 keys - Archive category tile
-    'categories.archive.name': 'Archive',
 
     // v12 - About rewrite, Why Matthew, shop subtitle
     'about.story.heading': '40 Years of Curated, Authenticated Design & Antiques',
@@ -816,6 +832,25 @@ const translations = {
     'shop.filter.category': 'Category',
     'shop.filter.sort': 'Sort',
     'hero.subtitle': '40 Years | Authenticated European Design & Antiques',
+
+    // v16 - language gap fill + Accessoires/Jewellery
+    'categories.accessoires.label': 'Accessories/Jewellery',
+    'categories.accessoires.desc': 'Jewellery & Accessories',
+
+    // v17 - cross-language contamination fix
+    'archive.title': 'Sold Pieces',
+    'archive.subtitle': 'A selection of pieces already sold from our collection',
+    'archive.empty': 'No sold pieces yet',
+    'archive.link': 'Archive (Sold)',
+    'categories.archive.label': 'Archive',
+    'categories.archive.desc': 'Sold Pieces',
+    'categories.archive.name': 'Archive',
+    'nav.archive': 'Archive',
+    'status.sold': 'SOLD',
+    'status.sold_on': 'Sold on',
+    'status.draft': 'Draft',
+    'status.inquire_similar': 'Inquire about a similar piece',
+    'shop.no_products': 'No products in this category',
 
   }
 };
