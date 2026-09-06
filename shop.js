@@ -41,6 +41,7 @@ async function initializeShop() {
         if (catFilter) catFilter.value = categoryParam;
     }
     
+    buildCategorySelect();
     buildCategoryPills();
     buildArtistChips();
 
@@ -290,14 +291,33 @@ function buildCategoryPills() {
     const cats = ['Möbel','Glas','Leuchten','Objekte','Gemälde/Grafik','Accessoires','Keramik','Fundstücke'];
     const counts = {};
     source.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
-    let html = `<button type="button" class="cat-pill" data-cat="" onclick="selectCategory('')">Alle <span>${source.length}</span></button>`;
+    const allLabel = (window.t ? window.t('shop.filter.all') : 'Alle');
+    let html = `<button type="button" class="cat-pill" data-cat="" onclick="selectCategory('')">${allLabel} <span>${source.length}</span></button>`;
     cats.forEach(cat => {
         const n = counts[cat] || 0;
         if (n === 0) return;   // hide empty categories rather than showing dead ends
-        html += `<button type="button" class="cat-pill" data-cat="${cat}" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')">${cat} <span>${n}</span></button>`;
+        const label = window.translateCategory ? window.translateCategory(cat) : cat;
+        html += `<button type="button" class="cat-pill" data-cat="${cat}" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')">${label} <span>${n}</span></button>`;
     });
     wrap.innerHTML = html;
     syncCategoryPills();
+}
+
+
+// Rebuild the mobile category <select> so its options follow the active language
+function buildCategorySelect() {
+    const sel = document.getElementById('categoryFilter');
+    if (!sel) return;
+    const current = sel.value;
+    const cats = ['Möbel','Glas','Leuchten','Objekte','Gemälde/Grafik','Accessoires','Keramik','Fundstücke'];
+    const allLabel = window.t ? window.t('shop.filter.all') : 'Alle Kategorien';
+    let html = `<option value="">${allLabel}</option>`;
+    cats.forEach(cat => {
+        const label = window.translateCategory ? window.translateCategory(cat) : cat;
+        html += `<option value="${cat}">${label}</option>`;
+    });
+    sel.innerHTML = html;
+    sel.value = current;
 }
 
 // ---- Back to top ----
@@ -312,6 +332,8 @@ window.addEventListener('scroll', function () {
 
 // Re-render when language changes (via custom event)
 window.addEventListener('languageChanged', function() {
+    buildCategorySelect();
+    buildCategoryPills();
     applyFilters();
 });
 
@@ -366,7 +388,7 @@ function renderProductCard(product) {
             </div>
             
             <div class="product-info">
-                <div class="product-category-label">${product.category}${product.era ? ' · ' + product.era : ''}</div>
+                <div class="product-category-label">${window.translateCategory ? window.translateCategory(product.category) : product.category}${product.era ? ' · ' + (window.translateEra ? window.translateEra(product.era) : product.era) : ''}</div>
                 <h3 class="product-name">${product.name}</h3>
                 <p class="product-hook">${product.shortHook}</p>
                 <div class="product-price">${product.price}</div>

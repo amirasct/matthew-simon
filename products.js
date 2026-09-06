@@ -1523,6 +1523,85 @@ function buildPhotoSlug(product) {
     return slug || 'ms-produkt';
 }
 
+
+// ============================
+// LOCALISED CATEGORY + ERA LABELS
+// ============================
+// Categories and eras are STORED in German (they are the canonical keys used
+// by filters and the admin). These helpers render them in the active language
+// at display time, so switching language updates them everywhere.
+
+const CATEGORY_I18N_KEY = {
+    'Möbel': 'categories.furniture.label',
+    'Glas': 'categories.glass.label',
+    'Leuchten': 'categories.lighting.label',
+    'Objekte': 'categories.objects.label',
+    'Gemälde/Grafik': 'categories.kunst.label',
+    'Accessoires': 'categories.accessoires.label',
+    'Keramik': 'categories.keramik.label',
+    'Fundstücke': 'categories.fundstuecke.label',
+    'Archiv': 'categories.archive.label'
+};
+
+function translateCategory(cat) {
+    if (!cat) return '';
+    const key = CATEGORY_I18N_KEY[cat];
+    if (key && typeof window.t === 'function') {
+        const out = window.t(key);
+        if (out && out !== key) return out;
+    }
+    return cat;
+}
+
+const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII',
+               'XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI'];
+
+function ordinalEn(n) {
+    const s = ['th','st','nd','rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+// Turn a stored German era label into the active language.
+function translateEra(era) {
+    if (!era) return '';
+    const lang = (typeof window.getCurrentLanguage === 'function'
+        ? window.getCurrentLanguage()
+        : (localStorage.getItem('matthew_language') || 'de'));
+    if (lang === 'de') return era;
+
+    let m;
+    // "1950er" -> decade
+    if ((m = era.match(/^(\d{4})er$/))) {
+        const y = m[1];
+        if (lang === 'en') return y.slice(0, 3) + '0s';
+        if (lang === 'fr') return 'années ' + y;
+        if (lang === 'it') return "anni '" + y.slice(2);
+    }
+    // "um 1950" -> circa
+    if ((m = era.match(/^um\s+(\d{4})$/))) {
+        const y = m[1];
+        if (lang === 'en') return 'c. ' + y;
+        if (lang === 'fr') return 'vers ' + y;
+        if (lang === 'it') return y + ' ca.';
+    }
+    // "17./18. Jh." -> century range
+    if ((m = era.match(/^(\d{1,2})\.\s*\/\s*(\d{1,2})\.\s*Jh\.?$/))) {
+        const a = parseInt(m[1], 10), b = parseInt(m[2], 10);
+        if (lang === 'en') return ordinalEn(a) + '/' + ordinalEn(b) + ' c.';
+        if (lang === 'fr') return ROMAN[a] + 'e/' + ROMAN[b] + 'e s.';
+        if (lang === 'it') return ROMAN[a] + '/' + ROMAN[b] + ' sec.';
+    }
+    // "15. Jh." -> century
+    if ((m = era.match(/^(\d{1,2})\.\s*Jh\.?$/))) {
+        const a = parseInt(m[1], 10);
+        if (lang === 'en') return ordinalEn(a) + ' c.';
+        if (lang === 'fr') return ROMAN[a] + 'e s.';
+        if (lang === 'it') return ROMAN[a] + ' sec.';
+    }
+    // Year ranges and bare years read the same in every language
+    return era;
+}
+
 // ============================
 // EXPOSE GLOBALLY
 // ============================
@@ -1538,6 +1617,8 @@ window.getTranslatedProduct = getTranslatedProduct;
 window.getAllTranslatedProducts = getAllTranslatedProducts;
 window.getImageUrl = getImageUrl;
 window.buildAltText = buildAltText;
+window.translateCategory = translateCategory;
+window.translateEra = translateEra;
 window.buildPhotoSlug = buildPhotoSlug;
 window.loadCloudData = loadCloudData;
 window.saveCloudData = saveCloudData;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=37">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -157,10 +157,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=36"></script>
-<script src="products.js?v=36"></script>
-<script src="translations_part1.js?v=36"></script>
-<script src="translations_part2.js?v=36"></script>
+<script src="languages.js?v=37"></script>
+<script src="products.js?v=37"></script>
+<script src="translations_part1.js?v=37"></script>
+<script src="translations_part2.js?v=37"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -323,7 +323,7 @@ function renderProductDetail(product) {
             </div>
             
             <div class="detail-info">
-                <div class="detail-category">${product.category}${product.era ? ' · ' + product.era : ''}</div>
+                <div class="detail-category">${window.translateCategory ? window.translateCategory(product.category) : product.category}${product.era ? ' · ' + (window.translateEra ? window.translateEra(product.era) : product.era) : ''}</div>
                 ${product.artist ? `<div class="detail-artist">${product.artist}</div>` : ''}
                 <h1>${product.name}</h1>
                 ${badges}

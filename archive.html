@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=37">
     <style>
         .archive-container {
             max-width: 1200px;
@@ -230,10 +230,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=36"></script>
-<script src="products.js?v=36"></script>
-<script src="translations_part1.js?v=36"></script>
-<script src="translations_part2.js?v=36"></script>
+<script src="languages.js?v=37"></script>
+<script src="products.js?v=37"></script>
+<script src="translations_part1.js?v=37"></script>
+<script src="translations_part2.js?v=37"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -311,7 +311,7 @@ function renderArchive() {
                     ${img}
                 </div>
                 <div class="archive-info">
-                    <div class="archive-category">${translated.category}</div>
+                    <div class="archive-category">${window.translateCategory ? window.translateCategory(translated.category) : translated.category}</div>
                     <h3 class="archive-name">${translated.name}</h3>
                     ${translated.shortHook ? `<p class="archive-hook">${translated.shortHook}</p>` : ''}
                 </div>

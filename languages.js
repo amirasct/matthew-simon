@@ -9,7 +9,6 @@ const translations = {
     
     // Homepage
     'hero.title': 'Matthew Simon',
-    'hero.subtitle': '40 Jahre | Authentifizierte europäische Designs',
     'hero.location': 'Bern, Schweiz',
     'hero.explore': 'Kollektion erkunden',
     'hero.learnmore': 'Mehr erfahren',
@@ -58,8 +57,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Kollektion',
-    'shop.filter.category': 'Kategorie:',
-    'shop.filter.sort': 'Sortieren:',
     'shop.sort.featured': 'Vorgestellt',
     'shop.sort.price-high': 'Preis: Hoch bis Niedrig',
     'shop.sort.price-low': 'Preis: Niedrig bis Hoch',
@@ -157,7 +154,6 @@ const translations = {
     'about.based': 'Basierend in Bern',
     'why.master': 'Meister Handwerker',
     'why.master.desc': 'Ausgebildet als Vergolder und Restaurator mit tiefem Verständnis von Materialien und Techniken.',
-    'shop.subtitle': 'Kuratierte und authentifizierte Stücke',
 
     // v13 - category rename + admin fields
     'categories.kunst.label': 'Gemälde/Grafik',
@@ -178,6 +174,13 @@ const translations = {
     'shipping.intl': 'Internationaler Versand ist auf Anfrage möglich – wir finden für jedes Stück eine passende Lösung.',
     'shipping.tax': 'Bei internationalem Versand können Zoll- und Einfuhrgebühren des Ziellandes anfallen.',
 
+    // v15 - filter labels + wording fixes
+    'shop.subtitle': 'Kuratierte und authentifizierte Stücke',
+    'shop.filter.all': 'Alle Kategorien',
+    'shop.filter.category': 'Kategorie',
+    'shop.filter.sort': 'Sortieren',
+    'hero.subtitle': '40 Jahre | Authentifiziertes europäisches Design & Antiquitäten',
+
   },
   fr: {
     // Navigation
@@ -188,7 +191,6 @@ const translations = {
     
     // Homepage
     'hero.title': 'Matthew Simon',
-    'hero.subtitle': '40 ans | Design Authentifiés Européens',
     'hero.location': 'Berne, Suisse',
     'hero.explore': 'Explorer la collection',
     'hero.learnmore': 'En savoir plus',
@@ -237,8 +239,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collection',
-    'shop.filter.category': 'Catégorie:',
-    'shop.filter.sort': 'Trier:',
     'shop.sort.featured': 'En vedette',
     'shop.sort.price-high': 'Prix: Élevé à Bas',
     'shop.sort.price-low': 'Prix: Bas à Élevé',
@@ -358,7 +358,6 @@ const translations = {
     'about.based': 'Basé à Berne',
     'why.master': 'Maître Artisan',
     'why.master.desc': 'Formé comme doreur et restaurateur, avec une connaissance approfondie des matériaux et des techniques.',
-    'shop.subtitle': 'Pièces sélectionnées et authentifiées',
 
     // v13 - category rename + admin fields
     'categories.kunst.label': 'Peintures & Estampes',
@@ -379,6 +378,13 @@ const translations = {
     'shipping.intl': 'L\'expédition internationale est possible sur demande – nous trouverons une solution adaptée à chaque pièce.',
     'shipping.tax': 'Pour les envois internationaux, des droits de douane et taxes d\'importation du pays de destination peuvent s\'appliquer.',
 
+    // v15 - filter labels + wording fixes
+    'shop.subtitle': 'Pièces Sélectionnées et Authentifiées',
+    'shop.filter.all': 'Toutes les catégories',
+    'shop.filter.category': 'Catégorie',
+    'shop.filter.sort': 'Trier',
+    'hero.subtitle': '40 ans | Design et antiquités européens authentifiés',
+
   },
   it: {
     // Navigation
@@ -389,7 +395,6 @@ const translations = {
     
     // Homepage
     'hero.title': 'Matthew Simon',
-    'hero.subtitle': '40 Anni | Design e Antiquariato Europeo Autenticato',
     'hero.location': 'Berna, Svizzera',
     'hero.explore': 'Esplora Collezione',
     'hero.learnmore': 'Scopri di Più',
@@ -438,8 +443,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collezione',
-    'shop.filter.category': 'Categoria:',
-    'shop.filter.sort': 'Ordina:',
     'shop.sort.featured': 'In Evidenza',
     'shop.sort.price-high': 'Prezzo: Alto a Basso',
     'shop.sort.price-low': 'Prezzo: Basso ad Alto',
@@ -542,7 +545,6 @@ const translations = {
     'about.based': 'Con sede a Berna',
     'why.master': 'Maestro Artigiano',
     'why.master.desc': 'Formato come doratore e restauratore, con profonda conoscenza di materiali e tecniche.',
-    'shop.subtitle': 'Pezzi selezionati e autenticati',
 
     // v13 - category rename + admin fields
     'categories.kunst.label': 'Dipinti e Grafica',
@@ -563,6 +565,13 @@ const translations = {
     'shipping.intl': 'La spedizione internazionale è possibile su richiesta – troveremo una soluzione adatta per ogni pezzo.',
     'shipping.tax': 'Per le spedizioni internazionali possono essere applicati dazi doganali e tasse di importazione del paese di destinazione.',
 
+    // v15 - filter labels + wording fixes
+    'shop.subtitle': 'Pezzi Selezionati e Autenticati',
+    'shop.filter.all': 'Tutte le categorie',
+    'shop.filter.category': 'Categoria',
+    'shop.filter.sort': 'Ordina',
+    'hero.subtitle': '40 Anni | Design e antiquariato europeo autenticato',
+
   },
   en: {
     // Navigation
@@ -573,7 +582,6 @@ const translations = {
     
     // Homepage
     'hero.title': 'Matthew Simon',
-    'hero.subtitle': '40 Years | Authenticated European Design & Antiques',
     'hero.location': 'Bern, Switzerland',
     'hero.explore': 'Explore Collection',
     'hero.learnmore': 'Learn More',
@@ -622,8 +630,6 @@ const translations = {
     
     // Shop Page
     'shop.title': 'Collection',
-    'shop.filter.category': 'Category:',
-    'shop.filter.sort': 'Sort:',
     'shop.sort.featured': 'Featured',
     'shop.sort.price-high': 'Price: High to Low',
     'shop.sort.price-low': 'Price: Low to High',
@@ -784,7 +790,6 @@ const translations = {
     'about.based': 'Based in Bern',
     'why.master': 'Master Craftsman',
     'why.master.desc': 'Trained as a gilder and restorer, with deep understanding of materials and techniques.',
-    'shop.subtitle': 'Curated and authenticated pieces',
 
     // v13 - category rename + admin fields
     'categories.kunst.label': 'Paintings & Prints',
@@ -804,6 +809,13 @@ const translations = {
     'shipping.domestic': 'We are happy to arrange shipping within Switzerland for you.',
     'shipping.intl': 'International shipping is available on request – we will find a suitable solution for every piece.',
     'shipping.tax': 'For international shipments, customs and import duties of the destination country may apply.',
+
+    // v15 - filter labels + wording fixes
+    'shop.subtitle': 'Curated and Authenticated Pieces',
+    'shop.filter.all': 'All Categories',
+    'shop.filter.category': 'Category',
+    'shop.filter.sort': 'Sort',
+    'hero.subtitle': '40 Years | Authenticated European Design & Antiques',
 
   }
 };
@@ -904,6 +916,7 @@ function updatePageLanguage() {
 window.updatePageLanguage = updatePageLanguage;
 window.setLanguage = setLanguage;
 window.t = t;
+window.getCurrentLanguage = function() { return currentLanguage; };
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
