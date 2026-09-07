@@ -205,6 +205,11 @@ const translations = {
 
     'shop.clear_filters': 'Filter zurücksetzen',
 
+    // v18 - contact form states
+    'contact.form.sending': 'Wird gesendet …',
+    'contact.form.success': 'Vielen Dank! Ihre Anfrage wurde gesendet. Matthew meldet sich in der Regel innerhalb von 24 Stunden.',
+    'contact.form.error': 'Das Senden hat leider nicht funktioniert. Bitte schreiben Sie direkt an:',
+
   },
   fr: {
     // Navigation
@@ -415,6 +420,11 @@ const translations = {
 
     'shop.clear_filters': 'Réinitialiser les filtres',
 
+    // v18 - contact form states
+    'contact.form.sending': 'Envoi en cours …',
+    'contact.form.success': 'Merci ! Votre demande a été envoyée. Matthew répond généralement sous 24 heures.',
+    'contact.form.error': 'L\'envoi a échoué. Merci d\'écrire directement à :',
+
   },
   it: {
     // Navigation
@@ -622,6 +632,11 @@ const translations = {
     'archive.title': 'Pezzi venduti',
 
     'shop.clear_filters': 'Azzera i filtri',
+
+    // v18 - contact form states
+    'contact.form.sending': 'Invio in corso …',
+    'contact.form.success': 'Grazie! La sua richiesta è stata inviata. Matthew risponde di solito entro 24 ore.',
+    'contact.form.error': 'Invio non riuscito. Scriva direttamente a:',
 
   },
   en: {
@@ -859,6 +874,11 @@ const translations = {
     'shop.no_products': 'No products in this category',
 
     'shop.clear_filters': 'Clear filters',
+
+    // v18 - contact form states
+    'contact.form.sending': 'Sending …',
+    'contact.form.success': 'Thank you! Your inquiry has been sent. Matthew usually replies within 24 hours.',
+    'contact.form.error': 'Sorry, sending failed. Please email directly:',
 
   }
 };

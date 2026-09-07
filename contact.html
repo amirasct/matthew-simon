@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=41">
 </head>
 <body>
 
@@ -95,7 +95,18 @@
             <div class="contact-form-container">
                 <h2>Send an Inquiry</h2>
                 
-                <form class="contact-form" id="contactForm">
+                <form class="contact-form" id="contactForm"
+                      name="kontakt"
+                      method="POST"
+                      data-netlify="true"
+                      data-netlify-honeypot="bot-field"
+                      netlify>
+                    <!-- Netlify needs this hidden field to match the submission to the form -->
+                    <input type="hidden" name="form-name" value="kontakt">
+                    <!-- Spam trap: real people never fill this in, bots do -->
+                    <p class="hp-field">
+                        <label>Bitte leer lassen: <input name="bot-field"></label>
+                    </p>
                     <div class="form-group">
                         <label for="name" data-i18n="contact.form.name">Your Name</label>
                         <input type="text" id="name" name="name" required>
@@ -122,8 +133,9 @@
                         <textarea id="message" name="message" rows="6" data-i18n-placeholder="contact.form.message" placeholder="Tell Matthew about your inquiry..." required></textarea>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary" data-i18n="contact.form.send">Send Inquiry</button>
+                    <button type="submit" class="btn btn-primary" id="contactSubmit" data-i18n="contact.form.send">Send Inquiry</button>
                     <p class="form-note" data-i18n="contact.form.note">Matthew typically responds within 24 hours.</p>
+                    <div id="formStatus" class="form-status" style="display:none;"></div>
                 </form>
             </div>
             
@@ -195,7 +207,7 @@
     </div>
 </footer>
 
-<script src="languages.js?v=39"></script>
+<script src="languages.js?v=41"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -210,18 +222,53 @@ document.addEventListener('click', function(event) {
     }
 });
 
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+// Submit straight to Netlify Forms via fetch, so the visitor stays on the page
+// and gets a clear confirmation. Previously this opened a mailto: link, which
+// silently did nothing for anyone without a desktop mail client configured.
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    
-    // Create mailto link with pre-filled content
-    const mailtoLink = `mailto:matthew.simon@gmx.net?subject=Inquiry: ${subject || 'General'}&body=From: ${name} (${email})%0D%0A%0D%0AMessage:%0D%0A${message}`;
-    
-    window.location.href = mailtoLink;
+    const form = e.target;
+    const btn = document.getElementById('contactSubmit');
+    const status = document.getElementById('formStatus');
+    const origLabel = btn.textContent;
+
+    // Remember name/email so a returning visitor doesn't retype them
+    try {
+        localStorage.setItem('contactName', document.getElementById('name').value);
+        localStorage.setItem('contactEmail', document.getElementById('email').value);
+    } catch (err) {}
+
+    btn.disabled = true;
+    btn.textContent = (window.t ? window.t('contact.form.sending') : 'Wird gesendet …');
+    status.style.display = 'none';
+
+    try {
+        const data = new FormData(form);
+        const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString()
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+
+        form.reset();
+        status.className = 'form-status success';
+        status.innerHTML = (window.t ? window.t('contact.form.success')
+            : 'Vielen Dank! Ihre Anfrage wurde gesendet. Matthew meldet sich in der Regel innerhalb von 24 Stunden.');
+        status.style.display = 'block';
+        status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+        console.error('Form submit failed:', err);
+        // Never leave them stuck - show the direct address as a fallback
+        status.className = 'form-status error';
+        status.innerHTML = (window.t ? window.t('contact.form.error')
+            : 'Das Senden hat leider nicht funktioniert.')
+            + ' <a href="mailto:matthew.simon@gmx.net">matthew.simon@gmx.net</a>';
+        status.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = origLabel;
+    }
 });
 
 // Prefill form with product name / subject / message if coming from shop/detail
