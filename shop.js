@@ -43,7 +43,6 @@ async function initializeShop() {
     
     buildCategorySelect();
     buildCategoryPills();
-    buildArtistChips();
 
     const restored = restoreShopState();
 
@@ -67,7 +66,7 @@ async function initializeShop() {
     const categoryFilter = document.getElementById('categoryFilter');
     const sortFilter = document.getElementById('sortFilter');
     
-    if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
+    if (categoryFilter) categoryFilter.addEventListener('change', onCategoryChange);
     if (sortFilter) sortFilter.addEventListener('change', applyFilters);
     
     // Re-render when cloud data updates
@@ -266,31 +265,29 @@ function searchFor(term) {
     document.querySelector('.shop-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Build the artist shortcut chips from whoever actually has the most pieces
-function buildArtistChips() {
-    const wrap = document.getElementById('artistChips');
-    if (!wrap) return;
-    const all = window.getPublicProducts ? window.getPublicProducts() : [];
-    const counts = {};
-    all.forEach(p => {
-        if (p.artist && p.artist.length > 2) {
-            counts[p.artist] = (counts[p.artist] || 0) + 1;
-        }
-    });
-    const top = Object.entries(counts)
-        .filter(([, n]) => n >= 2)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 6);
-    if (top.length === 0) { wrap.innerHTML = ''; return; }
-    wrap.innerHTML = top.map(([name, n]) =>
-        `<button type="button" class="artist-chip" onclick="searchFor('${name.replace(/'/g, "\\'")}')">${name} <span>${n}</span></button>`
-    ).join('');
+// ---- Category pills (desktop) kept in sync with the select (mobile) ----
+// Single entry point for BOTH the desktop pills and the mobile dropdown,
+// so the search-clearing behaviour is identical on either.
+function onCategoryChange() {
+    const sel = document.getElementById('categoryFilter');
+    selectCategory(sel ? sel.value : '');
 }
 
-// ---- Category pills (desktop) kept in sync with the select (mobile) ----
 function selectCategory(cat) {
     const sel = document.getElementById('categoryFilter');
     if (sel) sel.value = cat;
+
+    // Clear any active search when a category is chosen. Otherwise a search
+    // term the visitor has forgotten about keeps narrowing the category and
+    // the grid comes back empty for no visible reason.
+    if (searchQuery) {
+        searchQuery = '';
+        const box = document.getElementById('shopSearch');
+        if (box) box.value = '';
+        const clearBtn = document.getElementById('searchClear');
+        if (clearBtn) clearBtn.style.display = 'none';
+    }
+
     syncCategoryPills();
     applyFilters();
 }

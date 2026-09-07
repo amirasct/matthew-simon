@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=40">
 </head>
 <body>
 
@@ -104,15 +104,19 @@
 <!-- Search -->
 <section class="shop-search-section">
     <div class="shop-search-wrap">
-        <span class="shop-search-icon">⌕</span>
+        <span class="shop-search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+            </svg>
+        </span>
         <input type="search" id="shopSearch" class="shop-search-input"
-               placeholder="Suchen: Murano, Barovier, 1950er …"
-               data-i18n-placeholder="shop.search.placeholder"
-               oninput="onSearchInput(this.value)" autocomplete="off">
+               oninput="onSearchInput(this.value)" autocomplete="off"
+               aria-label="Suche">
         <button type="button" id="searchClear" class="shop-search-clear"
                 onclick="clearSearch()" style="display:none;" aria-label="Suche löschen">×</button>
     </div>
-    <div id="artistChips" class="artist-chips"></div>
 </section>
 
 <!-- Category pills (desktop) -->
@@ -121,7 +125,7 @@
     <div class="filters-container">
         <div class="filter-group filter-group-mobile-cat">
             <label data-i18n="shop.filter.category">Category</label>
-            <select id="categoryFilter" onchange="syncCategoryPills()">
+            <select id="categoryFilter">
                 <option value="">All Categories</option>
                 <option value="Möbel">Möbel (Furniture)</option>
                 <option value="Glas">Glas (Glass)</option>
@@ -191,11 +195,11 @@
     </div>
 </footer>
 
-<script src="languages.js?v=39"></script>
-<script src="products.js?v=39"></script>
-<script src="translations_part1.js?v=39"></script>
-<script src="translations_part2.js?v=39"></script>
-<script src="shop.js?v=39"></script>
+<script src="languages.js?v=40"></script>
+<script src="products.js?v=40"></script>
+<script src="translations_part1.js?v=40"></script>
+<script src="translations_part2.js?v=40"></script>
+<script src="shop.js?v=40"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
