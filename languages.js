@@ -203,6 +203,8 @@ const translations = {
     'categories.accessoires.label': 'Accessoires/Schmuck',
     'categories.accessoires.desc': 'Schmuck & Accessoires',
 
+    'shop.clear_filters': 'Filter zurücksetzen',
+
   },
   fr: {
     // Navigation
@@ -411,6 +413,8 @@ const translations = {
     // v17 - cross-language contamination fix
     'footer.instagram': 'Instagram',
 
+    'shop.clear_filters': 'Réinitialiser les filtres',
+
   },
   it: {
     // Navigation
@@ -616,6 +620,8 @@ const translations = {
     'featured.view_details': 'Vedi dettagli',
     'featured.view_all': 'Vedi tutto →',
     'archive.title': 'Pezzi venduti',
+
+    'shop.clear_filters': 'Azzera i filtri',
 
   },
   en: {
@@ -851,6 +857,8 @@ const translations = {
     'status.draft': 'Draft',
     'status.inquire_similar': 'Inquire about a similar piece',
     'shop.no_products': 'No products in this category',
+
+    'shop.clear_filters': 'Clear filters',
 
   }
 };

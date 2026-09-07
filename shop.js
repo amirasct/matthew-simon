@@ -82,8 +82,28 @@ function switchShopView(view) {
     document.querySelectorAll('.shop-tab').forEach(t => {
         t.classList.toggle('active', t.dataset.view === view);
     });
+
+    // Reset the category filter when switching between Available and Archive.
+    // The archive covers only a few categories, so keeping a stale filter
+    // silently produces an empty grid and looks like the archive is broken.
+    const catSel = document.getElementById('categoryFilter');
+    if (catSel) catSel.value = '';
+
     document.querySelector('.shop-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    buildCategorySelect();
     buildCategoryPills();
+    applyFilters();
+}
+
+function clearAllFilters() {
+    const catSel = document.getElementById('categoryFilter');
+    if (catSel) catSel.value = '';
+    searchQuery = '';
+    const box = document.getElementById('shopSearch');
+    if (box) box.value = '';
+    const clearBtn = document.getElementById('searchClear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    syncCategoryPills();
     applyFilters();
 }
 
@@ -310,9 +330,16 @@ function buildCategorySelect() {
     if (!sel) return;
     const current = sel.value;
     const cats = ['Möbel','Glas','Leuchten','Objekte','Gemälde/Grafik','Accessoires','Keramik','Fundstücke'];
+    // Only list categories that exist in the view being shown, so the archive
+    // never offers a category with nothing behind it
+    const source = currentView === 'archive'
+        ? (window.getArchiveProducts ? window.getArchiveProducts() : [])
+        : (window.getPublicProducts ? window.getPublicProducts() : []);
+    const present = new Set(source.map(p => p.category));
     const allLabel = window.t ? window.t('shop.filter.all') : 'Alle Kategorien';
     let html = `<option value="">${allLabel}</option>`;
     cats.forEach(cat => {
+        if (!present.has(cat)) return;
         const label = window.translateCategory ? window.translateCategory(cat) : cat;
         html += `<option value="${cat}">${label}</option>`;
     });
@@ -351,7 +378,18 @@ function renderProducts() {
     
     if (filteredProducts.length === 0) {
         grid.innerHTML = '';
-        if (emptyState) emptyState.style.display = 'block';
+        if (emptyState) {
+            emptyState.style.display = 'block';
+            // Explain WHY it's empty and offer a way out, rather than a bare
+            // "no products" that looks like the archive is broken
+            const catSel = document.getElementById('categoryFilter');
+            const hasFilter = (catSel && catSel.value) || searchQuery;
+            const msg = window.t ? window.t('shop.no_products') : 'Keine Produkte gefunden';
+            const resetLabel = window.t ? window.t('shop.clear_filters') : 'Filter zurücksetzen';
+            emptyState.innerHTML = hasFilter
+                ? `<p>${msg}</p><button type="button" class="cat-pill" style="margin-top:12px;" onclick="clearAllFilters()">${resetLabel}</button>`
+                : `<p>${msg}</p>`;
+        }
         return;
     }
     
