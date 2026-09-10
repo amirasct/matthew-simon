@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=42">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -151,16 +151,35 @@
             📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
             🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
         </div>
+        <div class="footer-section footer-newsletter">
+            <h4 data-i18n="newsletter.title">Newsletter</h4>
+            <p class="newsletter-intro" data-i18n="newsletter.intro">Einmal im Monat: neue Stücke und Einblicke aus der Sammlung.</p>
+            <form name="newsletter" method="POST" data-netlify="true"
+                  data-netlify-honeypot="bot-field-news" class="newsletter-form" netlify>
+                <input type="hidden" name="form-name" value="newsletter">
+                <p class="hp-field"><label>Bitte leer lassen: <input name="bot-field-news"></label></p>
+                <div class="newsletter-row">
+                    <input type="email" name="email" required
+                           class="newsletter-input"
+                           data-i18n-placeholder="newsletter.placeholder"
+                           placeholder="E-Mail-Adresse" aria-label="E-Mail-Adresse"
+                           autocomplete="email">
+                    <button type="submit" class="newsletter-btn" data-i18n="newsletter.button">Abonnieren</button>
+                </div>
+                <div class="newsletter-status" style="display:none;"></div>
+                <p class="newsletter-privacy" data-i18n="newsletter.privacy">Jederzeit abbestellbar. Keine Weitergabe an Dritte.</p>
+            </form>
+        </div>
     </div>
     <div class="footer-bottom">
         <p data-i18n="footer.copyright">&copy; 2026 Matthew Simon. All rights reserved.</p>
     </div>
 </footer>
 
-<script src="languages.js?v=39"></script>
-<script src="products.js?v=39"></script>
-<script src="translations_part1.js?v=39"></script>
-<script src="translations_part2.js?v=39"></script>
+<script src="languages.js?v=42"></script>
+<script src="products.js?v=42"></script>
+<script src="translations_part1.js?v=42"></script>
+<script src="translations_part2.js?v=42"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -347,8 +366,9 @@ function renderProductDetail(product) {
                     <span data-i18n="detail.shipping">Abholung in Bern, Versand in der Schweiz und international auf Anfrage.</span>
                 </div>
                 
-                <p style="margin-top:16px;font-size:0.85rem;color:#666;text-align:center;">
-                    📧 matthew.simon@gmx.net &nbsp;|&nbsp; 📱 +41 79 302 19 85
+                <p class="detail-contact-line">
+                    <a href="mailto:matthew.simon@gmx.net">📧 matthew.simon@gmx.net</a>
+                    <a href="tel:+41793021985">📱 +41 79 302 19 85</a>
                 </p>
             </div>
         </div>
@@ -385,10 +405,10 @@ function inquireAbout(name, isSold) {
         else if (lang === 'it') message = encodeURIComponent(`Buongiorno Signor Simon,\n\nVedo che "${name}" è già stato venduto. Avete pezzi simili nella vostra collezione? Sarei molto interessato/a a saperne di più.\n\nCordiali saluti`);
         else message = encodeURIComponent(`Dear Mr. Simon,\n\nI see that "${name}" has already been sold. Do you have similar pieces in your collection? I would be very interested to learn more.\n\nBest regards`);
     } else {
-        if (lang === 'de') message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
-        else if (lang === 'fr') message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${name}". Pourriez-vous m'envoyer plus de détails, des photos haute résolution et les informations d'expédition ?\n\nCordialement`);
-        else if (lang === 'it') message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${name}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
-        else message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${name}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
+        if (lang === 'de') message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${name}".\n\nMit freundlichen Grüßen`);
+        else if (lang === 'fr') message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${name}".\n\nCordialement`);
+        else if (lang === 'it') message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${name}".\n\nCordiali saluti`);
+        else message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${name}".\n\nBest regards`);
     }
     
     window.location.href = `contact.html?subject=${subject}&message=${message}`;

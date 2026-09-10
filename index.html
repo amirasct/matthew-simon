@@ -45,7 +45,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=42">
 </head>
 <body>
 
@@ -237,6 +237,26 @@
             📱 <a href="tel:+41793021985">+41 79 302 19 85</a> (WhatsApp)<br>
             🔗 <a href="https://www.instagram.com/matthew_simon_bern" target="_blank">Instagram</a></p>
         </div>
+
+        <div class="footer-section footer-newsletter">
+            <h4 data-i18n="newsletter.title">Newsletter</h4>
+            <p class="newsletter-intro" data-i18n="newsletter.intro">Einmal im Monat: neue Stücke und Einblicke aus der Sammlung.</p>
+            <form name="newsletter" method="POST" data-netlify="true"
+                  data-netlify-honeypot="bot-field-news" class="newsletter-form" netlify>
+                <input type="hidden" name="form-name" value="newsletter">
+                <p class="hp-field"><label>Bitte leer lassen: <input name="bot-field-news"></label></p>
+                <div class="newsletter-row">
+                    <input type="email" name="email" required
+                           class="newsletter-input"
+                           data-i18n-placeholder="newsletter.placeholder"
+                           placeholder="E-Mail-Adresse" aria-label="E-Mail-Adresse"
+                           autocomplete="email">
+                    <button type="submit" class="newsletter-btn" data-i18n="newsletter.button">Abonnieren</button>
+                </div>
+                <div class="newsletter-status" style="display:none;"></div>
+                <p class="newsletter-privacy" data-i18n="newsletter.privacy">Jederzeit abbestellbar. Keine Weitergabe an Dritte.</p>
+            </form>
+        </div>
         <div class="footer-section">
             <h4 data-i18n="footer.admin">Admin</h4>
             <p><a href="admin.html">Manage Products</a></p>
@@ -247,10 +267,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=39"></script>
-<script src="products.js?v=39"></script>
-<script src="translations_part1.js?v=39"></script>
-<script src="translations_part2.js?v=39"></script>
+<script src="languages.js?v=42"></script>
+<script src="products.js?v=42"></script>
+<script src="translations_part1.js?v=42"></script>
+<script src="translations_part2.js?v=42"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');

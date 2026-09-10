@@ -210,6 +210,18 @@ const translations = {
     'contact.form.success': 'Vielen Dank! Ihre Anfrage wurde gesendet. Matthew meldet sich in der Regel innerhalb von 24 Stunden.',
     'contact.form.error': 'Das Senden hat leider nicht funktioniert. Bitte schreiben Sie direkt an:',
 
+    // v19 - newsletter + email validation
+    'newsletter.title': 'Newsletter',
+    'newsletter.intro': 'Einmal im Monat: neue Stücke und Einblicke aus der Sammlung.',
+    'newsletter.placeholder': 'E-Mail-Adresse',
+    'newsletter.button': 'Abonnieren',
+    'newsletter.privacy': 'Jederzeit abbestellbar. Keine Weitergabe an Dritte.',
+    'newsletter.success': 'Vielen Dank! Sie sind angemeldet.',
+    'newsletter.error': 'Anmeldung fehlgeschlagen. Bitte später erneut versuchen.',
+    'newsletter.invalid': 'Bitte prüfen Sie die E-Mail-Adresse.',
+    'contact.form.email.required': 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
+    'contact.form.email.invalid': 'Bitte prüfen Sie die E-Mail-Adresse (z. B. name@beispiel.ch).',
+
   },
   fr: {
     // Navigation
@@ -425,6 +437,18 @@ const translations = {
     'contact.form.success': 'Merci ! Votre demande a été envoyée. Matthew répond généralement sous 24 heures.',
     'contact.form.error': 'L\'envoi a échoué. Merci d\'écrire directement à :',
 
+    // v19 - newsletter + email validation
+    'newsletter.title': 'Newsletter',
+    'newsletter.intro': 'Une fois par mois : nouvelles pièces et aperçus de la collection.',
+    'newsletter.placeholder': 'Adresse e-mail',
+    'newsletter.button': 'S\'abonner',
+    'newsletter.privacy': 'Désabonnement à tout moment. Jamais transmis à des tiers.',
+    'newsletter.success': 'Merci ! Votre inscription est enregistrée.',
+    'newsletter.error': 'L\'inscription a échoué. Merci de réessayer plus tard.',
+    'newsletter.invalid': 'Merci de vérifier l\'adresse e-mail.',
+    'contact.form.email.required': 'Merci de saisir votre adresse e-mail.',
+    'contact.form.email.invalid': 'Merci de vérifier l\'adresse e-mail (par ex. nom@exemple.ch).',
+
   },
   it: {
     // Navigation
@@ -637,6 +661,18 @@ const translations = {
     'contact.form.sending': 'Invio in corso …',
     'contact.form.success': 'Grazie! La sua richiesta è stata inviata. Matthew risponde di solito entro 24 ore.',
     'contact.form.error': 'Invio non riuscito. Scriva direttamente a:',
+
+    // v19 - newsletter + email validation
+    'newsletter.title': 'Newsletter',
+    'newsletter.intro': 'Una volta al mese: nuovi pezzi e approfondimenti dalla collezione.',
+    'newsletter.placeholder': 'Indirizzo e-mail',
+    'newsletter.button': 'Iscriviti',
+    'newsletter.privacy': 'Cancellabile in qualsiasi momento. Mai ceduto a terzi.',
+    'newsletter.success': 'Grazie! La sua iscrizione è registrata.',
+    'newsletter.error': 'Iscrizione non riuscita. Riprovi più tardi.',
+    'newsletter.invalid': 'Controlli l\'indirizzo e-mail.',
+    'contact.form.email.required': 'Inserisca il suo indirizzo e-mail.',
+    'contact.form.email.invalid': 'Controlli l\'indirizzo e-mail (es. nome@esempio.ch).',
 
   },
   en: {
@@ -880,6 +916,18 @@ const translations = {
     'contact.form.success': 'Thank you! Your inquiry has been sent. Matthew usually replies within 24 hours.',
     'contact.form.error': 'Sorry, sending failed. Please email directly:',
 
+    // v19 - newsletter + email validation
+    'newsletter.title': 'Newsletter',
+    'newsletter.intro': 'Once a month: new pieces and insights from the collection.',
+    'newsletter.placeholder': 'Email address',
+    'newsletter.button': 'Subscribe',
+    'newsletter.privacy': 'Unsubscribe at any time. Never shared with third parties.',
+    'newsletter.success': 'Thank you! You are subscribed.',
+    'newsletter.error': 'Sign-up failed. Please try again later.',
+    'newsletter.invalid': 'Please check the email address.',
+    'contact.form.email.required': 'Please enter your email address.',
+    'contact.form.email.invalid': 'Please check the email address (e.g. name@example.com).',
+
   }
 };
 
@@ -995,4 +1043,58 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+});
+
+// ============================
+// NEWSLETTER SIGNUP (Netlify Forms)
+// ============================
+// Submits without leaving the page. Present in every footer, so this is
+// attached to whichever form exists on the current page.
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.newsletter-form').forEach(function (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = form.querySelector('.newsletter-btn');
+            const input = form.querySelector('.newsletter-input');
+            const status = form.querySelector('.newsletter-status');
+            const orig = btn.textContent;
+            const val = (input.value || '').trim();
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val)) {
+                status.className = 'newsletter-status error';
+                status.textContent = window.t ? window.t('newsletter.invalid')
+                    : 'Bitte prüfen Sie die E-Mail-Adresse.';
+                status.style.display = 'block';
+                input.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '…';
+            status.style.display = 'none';
+
+            try {
+                const res = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(new FormData(form)).toString()
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                form.reset();
+                status.className = 'newsletter-status success';
+                status.textContent = window.t ? window.t('newsletter.success')
+                    : 'Vielen Dank! Sie sind angemeldet.';
+                status.style.display = 'block';
+            } catch (err) {
+                console.error('Newsletter signup failed:', err);
+                status.className = 'newsletter-status error';
+                status.textContent = window.t ? window.t('newsletter.error')
+                    : 'Anmeldung fehlgeschlagen. Bitte später erneut versuchen.';
+                status.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = orig;
+            }
+        });
+    });
 });
