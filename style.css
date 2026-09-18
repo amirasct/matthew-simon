@@ -2964,3 +2964,30 @@ textarea.input-error {
     .detail-contact-line { flex-direction: column; gap: 4px; }
     .detail-contact-line a { padding: 10px 4px; }
 }
+
+/* Sold badge on shop-page product cards (Verkauft/Archiv tab).
+   Same visual language as the standalone archive.html page, so a sold
+   piece reads as "sold" consistently wherever it appears on the site. */
+.product-card .sold-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(139, 20, 20, 0.95);
+    color: white;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.product-card-sold .product-image {
+    filter: grayscale(15%);
+    transition: filter 0.3s ease;
+}
+
+.product-card-sold:hover .product-image {
+    filter: grayscale(0%);
+}

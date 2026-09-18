@@ -398,27 +398,63 @@ function renderProducts() {
 function renderProductCard(product) {
     // Escape name for JS strings
     const escName = product.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    
+    const isSold = product.status === 'sold';
+
     // Image handling with placeholder fallback
     const imageHtml = product.images && product.images.length > 0
         ? `<img src="${getImageUrl(product.images[0])}" alt="${(window.buildAltText ? window.buildAltText(product) : product.name).replace(/"/g,'&quot;')}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image-placeholder\\'>📷<br><span>Foto folgt</span></div>';">`
         : `<div class="no-image-placeholder">📷<br><span>Foto folgt</span></div>`;
-    
+
     // Badges HTML
     const badgeHtml = product.badges && product.badges.length > 0
         ? `<div class="product-badges">${product.badges.map(b => renderBadge(b)).join('')}</div>`
         : '';
-    
+
     // Photo count indicator
     const photoCount = product.images && product.images.length > 1
         ? `<div class="photo-count">📷 ${product.images.length}</div>`
         : '';
-    
+
+    // SOLD badge, matching the treatment already used on archive.html and product-detail.html
+    const soldLabels = { de: 'VERKAUFT', en: 'SOLD', fr: 'VENDU', it: 'VENDUTO' };
+    const lang = (typeof window.getCurrentLanguage === 'function' ? window.getCurrentLanguage() : 'de');
+    const soldBadgeHtml = isSold
+        ? `<span class="sold-badge">${soldLabels[lang] || 'SOLD'}</span>`
+        : '';
+
+    // Price: a sold "Preis auf Anfrage" piece has nothing left to inquire about,
+    // so the line is dropped rather than crossed out (crossing out that phrase
+    // reads as broken, not honest). A sold item with a real price is struck
+    // through instead — same treatment as the product detail page, and it
+    // doubles as social proof that pieces do sell.
+    const wasPriceOnRequest = product.price === 'Preis auf Anfrage';
+    const priceHtml = (isSold && wasPriceOnRequest)
+        ? ''
+        : `<div class="product-price"${isSold ? ' style="text-decoration:line-through;color:#999;"' : ''}>${product.price}</div>`;
+
+    // Sold pieces have nothing to inquire about — swap the inquire button for
+    // Details only, so the card doesn't invite an offer on something already gone.
+    const actionsHtml = isSold
+        ? `<div class="product-actions" onclick="event.stopPropagation();">
+                <button class="btn-details" style="width:100%;" onclick="goToProduct(${product.id})">
+                    Details →
+                </button>
+            </div>`
+        : `<div class="product-actions" onclick="event.stopPropagation();">
+                <button class="btn-inquire" onclick="inquireAbout('${escName}')">
+                    <span>✉</span> Anfrage
+                </button>
+                <button class="btn-details" onclick="goToProduct(${product.id})">
+                    Details →
+                </button>
+            </div>`;
+
     return `
-        <div class="product-card" onclick="goToProduct(${product.id})" role="link" tabindex="0" onkeypress="if(event.key==='Enter')goToProduct(${product.id})">
+        <div class="product-card${isSold ? ' product-card-sold' : ''}" onclick="goToProduct(${product.id})" role="link" tabindex="0" onkeypress="if(event.key==='Enter')goToProduct(${product.id})">
             <div class="product-image-container">
                 ${imageHtml}
                 ${photoCount}
+                ${soldBadgeHtml}
                 ${badgeHtml}
             </div>
             
@@ -426,17 +462,10 @@ function renderProductCard(product) {
                 <div class="product-category-label">${window.translateCategory ? window.translateCategory(product.category) : product.category}${product.era ? ' · ' + (window.translateEra ? window.translateEra(product.era) : product.era) : ''}</div>
                 <h3 class="product-name">${product.name}</h3>
                 <p class="product-hook">${product.shortHook}</p>
-                <div class="product-price">${product.price}</div>
+                ${priceHtml}
             </div>
             
-            <div class="product-actions" onclick="event.stopPropagation();">
-                <button class="btn-inquire" onclick="inquireAbout('${escName}')">
-                    <span>✉</span> Anfrage
-                </button>
-                <button class="btn-details" onclick="goToProduct(${product.id})">
-                    Details →
-                </button>
-            </div>
+            ${actionsHtml}
         </div>
     `;
 }
