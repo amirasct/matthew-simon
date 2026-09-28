@@ -1,10 +1,8 @@
 # Matthew Simon - robots.txt
 # Allows all search engines to crawl the site
-# Disallows admin area
 
 User-agent: *
 Allow: /
-Disallow: /admin.html
 Disallow: /.netlify/
 
 # Sitemap location

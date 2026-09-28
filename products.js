@@ -1367,16 +1367,28 @@ async function saveCloudData(dataObj) {
     for (let attempt = 1; attempt <= 3; attempt++) {
         try {
             console.log(`[SAVE] Attempt ${attempt}/3 - sending POST...`);
+            // The server only accepts saves that carry the signed pass from admin login
+            const headers = { 'Content-Type': 'application/json' };
+            const token = (typeof window.getAdminToken === 'function') ? window.getAdminToken() : null;
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+
             const response = await fetch('/.netlify/functions/save-products', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 cache: 'no-store',
                 body: JSON.stringify(dataObj)
             });
             
             if (!response.ok) {
                 const errText = await response.text().catch(() => '');
-                throw new Error(`Save failed (${response.status}): ${errText}`);
+                const err = new Error(`Save failed (${response.status}): ${errText}`);
+                err.status = response.status;
+                // Retrying cannot fix a rejected pass, bad data, or missing server settings
+                if ([400, 401, 403, 413, 503].includes(response.status)) err.noRetry = true;
+                if (response.status === 401) {
+                    window.dispatchEvent(new CustomEvent('adminSessionExpired'));
+                }
+                throw err;
             }
             const result = await response.json();
             console.log(`[SAVE] ✅ Confirmed by server in ${Date.now() - startTime}ms:`, result.savedAt);
@@ -1390,6 +1402,7 @@ async function saveCloudData(dataObj) {
         } catch (error) {
             lastError = error;
             console.error(`[SAVE] ❌ Attempt ${attempt} failed:`, error.message);
+            if (error.noRetry) break;
             if (attempt < 3) {
                 const wait = attempt * 700;
                 console.log(`[SAVE] Retrying in ${wait}ms...`);
