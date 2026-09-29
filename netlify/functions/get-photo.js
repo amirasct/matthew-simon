@@ -28,7 +28,23 @@ export default async (req, context) => {
             status: 200,
             headers: {
                 'Content-Type': contentType,
-                'Cache-Control': 'public, max-age=31536000, immutable'
+                // 'Cache-Control' only tells the VISITOR'S OWN BROWSER to keep this
+                // for a year. It does NOT make Netlify's own network cache it.
+                // Without the header below, every single request - including ones
+                // from a WhatsApp/Facebook link-preview crawler, and from every
+                // different visitor - has to run this function fresh and fetch the
+                // photo from storage again. If that happens to be slow at that
+                // moment, the crawler gives up and shows no image.
+                'Cache-Control': 'public, max-age=31536000, immutable',
+                // This is the fix: tells Netlify's own network to cache the response.
+                // Once ANY single request for a given photo succeeds, the network
+                // remembers it, and every request after that - from anyone,
+                // anywhere, including a crawler's retry - is served instantly with
+                // no function run and no storage lookup at all.
+                // "durable" additionally shares that cached copy across every one
+                // of Netlify's edge locations worldwide, not just the location the
+                // first request happened to land on.
+                'Netlify-CDN-Cache-Control': 'public, max-age=31536000, immutable, durable'
             }
         });
     } catch (error) {
