@@ -2896,6 +2896,26 @@ textarea.input-error {
    ========================================================== */
 .footer-newsletter { max-width: 320px; }
 
+/* Force Sender's embedded form to align flush-left with the "Newsletter"
+   heading above it. Sender's own box padding (set to 20px on all sides when
+   the form still had a visible card background) kept shifting the actual
+   inputs/button rightward after the box background was made transparent -
+   the padding no longer had a border to sit inside, so it just looked like
+   a misalignment. This overrides it directly rather than depending on every
+   setting inside Sender's dashboard staying correct. */
+.footer-newsletter .sender-form-field {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+}
+.footer-newsletter .sender-form-field > div,
+.footer-newsletter .sender-form-field form,
+.footer-newsletter .sender-form-field [class*="sender-"] {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+}
+
 .newsletter-intro {
     font-size: 0.85rem;
     line-height: 1.5;
