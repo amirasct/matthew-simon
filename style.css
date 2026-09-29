@@ -2991,3 +2991,18 @@ textarea.input-error {
 .product-card-sold:hover .product-image {
     filter: grayscale(0%);
 }
+
+/* Product names on shop cards are real links (so search engines can follow them)
+   but should look exactly like the plain heading they replaced. */
+.product-name .product-link,
+.product-name .product-link:visited {
+    color: inherit;
+    text-decoration: none;
+}
+.product-name .product-link:hover { color: #B8860B; }
+
+/* 404 page */
+.notfound-section { padding: 3.5rem 1.5rem 5rem; text-align: center; }
+.notfound-inner { max-width: 620px; margin: 0 auto; }
+.notfound-text { font-size: 1.1rem; line-height: 1.7; color: #555; margin-bottom: 2rem; }
+.notfound-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }

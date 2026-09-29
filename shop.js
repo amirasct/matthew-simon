@@ -460,7 +460,7 @@ function renderProductCard(product) {
             
             <div class="product-info">
                 <div class="product-category-label">${window.translateCategory ? window.translateCategory(product.category) : product.category}${product.era ? ' · ' + (window.translateEra ? window.translateEra(product.era) : product.era) : ''}</div>
-                <h3 class="product-name">${product.name}</h3>
+                <h3 class="product-name"><a class="product-link" href="product-detail.html?id=${product.id}" onclick="if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey){return true;}event.preventDefault();event.stopPropagation();goToProduct(${product.id});">${product.name}</a></h3>
                 <p class="product-hook">${product.shortHook}</p>
                 ${priceHtml}
             </div>
@@ -492,13 +492,13 @@ function inquireAbout(productName) {
     
     let message = '';
     if (lang === 'de') {
-        message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${productName}". Könnten Sie mir bitte weitere Details, hochauflösende Fotos und Versandinformationen zusenden?\n\nMit freundlichen Grüßen`);
+        message = encodeURIComponent(`Guten Tag Herr Simon,\n\nIch interessiere mich für "${productName}".\n\nMit freundlichen Grüßen`);
     } else if (lang === 'fr') {
-        message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${productName}". Pourriez-vous me faire parvenir plus de détails, des photos haute résolution et les informations d'expédition?\n\nCordialement`);
+        message = encodeURIComponent(`Bonjour Monsieur Simon,\n\nJe suis intéressé(e) par "${productName}".\n\nCordialement`);
     } else if (lang === 'it') {
-        message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${productName}". Potrebbe inviarmi maggiori dettagli, foto ad alta risoluzione e informazioni sulla spedizione?\n\nCordiali saluti`);
+        message = encodeURIComponent(`Buongiorno Signor Simon,\n\nSono interessato/a a "${productName}".\n\nCordiali saluti`);
     } else {
-        message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${productName}". Could you please send me more details, high-resolution photos, and shipping information?\n\nBest regards`);
+        message = encodeURIComponent(`Dear Mr. Simon,\n\nI'm interested in "${productName}".\n\nBest regards`);
     }
     
     window.location.href = `contact.html?subject=${subject}&message=${message}`;

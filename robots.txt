@@ -1,12 +1,9 @@
 # Matthew Simon - robots.txt
-# Allows all search engines to crawl the site
+# Everything public is open to search engines, including the shop data and
+# photos that the pages load (blocking those would leave Google seeing empty pages).
 
 User-agent: *
 Allow: /
-Disallow: /.netlify/
 
-# Sitemap location
+# Sitemap (built live from the shop, lists every product and its photos)
 Sitemap: https://matthew-simon.ch/sitemap.xml
-
-# Crawl politely (2 seconds between requests)
-Crawl-delay: 2

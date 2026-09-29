@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2G90BJ9YBX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2G90BJ9YBX');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Produkt - Matthew Simon European Design & Antiques</title>
-    <link rel="stylesheet" href="style.css?v=43">
+    <link rel="stylesheet" href="style.css?v=45">
     <style>
         .detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #1B3A52; text-decoration: none; font-weight: 600; }
@@ -92,6 +100,12 @@
         .lightbox img { max-width: 95%; max-height: 95%; object-fit: contain; }
         .lightbox-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
     </style>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1B3A52">
 </head>
 <body>
 
@@ -176,10 +190,10 @@
     </div>
 </footer>
 
-<script src="languages.js?v=43"></script>
-<script src="products.js?v=43"></script>
-<script src="translations_part1.js?v=43"></script>
-<script src="translations_part2.js?v=43"></script>
+<script src="languages.js?v=45"></script>
+<script src="products.js?v=45"></script>
+<script src="translations_part1.js?v=45"></script>
+<script src="translations_part2.js?v=45"></script>
 <script>
 function toggleLanguageMenu() {
     const menu = document.getElementById('languageMenu');
@@ -245,6 +259,7 @@ function renderCurrentProduct(id) {
     
     // Update SEO meta tags for social sharing (WhatsApp, Facebook, etc.)
     updateProductMetaTags(product);
+    updateProductStructuredData(product);
     
     renderProductDetail(product);
     
@@ -252,6 +267,58 @@ function renderCurrentProduct(id) {
     if (window.updatePageLanguage) {
         window.updatePageLanguage();
     }
+}
+
+function updateProductStructuredData(product) {
+    // Product markup for search engines: lets Google show price and availability in
+    // results and label photos as products in Google Images.
+    const SITE = 'https://matthew-simon.ch';
+    const abs = (img) => !img ? null
+        : /^https?:\/\//i.test(img) ? img
+        : img.startsWith('/') ? SITE + img
+        : SITE + '/images/' + encodeURIComponent(img);
+
+    const url = SITE + '/product-detail.html?id=' + product.id;
+    const images = (product.images || []).map(abs).filter(Boolean).slice(0, 8);
+    const description = String(product.description || product.shortHook || '')
+        .replace(/\s+/g, ' ').trim().substring(0, 500);
+
+    const data = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: description || product.name,
+        sku: String(product.id),
+        url: url,
+        category: product.category
+    };
+    if (images.length) data.image = images;
+    if (product.artist) data.brand = { '@type': 'Brand', name: product.artist };
+
+    // Only pieces with a real price get an offer. "Preis auf Anfrage" has no number,
+    // and an offer without a price is invalid markup, so those are left without one.
+    const priceText = String(product.price || '');
+    const digits = priceText.replace(/[^\d]/g, '');
+    if (digits && !/anfrage/i.test(priceText)) {
+        data.offers = {
+            '@type': 'Offer',
+            url: url,
+            priceCurrency: 'CHF',
+            price: String(parseInt(digits, 10)),
+            availability: product.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+            seller: { '@type': 'Organization', name: 'Matthew Simon' }
+        };
+    }
+
+    // Replace (never duplicate) the block when the page re-renders, e.g. on language change
+    let el = document.getElementById('product-jsonld');
+    if (!el) {
+        el = document.createElement('script');
+        el.type = 'application/ld+json';
+        el.id = 'product-jsonld';
+        document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(data);
 }
 
 function updateProductMetaTags(product) {

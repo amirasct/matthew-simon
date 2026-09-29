@@ -1,0 +1,134 @@
+# Redirects from the OLD website (Hoststar) to the new one.
+# Netlify reads this file automatically. The first matching rule wins, so
+# specific rules come first and the catch-all is last.
+
+# --- Old main pages ---
+/ueber-mich.html  /about.html  301
+/ueber-mich  /about.html  301
+/kontakt.html  /contact.html  301
+/kontakt  /contact.html  301
+
+# --- Old category pages (best guesses at the old names; harmless if they never existed) ---
+/glas.html  /shop.html?category=Glas  301
+/glas  /shop.html?category=Glas  301
+/leuchten.html  /shop.html?category=Leuchten  301
+/leuchten  /shop.html?category=Leuchten  301
+/moebel.html  /shop.html?category=M%C3%B6bel  301
+/moebel  /shop.html?category=M%C3%B6bel  301
+/objekte.html  /shop.html?category=Objekte  301
+/objekte  /shop.html?category=Objekte  301
+
+# --- Newer pieces that were re-added through the admin (now in the Archive) ---
+# Scarpa Battuto Vase
+/ms-gl-03-*  /product-detail.html?id=1046  301
+# Breuer Tisch B19
+/ms-mo-11-*  /product-detail.html?id=1048  301
+# Fornasetti Schirmstaender
+/ms-mo-02-*  /product-detail.html?id=1051  301
+
+# --- The original 100 pieces: old page ms-<cat>-<nn>-<name>.html -> new product page ---
+/ms-mo-22-*  /product-detail.html?id=1  301
+/ms-mo-20-*  /product-detail.html?id=2  301
+/ms-le-25-*  /product-detail.html?id=3  301
+/ms-ob-29-*  /product-detail.html?id=4  301
+/ms-le-18-*  /product-detail.html?id=5  301
+/ms-gl-41-*  /product-detail.html?id=6  301
+/ms-gl-31-*  /product-detail.html?id=7  301
+/ms-gl-25-*  /product-detail.html?id=8  301
+/ms-le-10-*  /product-detail.html?id=9  301
+/ms-gl-36-*  /product-detail.html?id=10  301
+/ms-gl-19-*  /product-detail.html?id=11  301
+/ms-ob-11-*  /product-detail.html?id=12  301
+/ms-le-24-*  /product-detail.html?id=13  301
+/ms-le-15-*  /product-detail.html?id=14  301
+/ms-gl-44-*  /product-detail.html?id=15  301
+/ms-gl-43-*  /product-detail.html?id=16  301
+/ms-gl-02-*  /product-detail.html?id=17  301
+/ms-gl-01-*  /product-detail.html?id=18  301
+/ms-ob-25-*  /product-detail.html?id=19  301
+# removed piece: Ein Paar Holophane Lampen
+/ms-le-22-*  /shop.html  301
+/ms-le-16-*  /product-detail.html?id=21  301
+/ms-gl-32-*  /product-detail.html?id=22  301
+/ms-gl-42-*  /product-detail.html?id=23  301
+/ms-gl-04-*  /product-detail.html?id=24  301
+/ms-mo-30-*  /product-detail.html?id=25  301
+/ms-gl-23-*  /product-detail.html?id=26  301
+/ms-gl-22-*  /product-detail.html?id=27  301
+/ms-ob-26-*  /product-detail.html?id=28  301
+/ms-ob-16-*  /product-detail.html?id=29  301
+/ms-mo-23-*  /product-detail.html?id=30  301
+/ms-mo-27-*  /product-detail.html?id=31  301
+/ms-le-13-*  /product-detail.html?id=32  301
+/ms-mo-29-*  /product-detail.html?id=33  301
+/ms-mo-28-*  /product-detail.html?id=34  301
+/ms-le-01-*  /product-detail.html?id=35  301
+/ms-le-14-*  /product-detail.html?id=36  301
+/ms-ob-20-*  /product-detail.html?id=37  301
+/ms-gl-30-*  /product-detail.html?id=38  301
+/ms-le-20-*  /product-detail.html?id=39  301
+/ms-le-23-*  /product-detail.html?id=40  301
+/ms-gl-26-*  /product-detail.html?id=41  301
+# removed piece: Bauhaus Tischlampe
+/ms-le-19-*  /shop.html  301
+/ms-gl-39-*  /product-detail.html?id=43  301
+/ms-gl-05-*  /product-detail.html?id=44  301
+/ms-gl-06-*  /product-detail.html?id=45  301
+/ms-gl-08-*  /product-detail.html?id=46  301
+/ms-gl-09-*  /product-detail.html?id=47  301
+/ms-gl-10-*  /product-detail.html?id=48  301
+/ms-gl-11-*  /product-detail.html?id=49  301
+/ms-gl-12-*  /product-detail.html?id=50  301
+/ms-gl-13-*  /product-detail.html?id=51  301
+/ms-gl-14-*  /product-detail.html?id=52  301
+/ms-gl-15-*  /product-detail.html?id=53  301
+/ms-gl-16-*  /product-detail.html?id=54  301
+/ms-gl-17-*  /product-detail.html?id=55  301
+/ms-gl-18-*  /product-detail.html?id=56  301
+/ms-gl-33-*  /product-detail.html?id=57  301
+/ms-gl-34-*  /product-detail.html?id=58  301
+/ms-gl-35-*  /product-detail.html?id=59  301
+/ms-le-02-*  /product-detail.html?id=60  301
+/ms-gl-38-*  /product-detail.html?id=61  301
+/ms-mo-05-*  /product-detail.html?id=62  301
+/ms-mo-06-*  /product-detail.html?id=63  301
+/ms-mo-09-*  /product-detail.html?id=64  301
+/ms-mo-10-*  /product-detail.html?id=65  301
+/ms-mo-13-*  /product-detail.html?id=66  301
+/ms-mo-14-*  /product-detail.html?id=67  301
+/ms-mo-26-*  /product-detail.html?id=68  301
+/ms-ob-05-*  /product-detail.html?id=69  301
+/ms-ob-07-*  /product-detail.html?id=70  301
+/ms-ob-09-*  /product-detail.html?id=71  301
+/ms-ob-22-*  /product-detail.html?id=72  301
+/ms-ob-23-*  /product-detail.html?id=73  301
+/ms-ob-24-*  /product-detail.html?id=74  301
+/ms-mo-18-*  /product-detail.html?id=75  301
+/ms-gl-37-*  /product-detail.html?id=76  301
+/ms-mo-31-*  /product-detail.html?id=77  301
+/ms-mo-32-*  /product-detail.html?id=78  301
+/ms-le-6-*  /product-detail.html?id=79  301
+/ms-ob-21-*  /product-detail.html?id=80  301
+/ms-le-21-*  /product-detail.html?id=81  301
+/ms-ob-03-*  /product-detail.html?id=82  301
+/ms-le-04-*  /product-detail.html?id=83  301
+/ms-ob-28-*  /product-detail.html?id=84  301
+/ms-le-06-*  /product-detail.html?id=85  301
+/ms-gl-20-*  /product-detail.html?id=86  301
+/ms-gl-27-*  /product-detail.html?id=87  301
+/ms-mo-17-*  /product-detail.html?id=88  301
+/ms-le-11-*  /product-detail.html?id=89  301
+/ms-le-9-*  /product-detail.html?id=90  301
+/ms-mo-16-*  /product-detail.html?id=91  301
+/ms-gl-29-*  /product-detail.html?id=92  301
+/ms-gl-28-*  /product-detail.html?id=93  301
+/ms-le-12-*  /product-detail.html?id=94  301
+/ms-le-05-*  /product-detail.html?id=95  301
+/ms-gl-40-*  /product-detail.html?id=96  301
+/ms-ob-17-*  /product-detail.html?id=97  301
+/ms-ob-04-*  /product-detail.html?id=98  301
+/ms-ob-27-*  /product-detail.html?id=99  301
+/ms-le-17-*  /product-detail.html?id=100  301
+
+# --- Any other old product page we could not match: send to the shop, not a dead end ---
+/ms-*  /shop.html  301

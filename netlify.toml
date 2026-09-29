@@ -47,3 +47,12 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+# The sitemap is built live from the shop's data by a function, so new products
+# and photos reach Google automatically. force = true makes this win over the
+# old static sitemap.xml file that is still in the repository.
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true

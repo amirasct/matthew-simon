@@ -222,6 +222,13 @@ const translations = {
     'contact.form.email.required': 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
     'contact.form.email.invalid': 'Bitte prüfen Sie die E-Mail-Adresse (z. B. name@beispiel.ch).',
 
+    // v20 - 404 page
+    'notfound.title': 'Seite nicht gefunden',
+    'notfound.text': 'Diese Seite gibt es nicht oder sie wurde verschoben. Unsere Website ist neu – vielleicht finden Sie, was Sie suchen, in der Sammlung.',
+    'notfound.shop': 'Zur Sammlung',
+    'notfound.home': 'Zur Startseite',
+    'notfound.contact': 'Kontakt aufnehmen',
+
   },
   fr: {
     // Navigation
@@ -449,6 +456,13 @@ const translations = {
     'contact.form.email.required': 'Merci de saisir votre adresse e-mail.',
     'contact.form.email.invalid': 'Merci de vérifier l\'adresse e-mail (par ex. nom@exemple.ch).',
 
+    // v20 - 404 page
+    'notfound.title': 'Page introuvable',
+    'notfound.text': 'Cette page n\'existe pas ou a été déplacée. Notre site est nouveau – vous trouverez peut-être ce que vous cherchez dans la collection.',
+    'notfound.shop': 'Voir la collection',
+    'notfound.home': 'Retour à l\'accueil',
+    'notfound.contact': 'Nous contacter',
+
   },
   it: {
     // Navigation
@@ -673,6 +687,13 @@ const translations = {
     'newsletter.invalid': 'Controlli l\'indirizzo e-mail.',
     'contact.form.email.required': 'Inserisca il suo indirizzo e-mail.',
     'contact.form.email.invalid': 'Controlli l\'indirizzo e-mail (es. nome@esempio.ch).',
+
+    // v20 - 404 page
+    'notfound.title': 'Pagina non trovata',
+    'notfound.text': 'Questa pagina non esiste o è stata spostata. Il nostro sito è nuovo – forse troverà ciò che cerca nella collezione.',
+    'notfound.shop': 'Vai alla collezione',
+    'notfound.home': 'Vai alla home',
+    'notfound.contact': 'Contattaci',
 
   },
   en: {
@@ -927,6 +948,13 @@ const translations = {
     'newsletter.invalid': 'Please check the email address.',
     'contact.form.email.required': 'Please enter your email address.',
     'contact.form.email.invalid': 'Please check the email address (e.g. name@example.com).',
+
+    // v20 - 404 page
+    'notfound.title': 'Page not found',
+    'notfound.text': 'This page does not exist or has moved. Our website is new – you may find what you are looking for in the collection.',
+    'notfound.shop': 'View the collection',
+    'notfound.home': 'Go to the homepage',
+    'notfound.contact': 'Get in touch',
 
   }
 };
