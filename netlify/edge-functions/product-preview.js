@@ -26,7 +26,18 @@ const FALLBACK = {
     de: { title: 'Matthew Simon – Kunst, Objekte, Design', desc: 'Authentifizierte europäische Antiquitäten und Design aus Bern.' },
 };
 
-const BOT_PATTERN = /facebookexternalhit|Facebot|WhatsApp|Instagram|Twitterbot|Slackbot|TelegramBot|Discordbot|LinkedInBot|SkypeUriPreview|Pinterest|redditbot|vkShare|W3C_Validator|Applebot/i;
+// IMPORTANT: this must only match actual link-preview CRAWLERS, never a real
+// person's browser. "Instagram" and "Pinterest" were removed from here on
+// purpose: Instagram's own in-app browser sends a user agent that starts with
+// the literal word "Instagram" (e.g. "Instagram 146.0.0.27.125 Android ..."),
+// and Pinterest's app does the same. Matching on those bare names meant every
+// real visitor who tapped a link inside those apps got this stripped-down
+// preview page instead of the actual site - which is exactly what happened.
+// Instagram has no crawler of its own anyway: Meta uses the shared
+// "facebookexternalhit" bot for Facebook, Instagram and Threads alike, which
+// is already covered below. Every token kept here is either the word "bot"
+// itself or a name no real browser would ever send.
+const BOT_PATTERN = /facebookexternalhit|Facebot|meta-externalagent|WhatsApp|Twitterbot|Slackbot|TelegramBot|Discordbot|LinkedInBot|SkypeUriPreview|redditbot|vkShare|W3C_Validator|Applebot/i;
 
 const esc = (s) => String(s == null ? '' : s).replace(/[<>&'"]/g, (c) =>
     ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[c]));
