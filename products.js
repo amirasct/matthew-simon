@@ -1513,13 +1513,28 @@ function getImageUrl(filename) {
 // and covers every product at render time - no file renaming required.
 function buildAltText(product) {
     if (!product) return '';
+    const name = (product.name || '').trim();
+    const nameLower = name.toLowerCase();
     const bits = [];
-    if (product.artist) bits.push(product.artist);
-    if (product.name) bits.push(product.name);
-    if (product.era) bits.push(product.era);
+
+    // Most product names already begin with the artist ("Ercole Barovier, Autunno
+    // Gammato Vase"), since that is how Matthew writes them. Prepending the artist
+    // field again produced doubled text like "Ercole Barovier, Ercole Barovier,
+    // Autunno Gammato Vase..." across most of the catalogue. Only add it separately
+    // when the name does not already start with it.
+    if (product.artist && !nameLower.includes(product.artist.trim().toLowerCase())) {
+        bits.push(product.artist);
+    }
+    if (name) bits.push(name);
+    // Same idea for era: several names already state their own date/period
+    // ("...um 1810", "(1899-1993)"), so only append the separate era field when
+    // that text is not already sitting in the name.
+    if (product.era && !nameLower.includes(String(product.era).toLowerCase())) {
+        bits.push(product.era);
+    }
     if (product.category) bits.push(product.category);
     const out = bits.filter(Boolean).join(', ');
-    return out || (product.name || 'Matthew Simon');
+    return out || (name || 'Matthew Simon');
 }
 
 // Slug used when naming NEW photo uploads: artist-era-category-name.jpg
