@@ -301,19 +301,22 @@ function updateProductStructuredData(product) {
     if (images.length) data.image = images;
     if (product.artist) data.brand = { '@type': 'Brand', name: product.artist };
 
-    // Only pieces with a real price get an offer. "Preis auf Anfrage" has no number,
-    // and an offer without a price is invalid markup, so those are left without one.
+    // Generate offers for all products (required by Google for rich snippets)
     const priceText = String(product.price || '');
     const digits = priceText.replace(/[^\d]/g, '');
-    if (digits && !/anfrage/i.test(priceText)) {
-        data.offers = {
-            '@type': 'Offer',
-            url: url,
-            priceCurrency: 'CHF',
-            price: String(parseInt(digits, 10)),
-            availability: product.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
-            seller: { '@type': 'Organization', name: 'Matthew Simon' }
-        };
+    const hasRealPrice = digits && !/anfrage/i.test(priceText);
+    
+    data.offers = {
+        '@type': 'Offer',
+        url: url,
+        priceCurrency: 'CHF',
+        availability: product.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'Matthew Simon' }
+    };
+    
+    // Only add price if it's a real number (not "Preis auf Anfrage")
+    if (hasRealPrice) {
+        data.offers.price = String(parseInt(digits, 10));
     }
 
     // Replace (never duplicate) the block when the page re-renders, e.g. on language change
